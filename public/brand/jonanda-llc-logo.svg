@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 60" fill="none" role="img" aria-label="JONANDA LLC Corporate Logo">
+  <defs>
+    <linearGradient id="logo-gold-1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCD34D" />
+      <stop offset="50%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#B45309" />
+    </linearGradient>
+    <linearGradient id="logo-gold-2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FDE68A" />
+      <stop offset="60%" stop-color="#D97706" />
+      <stop offset="100%" stop-color="#78350F" />
+    </linearGradient>
+    <linearGradient id="text-gold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F3F4F6" />
+    </linearGradient>
+  </defs>
+
+  <!-- Brand Mark (Left Icon) -->
+  <g transform="translate(6, 6) scale(0.48)">
+    <polygon points="50,5 89,27.5 89,72.5 50,95 11,72.5 11,27.5" 
+             stroke="url(#logo-gold-1)" stroke-width="3" stroke-opacity="0.4" fill="none" />
+    <path d="M35 22 L68 22 C76 22 81 27 81 35 L81 40 L69 40 L69 34 C69 31 67 29 63 29 L35 29 Z" 
+          fill="url(#logo-gold-1)" />
+    <path d="M57 32 L69 32 L69 64 C69 73 62 79 51 79 L36 79 C27 79 21 73 21 64 L21 58 L33 58 L33 63 C33 67 36 70 41 70 L49 70 C54 70 57 67 57 62 Z" 
+          fill="url(#logo-gold-2)" />
+    <circle cx="50" cy="50" r="4.5" fill="#FFFBEB" />
+    <circle cx="50" cy="50" r="2" fill="#FFFFFF" />
+  </g>
+
+  <!-- Typography -->
+  <!-- JONANDA -->
+  <text x="64" y="38" font-family="'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif" font-size="24" font-weight="800" letter-spacing="3" fill="#FFFFFF">
+    JONANDA
+  </text>
+  
+  <!-- LLC Pill Badge -->
+  <rect x="228" y="21" width="46" height="20" rx="4" fill="#F59E0B" fill-opacity="0.15" stroke="#F59E0B" stroke-opacity="0.4" stroke-width="1"/>
+  <text x="251" y="35" text-anchor="middle" font-family="'Plus Jakarta Sans', 'Inter', sans-serif" font-size="11" font-weight="700" letter-spacing="1.5" fill="#FBBF24">
+    LLC
+  </text>
+</svg>
