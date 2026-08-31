@@ -1,0 +1,19 @@
+{
+  "name": "JONANDA MAIL — Enterprise Email Platform",
+  "short_name": "JonandaMail",
+  "description": "Centralized business email, threaded webmail client, and deliverability platform for the JONANDA ecosystem.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050811",
+  "theme_color": "#0e8ee9",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "utilities"]
+}

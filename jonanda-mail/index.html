@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JONANDA MAIL — Centralized Business Email & Ecosystem Communication Platform</title>
+    <meta name="description" content="JONANDA MAIL provides enterprise business email, multi-project domain management, DNS deliverability orchestration (SPF/DKIM/DMARC/MX), and campaign automation for the JONANDA ecosystem." />
+    <meta name="keywords" content="JONANDA MAIL, business email, ecosystem email, secure webmail, email campaigns, SPF DKIM DMARC, JONANDA LLC, LOZULA Cybersecurity" />
+    <link rel="canonical" href="https://mail.jonanda.com" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://mail.jonanda.com/" />
+    <meta property="og:title" content="JONANDA MAIL — Central Email & Communication Platform" />
+    <meta property="og:description" content="Unified business email, threaded webmail client, domain deliverability controls, and campaign automation for JONANDA LLC and ecosystem ventures." />
+    <meta property="og:image" content="https://mail.jonanda.com/og-image.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://mail.jonanda.com/" />
+    <meta name="twitter:title" content="JONANDA MAIL — Central Email & Communication Platform" />
+    <meta name="twitter:description" content="Unified business email, threaded webmail client, domain deliverability controls, and campaign automation for JONANDA LLC and ecosystem ventures." />
+    <meta name="twitter:image" content="https://mail.jonanda.com/og-image.png" />
+
+    <!-- Organization & WebSite JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "JONANDA MAIL",
+      "operatingSystem": "Web, Cloud",
+      "applicationCategory": "BusinessApplication, CommunicationApplication",
+      "url": "https://mail.jonanda.com",
+      "provider": {
+        "@type": "Organization",
+        "name": "JONANDA LLC",
+        "url": "https://jonanda.com"
+      },
+      "description": "Centralized email, webmail, DNS verification, and campaign management platform for the JONANDA ecosystem."
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "JONANDA MAIL",
+      "url": "https://mail.jonanda.com"
+    }
+    </script>
+
+    <!-- Google Fonts Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#0e8ee9" />
+  </head>
+  <body class="bg-[#070b14] text-slate-100 antialiased selection:bg-brand-500/30 selection:text-brand-200">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(err => {
+            console.log('Service Worker registration failed:', err);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>
