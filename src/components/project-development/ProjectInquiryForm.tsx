@@ -182,7 +182,7 @@ export const ProjectInquiryForm: React.FC = () => {
                   onChange={handleChange}
                   placeholder="e.g. Alex Morgan"
                   required
-                  className="w-full px-4 py-3 rounded-xl bg-background/70 border border-white/[0.1] text-sm text-white placeholder-gray-500 focus:outline-none focus:border-gold-500/60 focus:ring-1 focus:ring-gold-500/60 transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-background/70 border border-gray-300 dark:border-white/[0.1] text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-amber-500/60 dark:focus:border-gold-500/60 focus:ring-1 focus:ring-amber-500/60 dark:focus:ring-gold-500/60 transition-colors"
                 />
               </div>
 
@@ -197,7 +197,7 @@ export const ProjectInquiryForm: React.FC = () => {
                   onChange={handleChange}
                   placeholder="name@company.com"
                   required
-                  className="w-full px-4 py-3 rounded-xl bg-background/70 border border-white/[0.1] text-sm text-white placeholder-gray-500 focus:outline-none focus:border-gold-500/60 focus:ring-1 focus:ring-gold-500/60 transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-background/70 border border-gray-300 dark:border-white/[0.1] text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-amber-500/60 dark:focus:border-gold-500/60 focus:ring-1 focus:ring-amber-500/60 dark:focus:ring-gold-500/60 transition-colors"
                 />
               </div>
 
@@ -211,7 +211,7 @@ export const ProjectInquiryForm: React.FC = () => {
                   value={formData.company}
                   onChange={handleChange}
                   placeholder="e.g. Acme Innovations LLC"
-                  className="w-full px-4 py-3 rounded-xl bg-background/70 border border-white/[0.1] text-sm text-white placeholder-gray-500 focus:outline-none focus:border-gold-500/60 focus:ring-1 focus:ring-gold-500/60 transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-background/70 border border-gray-300 dark:border-white/[0.1] text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-amber-500/60 dark:focus:border-gold-500/60 focus:ring-1 focus:ring-amber-500/60 dark:focus:ring-gold-500/60 transition-colors"
                 />
               </div>
 
@@ -225,7 +225,7 @@ export const ProjectInquiryForm: React.FC = () => {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="+1 (555) 000-0000"
-                  className="w-full px-4 py-3 rounded-xl bg-background/70 border border-white/[0.1] text-sm text-white placeholder-gray-500 focus:outline-none focus:border-gold-500/60 focus:ring-1 focus:ring-gold-500/60 transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-background/70 border border-gray-300 dark:border-white/[0.1] text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-amber-500/60 dark:focus:border-gold-500/60 focus:ring-1 focus:ring-amber-500/60 dark:focus:ring-gold-500/60 transition-colors"
                 />
               </div>
             </div>
@@ -252,7 +252,7 @@ export const ProjectInquiryForm: React.FC = () => {
                   onChange={handleChange}
                   placeholder="e.g. NextGen SaaS Analytics Platform"
                   required
-                  className="w-full px-4 py-3 rounded-xl bg-background/70 border border-white/[0.1] text-sm text-white placeholder-gray-500 focus:outline-none focus:border-gold-500/60 focus:ring-1 focus:ring-gold-500/60 transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-background/70 border border-gray-300 dark:border-white/[0.1] text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-amber-500/60 dark:focus:border-gold-500/60 focus:ring-1 focus:ring-amber-500/60 dark:focus:ring-gold-500/60 transition-colors"
                 />
               </div>
 
@@ -294,7 +294,7 @@ export const ProjectInquiryForm: React.FC = () => {
                 onChange={handleChange}
                 placeholder="Explain the concept, the core problem it solves, and what you want the application to accomplish..."
                 required
-                className="w-full px-4 py-3 rounded-xl bg-background/70 border border-white/[0.1] text-sm text-white placeholder-gray-500 focus:outline-none focus:border-gold-500/60 focus:ring-1 focus:ring-gold-500/60 transition-colors resize-y"
+                className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-background/70 border border-gray-300 dark:border-white/[0.1] text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-amber-500/60 dark:focus:border-gold-500/60 focus:ring-1 focus:ring-amber-500/60 dark:focus:ring-gold-500/60 transition-colors resize-y"
               />
             </div>
 
@@ -309,7 +309,7 @@ export const ProjectInquiryForm: React.FC = () => {
                   value={formData.targetUsers}
                   onChange={handleChange}
                   placeholder="e.g. Enterprise HR teams, Web3 developers, B2B buyers"
-                  className="w-full px-4 py-3 rounded-xl bg-background/70 border border-white/[0.1] text-sm text-white placeholder-gray-500 focus:outline-none focus:border-gold-500/60 focus:ring-1 focus:ring-gold-500/60 transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-background/70 border border-gray-300 dark:border-white/[0.1] text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-amber-500/60 dark:focus:border-gold-500/60 focus:ring-1 focus:ring-amber-500/60 dark:focus:ring-gold-500/60 transition-colors"
                 />
               </div>
 
@@ -323,7 +323,7 @@ export const ProjectInquiryForm: React.FC = () => {
                   value={formData.requiredFeatures}
                   onChange={handleChange}
                   placeholder="e.g. Auth, Stripe billing, OpenAI API, Admin dashboard"
-                  className="w-full px-4 py-3 rounded-xl bg-background/70 border border-white/[0.1] text-sm text-white placeholder-gray-500 focus:outline-none focus:border-gold-500/60 focus:ring-1 focus:ring-gold-500/60 transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-background/70 border border-gray-300 dark:border-white/[0.1] text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-amber-500/60 dark:focus:border-gold-500/60 focus:ring-1 focus:ring-amber-500/60 dark:focus:ring-gold-500/60 transition-colors"
                 />
               </div>
             </div>
@@ -339,7 +339,7 @@ export const ProjectInquiryForm: React.FC = () => {
                   value={formData.existingUrl}
                   onChange={handleChange}
                   placeholder="https://example.com"
-                  className="w-full px-4 py-3 rounded-xl bg-background/70 border border-white/[0.1] text-sm text-white placeholder-gray-500 focus:outline-none focus:border-gold-500/60 focus:ring-1 focus:ring-gold-500/60 transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-background/70 border border-gray-300 dark:border-white/[0.1] text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-amber-500/60 dark:focus:border-gold-500/60 focus:ring-1 focus:ring-amber-500/60 dark:focus:ring-gold-500/60 transition-colors"
                 />
               </div>
 
@@ -353,7 +353,7 @@ export const ProjectInquiryForm: React.FC = () => {
                   value={formData.existingRepo}
                   onChange={handleChange}
                   placeholder="e.g. github.com/org/repo (or private share)"
-                  className="w-full px-4 py-3 rounded-xl bg-background/70 border border-white/[0.1] text-sm text-white placeholder-gray-500 focus:outline-none focus:border-gold-500/60 focus:ring-1 focus:ring-gold-500/60 transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-background/70 border border-gray-300 dark:border-white/[0.1] text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-amber-500/60 dark:focus:border-gold-500/60 focus:ring-1 focus:ring-amber-500/60 dark:focus:ring-gold-500/60 transition-colors"
                 />
               </div>
             </div>
