@@ -19,11 +19,11 @@ export const Footer: React.FC = () => {
           {/* Brand & Corporate Summary Column */}
           <div className="lg:col-span-2 space-y-4">
             <Link to="/" className="inline-flex items-center gap-3 group">
-              <div className="w-9 h-9 flex items-center justify-center rounded-xl bg-surface border border-gold-500/30 group-hover:border-gold-500/60 transition-colors shadow-gold-sm">
+              <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-surface border border-gold-500/30 group-hover:border-gold-500/60 transition-colors shadow-gold-sm overflow-hidden p-1">
                 <img
-                  src="/brand/jonanda-llc-mark.svg"
-                  alt="JONANDA LLC"
-                  className="w-6 h-6 object-contain"
+                  src="/brand/jonanda-mark-gold.png"
+                  alt="JONANDA LLC Emblem"
+                  className="w-full h-full object-contain transform group-hover:scale-105 transition-transform"
                 />
               </div>
               <div className="flex items-center gap-1.5">
