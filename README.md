@@ -5,36 +5,34 @@
 [![Deployment](https://img.shields.io/badge/Platform-Cloudflare%20Workers%20%26%20Pages-orange.svg)](#)
 [![Security](https://img.shields.io/badge/Security-Zero%20Trust-emerald.svg)](#)
 
-> Official corporate website for **JONANDA LLC** — a United States technology enterprise developing products and services across Artificial Intelligence, Web3, Cybersecurity, Software, and Digital Infrastructure.
+> Official corporate website for **JONANDA LLC** — a United States technology enterprise developing proprietary products and delivering custom engineering solutions across Artificial Intelligence, Web3, Cybersecurity, SaaS, and Digital Infrastructure.
 
 ---
 
-## 🏛️ Corporate Overview & Product Ecosystem
+## 🏛️ Corporate Positioning & Service Architecture
 
-JONANDA LLC maintains dedicated governance for the parent company and its structured ecosystem portfolio:
+JONANDA LLC operates as both an institutional technology company developing its own ecosystem platforms and a trusted engineering partner building custom digital solutions for global enterprises, startups, and organizations.
 
-### 🪙 Current Operational Platforms (Live / Active)
-* **Jonanda Coin (JNDA) (`https://jonanda.com`)**: AI-integrated Web3 ecosystem and decentralized digital asset platform.
-* **LOZULA Cybersecurity (`https://lozula.com`)**: Cybersecurity technology, vulnerability assessments, and threat intelligence platform.
+### 💼 Custom Project Development (`/project-development`)
+* **Websites & Web Applications**: Custom corporate platforms, dashboards, and portals.
+* **Mobile Applications**: Native and cross-platform mobile systems.
+* **AI Systems & Agents**: Cognitive pipelines, LLM workflows, and intelligent automation.
+* **SaaS Platforms**: Multi-tenant architectures, subscription lifecycles, and RBAC security.
+* **Cybersecurity Solutions**: Authorized defensive assessment, threat monitoring, and audit tools.
+* **Blockchain & Web3**: Smart contract integrations, decentralized protocols, and digital asset infrastructure.
+* **SEO & Growth Tools**: Automated technical audits, search telemetry, and visibility intelligence.
+* **Business Platforms & APIs**: High-throughput microservices, admin consoles, and cloud infrastructure.
 
-### 🚀 Coming Soon Portfolio (Under Active Development)
-* **Jonanda Studio**: Next-generation AI and software development platform with intelligent workflow automation and AI agent infrastructure.
-* **Jonanda SEO**: Advanced automated SEO intelligence, technical website audits, and search visibility monitoring platform.
-* **Jonanda Influencer**: Managed creator and brand collaboration workflow, creator discovery, and campaign management platform.
-* **Jonanda Security Toolkit**: Authorized defensive cybersecurity assessment and operations toolkit for authorized security diagnostics.
-
-### 🔬 R&D & Incubation
-* **Future Technology & Incubation**: Dedicated research pipeline for enterprise AI engines, autonomous cloud systems, and edge infrastructure.
-
----
-
-## 🚀 Technology Capabilities
-
-1. **Artificial Intelligence**: Large language model integration, autonomous agent workflows, contextual data retrieval, and cognitive pipelines.
-2. **Web3 & Blockchain**: Decentralized protocols, secure smart contract architecture, and token utility engineering.
-3. **Cybersecurity**: Automated vulnerability assessments, perimeter defense, zero-trust architecture, and codebase security audits.
-4. **SaaS & Software Development**: High-performance full-stack web and mobile platforms, low-latency microservices, and distributed APIs.
-5. **Digital Infrastructure**: Global edge computing, resilient container orchestration, and high-availability multi-region persistence.
+### 🪙 Product Ecosystem Portfolio (`/ecosystem`)
+* **Jonanda Coin (JNDA)**: AI-integrated Web3 ecosystem and decentralized digital asset platform (`https://jonanda.com`).
+* **LOZULA Cybersecurity**: Cybersecurity technology, vulnerability assessments, and threat intelligence platform (`https://lozula.com`).
+* **Jonanda Mail**: Centralized business email and multi-project communication platform (`Coming Soon`).
+* **Jonanda Studio**: Next-generation AI workspace, agent workflows, and automation infrastructure (`Coming Soon`).
+* **Jonanda SEO**: Automated SEO intelligence, website audits, and search visibility platform (`Coming Soon`).
+* **Jonanda Influencer**: Managed creator and brand collaboration workflow platform (`Coming Soon`).
+* **Jonanda Security Toolkit**: Authorized defensive cybersecurity assessment and operations toolkit (`Coming Soon`).
+* **EqualShare Foundation**: Technology-enabled social impact and community empowerment initiative (`Ecosystem Initiative`).
+* **Future Technology & Incubation**: Structured R&D pipeline for enterprise AI and edge computing.
 
 ---
 
@@ -67,9 +65,10 @@ Jonanda-LLC/
 │   ├── components/
 │   │   ├── common/                  # Navbar, Footer, TechBackground, CorporateCard, Button, SEOHead
 │   │   ├── ecosystem/               # EcosystemCard component
+│   │   ├── project-development/     # ProjectInquiryForm, FAQAccordion
 │   │   └── home/                    # Hero, EcosystemPreview, TechPillarsPreview, CorporateSnapshot, CoreValues
-│   ├── data/                        # Ecosystem, technology, company, and navigation datasets
-│   ├── pages/                       # Home, About, Ecosystem, Technology, Company, Contact, Legal suite, 404
+│   ├── data/                        # Ecosystem, project development, technology, company, and navigation datasets
+│   ├── pages/                       # Home, About, Project Development, Ecosystem, Coming Soon, Technology, Company, Contact, Legal suite, 404
 │   ├── styles/                      # Tailwind styles and custom utilities
 │   ├── App.tsx                      # Router and application layout
 │   └── main.tsx                     # React DOM root mounting
@@ -120,7 +119,7 @@ This repository is pre-configured for automated deployment via Cloudflare:
 
 ---
 
-## 📬 Corporate Inquiries
+## 📬 Corporate Inquiries & Project Briefs
 
 * **Corporate Email**: `contact@jonanda.com`
 * **Official Corporate Website**: [https://llc.jonanda.com](https://llc.jonanda.com)

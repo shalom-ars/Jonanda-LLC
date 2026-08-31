@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExternalLink, ArrowRight, Sparkles, Shield, Bot, Search, Users, ShieldAlert, Cpu, Layers, Mail, CheckCircle2, Clock } from 'lucide-react';
+import { ExternalLink, ArrowRight, Sparkles, Shield, Bot, Search, Users, ShieldAlert, Cpu, Layers, Mail, HeartHandshake, CheckCircle2, Clock } from 'lucide-react';
 import { EcosystemProduct } from '../../data/ecosystemData';
 import { CorporateCard } from '../common/CorporateCard';
 import { Button } from '../common/Button';
@@ -19,7 +19,8 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   ShieldAlert,
   Cpu,
   Layers,
-  Mail
+  Mail,
+  HeartHandshake
 };
 
 export const EcosystemCard: React.FC<EcosystemCardProps> = ({
@@ -63,6 +64,12 @@ export const EcosystemCard: React.FC<EcosystemCardProps> = ({
                 <span>COMING SOON</span>
               </span>
             )}
+            {product.status === 'Ecosystem Initiative' && (
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider bg-gold-500/15 text-gold-300 border border-gold-500/30 whitespace-nowrap">
+                <HeartHandshake className="w-3 h-3 text-gold-400" />
+                <span>Ecosystem Initiative</span>
+              </span>
+            )}
             {product.status === 'Incubation & Research' && (
               <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider bg-blue-500/15 text-blue-300 border border-blue-500/30 whitespace-nowrap">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
@@ -93,6 +100,8 @@ export const EcosystemCard: React.FC<EcosystemCardProps> = ({
               className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
                 isComingSoon
                   ? 'bg-purple-500/10 border border-purple-500/30 text-purple-300 shadow-sm'
+                  : product.status === 'Ecosystem Initiative'
+                  ? 'bg-gold-500/10 border border-gold-500/30 text-gold-400'
                   : 'bg-blue-500/10 border border-blue-500/30 text-blue-400'
               }`}
             >

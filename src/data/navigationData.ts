@@ -7,6 +7,7 @@ export interface NavItem {
 export const MAIN_NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
+  { label: 'Project Development', href: '/project-development' },
   { label: 'Ecosystem', href: '/ecosystem' },
   { label: 'Coming Soon', href: '/coming-soon' },
   { label: 'Technology', href: '/technology' },
@@ -19,6 +20,13 @@ export const FOOTER_ECOSYSTEM_LINKS: NavItem[] = [
   { label: 'LOZULA Cybersecurity', href: 'https://lozula.com', isExternal: true },
   { label: 'Coming Soon Portfolio', href: '/coming-soon' },
   { label: 'Ecosystem Overview', href: '/ecosystem' },
+];
+
+export const FOOTER_SERVICES_LINKS: NavItem[] = [
+  { label: 'Project Development', href: '/project-development' },
+  { label: 'Web & Mobile Applications', href: '/project-development#services' },
+  { label: 'AI & SaaS Development', href: '/project-development#services' },
+  { label: 'Web3 & Cybersecurity Tools', href: '/project-development#services' },
 ];
 
 export const FOOTER_COMPANY_LINKS: NavItem[] = [

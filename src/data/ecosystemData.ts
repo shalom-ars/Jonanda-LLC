@@ -1,5 +1,5 @@
-export type ProjectStatus = 'Live & Operational' | 'Active Platform' | 'Coming Soon' | 'Incubation & Research';
-export type StatusColor = 'emerald' | 'amber' | 'purple' | 'blue';
+export type ProjectStatus = 'Live & Operational' | 'Active Platform' | 'Coming Soon' | 'Incubation & Research' | 'Ecosystem Initiative';
+export type StatusColor = 'emerald' | 'amber' | 'purple' | 'blue' | 'gold';
 export type ProjectTier = 'current' | 'coming-soon' | 'future';
 
 export interface EcosystemProduct {
@@ -13,7 +13,7 @@ export interface EcosystemProduct {
   status: ProjectStatus;
   statusColor: StatusColor;
   tier: ProjectTier;
-  iconName?: 'Sparkles' | 'Shield' | 'Bot' | 'Search' | 'Users' | 'ShieldAlert' | 'Cpu' | 'Layers' | 'Mail';
+  iconName?: 'Sparkles' | 'Shield' | 'Bot' | 'Search' | 'Users' | 'ShieldAlert' | 'Cpu' | 'Layers' | 'Mail' | 'HeartHandshake';
   logoUrl?: string;
   logoType?: 'image' | 'svg' | 'icon';
   ctaText: string;
@@ -124,7 +124,7 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
     ctaText: 'Coming Soon',
     isExternal: false,
     featured: true,
-    launchOrder: 3
+    launchOrder: 4
   },
   {
     id: 'jonanda-seo',
@@ -150,7 +150,7 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
     ctaText: 'Coming Soon',
     isExternal: false,
     featured: true,
-    launchOrder: 4
+    launchOrder: 5
   },
   {
     id: 'jonanda-influencer',
@@ -176,7 +176,7 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
     ctaText: 'Coming Soon',
     isExternal: false,
     featured: true,
-    launchOrder: 5
+    launchOrder: 6
   },
   {
     id: 'jonanda-security-toolkit',
@@ -203,10 +203,33 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
     ctaText: 'Coming Soon',
     isExternal: false,
     featured: true,
-    launchOrder: 6
+    launchOrder: 7
   },
 
-  // --- RESEARCH & FUTURE TECHNOLOGY ---
+  // --- RESEARCH & FUTURE TECHNOLOGY / INITIATIVES ---
+  {
+    id: 'equalshare-foundation',
+    name: 'EqualShare Foundation',
+    category: 'Social Impact & Technology Initiative',
+    tagline: 'Technology-enabled philanthropic and global impact initiative',
+    description: 'A dedicated social-impact and transparent empowerment initiative developed to explore technology-enabled equity frameworks and community support.',
+    fullDescription: 'The EqualShare Foundation operates as an ecosystem initiative supported by JONANDA LLC, focusing on leveraging transparent digital tools, verifiable allocation systems, and technology solutions to advance social good.',
+    capabilities: [
+      'Transparent Resource Distribution',
+      'Community Empowerment Frameworks',
+      'Verifiable Technology-Enabled Impact',
+      'Global Social Initiative Coordination'
+    ],
+    status: 'Ecosystem Initiative',
+    statusColor: 'gold',
+    tier: 'future',
+    iconName: 'HeartHandshake',
+    logoType: 'icon',
+    ctaText: 'Ecosystem Initiative',
+    isExternal: false,
+    featured: false,
+    launchOrder: 8
+  },
   {
     id: 'future-technology',
     name: 'Future Technology & Incubation',
@@ -229,7 +252,7 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
     ctaLink: '/technology',
     isExternal: false,
     featured: false,
-    launchOrder: 7
+    launchOrder: 9
   }
 ];
 

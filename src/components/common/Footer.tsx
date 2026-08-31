@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ExternalLink, ShieldCheck, Cpu, Globe } from 'lucide-react';
 import {
   FOOTER_ECOSYSTEM_LINKS,
+  FOOTER_SERVICES_LINKS,
   FOOTER_COMPANY_LINKS,
   FOOTER_LEGAL_LINKS
 } from '../../data/navigationData';
@@ -36,7 +37,7 @@ export const Footer: React.FC = () => {
             </Link>
 
             <p className="text-sm text-gray-400 leading-relaxed max-w-sm">
-              Building technology for the next digital economy. JONANDA LLC develops products and services across Artificial Intelligence, Web3, cybersecurity, software, and digital infrastructure.
+              Building technology for the next digital economy. JONANDA LLC develops proprietary software, AI systems, and custom digital platforms for global enterprises and startups.
             </p>
 
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-white/[0.03] border border-white/[0.08] text-xs text-gray-400">
@@ -45,12 +46,30 @@ export const Footer: React.FC = () => {
             </div>
 
             <div className="pt-2 flex flex-wrap gap-2 text-[11px] font-medium text-gray-400">
-              <span className="px-2 py-0.5 rounded bg-surface border border-white/5">AI</span>
+              <span className="px-2 py-0.5 rounded bg-surface border border-white/5">Custom Software</span>
+              <span className="px-2 py-0.5 rounded bg-surface border border-white/5">AI Systems</span>
               <span className="px-2 py-0.5 rounded bg-surface border border-white/5">Web3</span>
               <span className="px-2 py-0.5 rounded bg-surface border border-white/5">Cybersecurity</span>
-              <span className="px-2 py-0.5 rounded bg-surface border border-white/5">Software</span>
-              <span className="px-2 py-0.5 rounded bg-surface border border-white/5">Infrastructure</span>
             </div>
+          </div>
+
+          {/* Development & Solutions Column */}
+          <div className="space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-widest text-gold-300">
+              Solutions & Services
+            </h4>
+            <ul className="space-y-2.5 text-sm">
+              {FOOTER_SERVICES_LINKS.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    to={link.href}
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
           {/* Ecosystem Column */}
@@ -84,10 +103,10 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Company Column */}
+          {/* Company & Legal Column */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-widest text-gold-300">
-              Company
+              Company & Legal
             </h4>
             <ul className="space-y-2.5 text-sm">
               {FOOTER_COMPANY_LINKS.map((link) => (
@@ -100,15 +119,6 @@ export const Footer: React.FC = () => {
                   </Link>
                 </li>
               ))}
-            </ul>
-          </div>
-
-          {/* Legal & Governance Column */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-widest text-gold-300">
-              Legal & Compliance
-            </h4>
-            <ul className="space-y-2.5 text-sm">
               {FOOTER_LEGAL_LINKS.map((link) => (
                 <li key={link.label}>
                   <Link
