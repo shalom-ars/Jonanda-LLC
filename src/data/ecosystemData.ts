@@ -1,3 +1,7 @@
+export type ProjectStatus = 'Live & Operational' | 'Active Platform' | 'Coming Soon' | 'Incubation & Research';
+export type StatusColor = 'emerald' | 'amber' | 'purple' | 'blue';
+export type ProjectTier = 'current' | 'coming-soon' | 'future';
+
 export interface EcosystemProduct {
   id: string;
   name: string;
@@ -6,17 +10,21 @@ export interface EcosystemProduct {
   description: string;
   fullDescription?: string;
   capabilities: string[];
-  status: 'Live & Operational' | 'Active Platform' | 'Incubation & Research';
-  statusColor: 'emerald' | 'amber' | 'blue';
+  status: ProjectStatus;
+  statusColor: StatusColor;
+  tier: ProjectTier;
+  iconName?: 'Sparkles' | 'Shield' | 'Bot' | 'Search' | 'Users' | 'ShieldAlert' | 'Cpu' | 'Layers';
   logoUrl?: string;
   logoType?: 'image' | 'svg' | 'icon';
   ctaText: string;
-  ctaLink: string;
-  isExternal: boolean;
+  ctaLink?: string;
+  isExternal?: boolean;
   featured?: boolean;
+  launchOrder: number;
 }
 
 export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
+  // --- CURRENT OFFICIAL ECOSYSTEM (LIVE / ACTIVE) ---
   {
     id: 'jonanda-coin',
     name: 'Jonanda Coin (JNDA)',
@@ -32,12 +40,15 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
     ],
     status: 'Active Platform',
     statusColor: 'amber',
+    tier: 'current',
+    iconName: 'Sparkles',
     logoUrl: '/brand/jnda-coin.webp',
     logoType: 'image',
     ctaText: 'Explore JNDA',
     ctaLink: 'https://jonanda.com',
     isExternal: true,
-    featured: true
+    featured: true,
+    launchOrder: 1
   },
   {
     id: 'lozula-cybersecurity',
@@ -54,13 +65,123 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
     ],
     status: 'Live & Operational',
     statusColor: 'emerald',
+    tier: 'current',
+    iconName: 'Shield',
     logoUrl: '/brand/lozula-logo.svg',
     logoType: 'svg',
     ctaText: 'Explore LOZULA',
     ctaLink: 'https://lozula.com',
     isExternal: true,
-    featured: true
+    featured: true,
+    launchOrder: 2
   },
+
+  // --- COMING SOON PROJECT PORTFOLIO (UNDER ACTIVE DEVELOPMENT) ---
+  {
+    id: 'jonanda-studio',
+    name: 'Jonanda Studio',
+    category: 'AI & Technology',
+    tagline: 'Next-generation AI workflows, intelligent automation, and agent infrastructure',
+    description: 'A next-generation AI and software platform being developed within the JONANDA LLC technology ecosystem.',
+    fullDescription: 'Jonanda Studio is an intelligent software and AI workspace engineered to orchestrate multi-step autonomous workflows, cognitive processing agents, and developer tooling within a unified, high-performance environment.',
+    capabilities: [
+      'AI-powered workflows',
+      'Intelligent automation',
+      'AI agents',
+      'Productivity tools',
+      'Software development infrastructure'
+    ],
+    status: 'Coming Soon',
+    statusColor: 'purple',
+    tier: 'coming-soon',
+    iconName: 'Bot',
+    logoType: 'icon',
+    ctaText: 'Coming Soon',
+    isExternal: false,
+    featured: true,
+    launchOrder: 3
+  },
+  {
+    id: 'jonanda-seo',
+    name: 'Jonanda SEO',
+    category: 'SEO & Digital Growth',
+    tagline: 'Automated SEO intelligence, technical audits, and search visibility monitoring',
+    description: 'An advanced SEO platform designed to analyze, optimize, monitor, and improve websites using automated SEO intelligence.',
+    fullDescription: 'Jonanda SEO provides automated technical website audits, on-page optimization analysis, structured keyword tracking, and actionable search intelligence to enhance discoverability and indexing health across digital platforms.',
+    capabilities: [
+      'Technical SEO analysis',
+      'On-page SEO',
+      'Keyword research',
+      'Website audits',
+      'Search visibility monitoring',
+      'SEO reports',
+      'Performance recommendations'
+    ],
+    status: 'Coming Soon',
+    statusColor: 'purple',
+    tier: 'coming-soon',
+    iconName: 'Search',
+    logoType: 'icon',
+    ctaText: 'Coming Soon',
+    isExternal: false,
+    featured: true,
+    launchOrder: 4
+  },
+  {
+    id: 'jonanda-influencer',
+    name: 'Jonanda Influencer',
+    category: 'Creator Economy & Marketing',
+    tagline: 'Managed creator discovery, brand collaboration workflows, and campaign management',
+    description: 'A managed creator and brand collaboration platform designed to connect businesses with relevant creators and manage campaigns from discovery through completion.',
+    fullDescription: 'Jonanda Influencer simplifies the collaboration lifecycle for modern enterprises by providing structured discovery filters, standardized onboarding pipelines, campaign milestones, negotiation management, and unified performance telemetry.',
+    capabilities: [
+      'Creator discovery',
+      'Brand onboarding',
+      'Creator-brand matching',
+      'Campaign management',
+      'Collaboration workflow',
+      'Negotiation management',
+      'Performance tracking'
+    ],
+    status: 'Coming Soon',
+    statusColor: 'purple',
+    tier: 'coming-soon',
+    iconName: 'Users',
+    logoType: 'icon',
+    ctaText: 'Coming Soon',
+    isExternal: false,
+    featured: true,
+    launchOrder: 5
+  },
+  {
+    id: 'jonanda-security-toolkit',
+    name: 'Jonanda Security Toolkit',
+    category: 'Cybersecurity Technology',
+    tagline: 'Authorized defensive security assessment and operations toolkit',
+    description: 'An authorized defensive cybersecurity toolkit being developed for security assessment and security operations workflows.',
+    fullDescription: 'Designed exclusively for authorized defensive diagnostics, the Jonanda Security Toolkit provides network asset scanning, DNS reconnaissance, API security validation, whitelist boundary controls, and audit reporting for security teams.',
+    capabilities: [
+      'Website security scanning',
+      'Port and service discovery',
+      'DNS and subdomain discovery',
+      'API security checks',
+      'Vulnerability reporting',
+      'Scope/whitelist controls',
+      'Audit logs',
+      'Security dashboard'
+    ],
+    status: 'Coming Soon',
+    statusColor: 'purple',
+    tier: 'coming-soon',
+    iconName: 'ShieldAlert',
+    logoType: 'icon',
+    ctaText: 'Coming Soon',
+    isExternal: false,
+    featured: true,
+    launchOrder: 6
+  },
+
+  // --- RESEARCH & FUTURE TECHNOLOGY ---
   {
     id: 'future-technology',
     name: 'Future Technology & Incubation',
@@ -76,9 +197,18 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
     ],
     status: 'Incubation & Research',
     statusColor: 'blue',
+    tier: 'future',
+    iconName: 'Layers',
+    logoType: 'icon',
     ctaText: 'View Technology Capabilities',
     ctaLink: '/technology',
     isExternal: false,
-    featured: false
+    featured: false,
+    launchOrder: 7
   }
 ];
+
+// Helper selectors
+export const CURRENT_ECOSYSTEM_PRODUCTS = ECOSYSTEM_PRODUCTS.filter(p => p.tier === 'current');
+export const COMING_SOON_PRODUCTS = ECOSYSTEM_PRODUCTS.filter(p => p.tier === 'coming-soon');
+export const FUTURE_TECH_PRODUCTS = ECOSYSTEM_PRODUCTS.filter(p => p.tier === 'future');

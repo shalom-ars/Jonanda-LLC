@@ -2,20 +2,29 @@
 
 [![Target Domain](https://img.shields.io/badge/Domain-llc.jonanda.com-amber.svg)](https://llc.jonanda.com)
 [![Jurisdiction](https://img.shields.io/badge/Jurisdiction-United%20States-blue.svg)](#)
-[![Deployment](https://img.shields.io/badge/Platform-Cloudflare%20Pages-orange.svg)](#)
+[![Deployment](https://img.shields.io/badge/Platform-Cloudflare%20Workers%20%26%20Pages-orange.svg)](#)
 [![Security](https://img.shields.io/badge/Security-Zero%20Trust-emerald.svg)](#)
 
 > Official corporate website for **JONANDA LLC** — a United States technology enterprise developing products and services across Artificial Intelligence, Web3, Cybersecurity, Software, and Digital Infrastructure.
 
 ---
 
-## 🏛️ Corporate Overview & Separation of Entities
+## 🏛️ Corporate Overview & Product Ecosystem
 
-JONANDA LLC maintains dedicated governance for the parent company and distinct ecosystem platforms:
+JONANDA LLC maintains dedicated governance for the parent company and its structured ecosystem portfolio:
 
-* **JONANDA LLC (`llc.jonanda.com`)**: Corporate parent entity providing strategic direction, architectural standards, compliance, and enterprise digital infrastructure.
-* **Jonanda Coin (JNDA) (`jonanda.com`)**: AI-integrated Web3 ecosystem and decentralized digital asset platform.
-* **LOZULA Cybersecurity (`lozula.com`)**: Cybersecurity technology, vulnerability assessments, and threat intelligence platform.
+### 🪙 Current Operational Platforms (Live / Active)
+* **Jonanda Coin (JNDA) (`https://jonanda.com`)**: AI-integrated Web3 ecosystem and decentralized digital asset platform.
+* **LOZULA Cybersecurity (`https://lozula.com`)**: Cybersecurity technology, vulnerability assessments, and threat intelligence platform.
+
+### 🚀 Coming Soon Portfolio (Under Active Development)
+* **Jonanda Studio**: Next-generation AI and software development platform with intelligent workflow automation and AI agent infrastructure.
+* **Jonanda SEO**: Advanced automated SEO intelligence, technical website audits, and search visibility monitoring platform.
+* **Jonanda Influencer**: Managed creator and brand collaboration workflow, creator discovery, and campaign management platform.
+* **Jonanda Security Toolkit**: Authorized defensive cybersecurity assessment and operations toolkit for authorized security diagnostics.
+
+### 🔬 R&D & Incubation
+* **Future Technology & Incubation**: Dedicated research pipeline for enterprise AI engines, autonomous cloud systems, and edge infrastructure.
 
 ---
 
@@ -34,9 +43,9 @@ JONANDA LLC maintains dedicated governance for the parent company and distinct e
 * **Framework**: React 19, TypeScript, Vite
 * **Styling**: Tailwind CSS (Tailored luxury dark theme with gold metallic accents)
 * **Icons**: Lucide React
-* **Routing**: React Router (SPA with client-side history, scroll-to-top restoration, and Cloudflare Pages redirects)
+* **Routing**: React Router (SPA with client-side history, scroll-to-top restoration)
 * **SEO & Metadata**: Semantic HTML5, dynamic Open Graph & Twitter Cards, Schema.org `Organization` and `WebSite` JSON-LD schemas, `robots.txt`, and `sitemap.xml`
-* **Deployment**: Cloudflare Pages / Workers (configured via `wrangler.toml`, `_headers`, and `_redirects`)
+* **Deployment**: Cloudflare Workers with Static Assets & Pages (configured via `wrangler.toml`, `worker.js`, and `_headers`)
 
 ---
 
@@ -53,19 +62,20 @@ Jonanda-LLC/
 │   ├── favicon.svg                  # High-resolution vector favicon
 │   ├── robots.txt                   # Search crawler directives
 │   ├── sitemap.xml                  # SEO indexing sitemap
-│   ├── _headers                     # Cloudflare Pages security headers
-│   └── _redirects                   # Cloudflare SPA fallback routing
+│   └── _headers                     # Cloudflare security headers
 ├── src/
 │   ├── components/
 │   │   ├── common/                  # Navbar, Footer, TechBackground, CorporateCard, Button, SEOHead
+│   │   ├── ecosystem/               # EcosystemCard component
 │   │   └── home/                    # Hero, EcosystemPreview, TechPillarsPreview, CorporateSnapshot, CoreValues
 │   ├── data/                        # Ecosystem, technology, company, and navigation datasets
 │   ├── pages/                       # Home, About, Ecosystem, Technology, Company, Contact, Legal suite, 404
 │   ├── styles/                      # Tailwind styles and custom utilities
 │   ├── App.tsx                      # Router and application layout
 │   └── main.tsx                     # React DOM root mounting
+├── worker.js                        # Cloudflare Worker gateway with ASSETS binding & SPA fallback
 ├── index.html                       # HTML5 template with structured data and typography
-├── wrangler.toml                    # Cloudflare Pages deployment configuration
+├── wrangler.toml                    # Cloudflare Workers deployment configuration
 ├── tailwind.config.js               # Theme definitions and color tokens
 └── package.json
 ```
@@ -90,12 +100,12 @@ npm run preview
 
 ---
 
-## 🌐 Cloudflare Pages Deployment
+## 🌐 Cloudflare Deployment
 
-This repository is pre-configured for automated deployment via Cloudflare Pages:
+This repository is pre-configured for automated deployment via Cloudflare:
 
 * **Build Command**: `npm run build`
-* **Build Output Directory**: `dist`
+* **Deploy Command**: `npx wrangler deploy`
 * **Root Directory**: `/`
 * **Node Version**: `>= 18.0.0`
 
@@ -105,6 +115,7 @@ This repository is pre-configured for automated deployment via Cloudflare Pages:
 
 * **Zero-Trust Perimeters**: Enforced across all deployment and endpoint surfaces.
 * **Security Headers**: Configured with strict HSTS, CSP, X-Frame-Options, X-Content-Type-Options, and Referrer-Policy.
+* **Defensive Security Standard**: Cybersecurity tooling adheres strictly to authorized defensive diagnostics.
 * **Privacy Compliance**: GDPR and CCPA aligned data handling with minimal data retention.
 
 ---
