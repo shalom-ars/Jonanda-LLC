@@ -9,6 +9,7 @@ import { Footer } from './components/common/Footer';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { EcosystemPage } from './pages/EcosystemPage';
+import { ComingSoonPage } from './pages/ComingSoonPage';
 import { TechnologyPage } from './pages/TechnologyPage';
 import { CompanyPage } from './pages/CompanyPage';
 import { ContactPage } from './pages/ContactPage';
@@ -30,6 +31,7 @@ export const App: React.FC = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/ecosystem" element={<EcosystemPage />} />
+            <Route path="/coming-soon" element={<ComingSoonPage />} />
             <Route path="/technology" element={<TechnologyPage />} />
             <Route path="/company" element={<CompanyPage />} />
             <Route path="/contact" element={<ContactPage />} />

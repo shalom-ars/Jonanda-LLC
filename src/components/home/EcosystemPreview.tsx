@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Clock } from 'lucide-react';
 import { SectionHeading } from '../common/SectionHeading';
 import { Button } from '../common/Button';
 import { EcosystemCard } from '../ecosystem/EcosystemCard';
@@ -40,19 +40,25 @@ export const EcosystemPreview: React.FC = () => {
 
         {/* --- PART 2: COMING SOON PORTFOLIO --- */}
         <div className="space-y-6 pt-6">
-          <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.08] pb-3">
             <div className="flex items-center gap-2.5">
               <div className="w-2 h-2 rounded-full bg-purple-400" />
               <h3 className="text-sm font-bold uppercase tracking-wider text-white">
                 Coming Soon Portfolio
               </h3>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-500/15 text-purple-300 border border-purple-500/30 uppercase tracking-wider">
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded bg-purple-500/15 text-purple-300 border border-purple-500/30 uppercase tracking-wider">
                 In Active Development
               </span>
             </div>
-            <span className="text-xs text-gray-400 font-mono hidden sm:inline">
-              Upcoming Software & AI Tools
-            </span>
+            <Button
+              href="/coming-soon"
+              variant="ghost"
+              size="sm"
+              className="text-xs text-purple-300 hover:text-purple-200 p-0 self-start sm:self-auto hover:bg-transparent"
+              icon={<ArrowRight className="w-3.5 h-3.5" />}
+            >
+              View Full Coming Soon Page
+            </Button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -63,14 +69,23 @@ export const EcosystemPreview: React.FC = () => {
         </div>
 
         {/* Bottom Ecosystem CTA */}
-        <div className="text-center pt-4">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <Button
+            href="/coming-soon"
+            variant="primary"
+            size="md"
+            icon={<Clock className="w-4 h-4" />}
+          >
+            Explore Coming Soon Projects
+          </Button>
+
           <Button
             href="/ecosystem"
             variant="outline"
             size="md"
             icon={<ArrowRight className="w-4 h-4" />}
           >
-            Explore Complete Ecosystem Architecture
+            Explore Full Ecosystem Architecture
           </Button>
         </div>
       </div>

@@ -13,7 +13,7 @@ export interface EcosystemProduct {
   status: ProjectStatus;
   statusColor: StatusColor;
   tier: ProjectTier;
-  iconName?: 'Sparkles' | 'Shield' | 'Bot' | 'Search' | 'Users' | 'ShieldAlert' | 'Cpu' | 'Layers';
+  iconName?: 'Sparkles' | 'Shield' | 'Bot' | 'Search' | 'Users' | 'ShieldAlert' | 'Cpu' | 'Layers' | 'Mail';
   logoUrl?: string;
   logoType?: 'image' | 'svg' | 'icon';
   ctaText: string;
@@ -77,6 +77,31 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
   },
 
   // --- COMING SOON PROJECT PORTFOLIO (UNDER ACTIVE DEVELOPMENT) ---
+  {
+    id: 'jonanda-mail',
+    name: 'JONANDA MAIL',
+    category: 'Business Email & Communication',
+    tagline: 'Centralized email, webmail, and campaign infrastructure for the JONANDA ecosystem',
+    description: 'The centralized business email and multi-project communication platform engineered for JONANDA LLC and its ecosystem ventures.',
+    fullDescription: 'JONANDA MAIL delivers multi-tenant business email, threaded webmail, verified domain DNS orchestration (SPF, DKIM, DMARC, MX), audience campaign automation, and deliverability analytics under a unified enterprise control plane.',
+    capabilities: [
+      'Multi-project email identity management',
+      'Threaded webmail and inbox collaboration',
+      'Automated DNS and domain deliverability controls',
+      'Visual email template builder and campaign delivery',
+      'Multi-tenant role-based access security'
+    ],
+    status: 'Coming Soon',
+    statusColor: 'purple',
+    tier: 'coming-soon',
+    iconName: 'Mail',
+    logoType: 'icon',
+    ctaText: 'Coming Soon',
+    ctaLink: 'https://mail.jonanda.com',
+    isExternal: true,
+    featured: true,
+    launchOrder: 3
+  },
   {
     id: 'jonanda-studio',
     name: 'Jonanda Studio',

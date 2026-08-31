@@ -8,6 +8,7 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
   { label: 'Ecosystem', href: '/ecosystem' },
+  { label: 'Coming Soon', href: '/coming-soon' },
   { label: 'Technology', href: '/technology' },
   { label: 'Company', href: '/company' },
   { label: 'Contact', href: '/contact' },
@@ -16,6 +17,7 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
 export const FOOTER_ECOSYSTEM_LINKS: NavItem[] = [
   { label: 'Jonanda Coin (JNDA)', href: 'https://jonanda.com', isExternal: true },
   { label: 'LOZULA Cybersecurity', href: 'https://lozula.com', isExternal: true },
+  { label: 'Coming Soon Portfolio', href: '/coming-soon' },
   { label: 'Ecosystem Overview', href: '/ecosystem' },
 ];
 
