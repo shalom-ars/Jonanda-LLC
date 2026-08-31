@@ -38,10 +38,10 @@ export const Button: React.FC<ButtonProps> = ({
   };
 
   const variantStyles = {
-    primary: "bg-gold-gradient text-gray-950 font-semibold shadow-gold-sm hover:shadow-gold-md hover:brightness-105 active:scale-[0.98]",
-    secondary: "bg-surface/90 text-gray-200 border border-white/10 hover:bg-surface hover:border-gold-500/30 hover:text-white active:scale-[0.98]",
-    outline: "bg-transparent text-gold-300 border border-gold-500/40 hover:bg-gold-500/10 hover:border-gold-400 active:scale-[0.98]",
-    ghost: "bg-transparent text-gray-400 hover:text-white hover:bg-white/5 active:scale-[0.98]"
+    primary: "bg-gold-gradient text-gray-950 font-bold shadow-gold-sm hover:shadow-gold-md hover:brightness-105 active:scale-[0.98]",
+    secondary: "bg-surface/90 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-white/10 hover:bg-surface hover:border-gold-500/30 hover:text-black dark:hover:text-white active:scale-[0.98]",
+    outline: "bg-transparent text-amber-700 dark:text-gold-300 border border-amber-600/40 dark:border-gold-500/40 hover:bg-gold-500/10 hover:border-gold-500 active:scale-[0.98]",
+    ghost: "bg-transparent text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 active:scale-[0.98]"
   };
 
   const combinedClasses = `${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from './context/ThemeContext';
 import { ScrollToTop } from './components/common/ScrollToTop';
 import { TechBackground } from './components/common/TechBackground';
 import { Navbar } from './components/common/Navbar';
@@ -22,33 +23,35 @@ import { NotFoundPage } from './pages/NotFoundPage';
 
 export const App: React.FC = () => {
   return (
-    <BrowserRouter>
-      <div className="min-h-screen flex flex-col bg-background text-gray-100 relative">
-        <ScrollToTop />
-        <TechBackground />
-        <Navbar />
+    <ThemeProvider>
+      <BrowserRouter>
+        <div className="min-h-screen flex flex-col bg-background text-gray-900 dark:text-gray-100 relative transition-colors duration-300">
+          <ScrollToTop />
+          <TechBackground />
+          <Navbar />
 
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/ecosystem" element={<EcosystemPage />} />
-            <Route path="/coming-soon" element={<ComingSoonPage />} />
-            <Route path="/project-development" element={<ProjectDevelopmentPage />} />
-            <Route path="/partners" element={<PartnersPage />} />
-            <Route path="/technology" element={<TechnologyPage />} />
-            <Route path="/company" element={<CompanyPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/privacy" element={<PrivacyPolicyPage />} />
-            <Route path="/terms" element={<TermsConditionsPage />} />
-            <Route path="/cookies" element={<CookiePolicyPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </main>
+          <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/ecosystem" element={<EcosystemPage />} />
+              <Route path="/coming-soon" element={<ComingSoonPage />} />
+              <Route path="/project-development" element={<ProjectDevelopmentPage />} />
+              <Route path="/partners" element={<PartnersPage />} />
+              <Route path="/technology" element={<TechnologyPage />} />
+              <Route path="/company" element={<CompanyPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/privacy" element={<PrivacyPolicyPage />} />
+              <Route path="/terms" element={<TermsConditionsPage />} />
+              <Route path="/cookies" element={<CookiePolicyPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </main>
 
-        <Footer />
-      </div>
-    </BrowserRouter>
+          <Footer />
+        </div>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 };
 

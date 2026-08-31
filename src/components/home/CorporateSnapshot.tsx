@@ -19,30 +19,30 @@ export const CorporateSnapshot: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Left Column: Mission Narrative */}
           <div className="lg:col-span-7 space-y-6">
-            <h3 className="text-2xl sm:text-3xl font-bold text-white leading-snug">
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white leading-snug">
               Committed to Security, Stability, and Engineering Excellence
             </h3>
 
-            <p className="text-base text-gray-300 leading-relaxed">
+            <p className="text-base text-gray-600 dark:text-gray-300 leading-relaxed">
               JONANDA LLC was established to provide an institutional and engineering foundation for innovative software products. We separate corporate management, security assurance, and individual ecosystem platforms to maintain strict organizational clarity and accountability.
             </p>
 
             <div className="space-y-3 pt-2">
               <div className="flex items-start gap-3">
-                <div className="w-5 h-5 rounded-full bg-gold-500/15 flex items-center justify-center text-gold-400 shrink-0 mt-1">
+                <div className="w-5 h-5 rounded-full bg-gold-500/15 flex items-center justify-center text-amber-600 dark:text-gold-400 shrink-0 mt-1">
                   <ShieldCheck className="w-3.5 h-3.5" />
                 </div>
-                <p className="text-sm text-gray-300">
-                  <strong className="text-white">Separation of Entities:</strong> JONANDA LLC maintains dedicated governance for distinct products including Jonanda Coin (JNDA) and LOZULA Cybersecurity.
+                <p className="text-sm text-gray-600 dark:text-gray-300">
+                  <strong className="text-gray-900 dark:text-white">Separation of Entities:</strong> JONANDA LLC maintains dedicated governance for distinct products including Jonanda Coin (JNDA), LOZULA Cybersecurity, and JONANDA MAIL.
                 </p>
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="w-5 h-5 rounded-full bg-gold-500/15 flex items-center justify-center text-gold-400 shrink-0 mt-1">
+                <div className="w-5 h-5 rounded-full bg-gold-500/15 flex items-center justify-center text-amber-600 dark:text-gold-400 shrink-0 mt-1">
                   <Building2 className="w-3.5 h-3.5" />
                 </div>
-                <p className="text-sm text-gray-300">
-                  <strong className="text-white">United States Jurisdiction:</strong> Incorporated under United States law with structured international compliance and corporate standards.
+                <p className="text-sm text-gray-600 dark:text-gray-300">
+                  <strong className="text-gray-900 dark:text-white">United States Jurisdiction:</strong> Incorporated under United States law with structured international compliance and corporate standards.
                 </p>
               </div>
             </div>
@@ -59,22 +59,22 @@ export const CorporateSnapshot: React.FC = () => {
 
           {/* Right Column: Corporate Information Card */}
           <div className="lg:col-span-5">
-            <CorporateCard glow className="space-y-5 border-gold-500/20">
-              <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
+            <CorporateCard glow className="space-y-5 border-amber-500/30 dark:border-gold-500/20 shadow-sm dark:shadow-none">
+              <div className="flex items-center justify-between border-b border-gray-200 dark:border-white/[0.08] pb-4">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-gold-500/15 flex items-center justify-center text-gold-400">
+                  <div className="w-8 h-8 rounded-lg bg-gold-500/15 flex items-center justify-center text-amber-600 dark:text-gold-400">
                     <Building2 className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-white uppercase tracking-wider">
+                    <h4 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">
                       Corporate Information
                     </h4>
-                    <span className="text-[11px] text-gold-400 font-medium">
+                    <span className="text-[11px] text-amber-700 dark:text-gold-400 font-medium">
                       Official Entity Record
                     </span>
                   </div>
                 </div>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-white/5 text-gray-300 border border-white/10">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-white/10">
                   United States
                 </span>
               </div>
@@ -83,16 +83,16 @@ export const CorporateSnapshot: React.FC = () => {
                 {CORPORATE_DETAILS.map((item, idx) => (
                   <div
                     key={idx}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 py-1.5 border-b border-white/[0.04] last:border-0"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 py-1.5 border-b border-gray-200/60 dark:border-white/[0.04] last:border-0"
                   >
-                    <dt className="text-gray-400 font-medium">{item.label}</dt>
-                    <dd className="font-mono text-gray-200 text-right">
+                    <dt className="text-gray-500 dark:text-gray-400 font-medium">{item.label}</dt>
+                    <dd className="font-mono text-gray-900 dark:text-gray-200 text-right">
                       {item.isLink ? (
                         <a
                           href={item.href}
                           target={item.href?.startsWith('http') ? '_blank' : undefined}
                           rel={item.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
-                          className="text-gold-400 hover:text-gold-300 inline-flex items-center gap-1 transition-colors"
+                          className="text-amber-600 dark:text-gold-400 hover:text-amber-700 dark:hover:text-gold-300 inline-flex items-center gap-1 transition-colors font-semibold"
                         >
                           <span>{item.value}</span>
                           {item.href?.startsWith('http') && (
@@ -100,7 +100,7 @@ export const CorporateSnapshot: React.FC = () => {
                           )}
                         </a>
                       ) : (
-                        <span className="font-semibold text-white">{item.value}</span>
+                        <span className="font-semibold text-gray-900 dark:text-white">{item.value}</span>
                       )}
                     </dd>
                   </div>

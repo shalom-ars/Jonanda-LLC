@@ -1,7 +1,14 @@
 import React, { useEffect, useRef } from 'react';
+import { useTheme } from '../../context/ThemeContext';
 
 export const TechBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const { theme } = useTheme();
+  const themeRef = useRef(theme);
+
+  useEffect(() => {
+    themeRef.current = theme;
+  }, [theme]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -50,6 +57,8 @@ export const TechBackground: React.FC = () => {
       time += 0.003;
       ctx.clearRect(0, 0, width, height);
 
+      const isDark = themeRef.current === 'dark';
+
       // Subtle slow gold ambient radiance
       const goldRadialX = width * 0.5 + Math.sin(time) * 80;
       const goldRadialY = height * 0.35 + Math.cos(time * 0.8) * 50;
@@ -61,16 +70,23 @@ export const TechBackground: React.FC = () => {
         goldRadialY,
         width * 0.6
       );
-      goldRadial.addColorStop(0, 'rgba(212, 175, 55, 0.045)');
-      goldRadial.addColorStop(0.5, 'rgba(245, 158, 11, 0.015)');
-      goldRadial.addColorStop(1, 'rgba(8, 8, 11, 0)');
+
+      if (isDark) {
+        goldRadial.addColorStop(0, 'rgba(212, 175, 55, 0.045)');
+        goldRadial.addColorStop(0.5, 'rgba(245, 158, 11, 0.015)');
+        goldRadial.addColorStop(1, 'rgba(8, 8, 11, 0)');
+      } else {
+        goldRadial.addColorStop(0, 'rgba(217, 119, 6, 0.04)');
+        goldRadial.addColorStop(0.5, 'rgba(245, 158, 11, 0.01)');
+        goldRadial.addColorStop(1, 'rgba(248, 250, 252, 0)');
+      }
 
       ctx.fillStyle = goldRadial;
       ctx.fillRect(0, 0, width, height);
 
       // Subtle grid background
       const gridSize = 64;
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.015)';
+      ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.015)' : 'rgba(0, 0, 0, 0.025)';
       ctx.lineWidth = 1;
 
       // Draw faint grid lines
@@ -101,7 +117,9 @@ export const TechBackground: React.FC = () => {
         // Draw node
         ctx.beginPath();
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(245, 158, 11, ${node.baseAlpha})`;
+        ctx.fillStyle = isDark
+          ? `rgba(245, 158, 11, ${node.baseAlpha})`
+          : `rgba(217, 119, 6, ${node.baseAlpha * 0.7})`;
         ctx.fill();
 
         // Connect nearby nodes with subtle golden web lines
@@ -117,7 +135,9 @@ export const TechBackground: React.FC = () => {
             ctx.beginPath();
             ctx.moveTo(node.x, node.y);
             ctx.lineTo(other.x, other.y);
-            ctx.strokeStyle = `rgba(212, 175, 55, ${alpha})`;
+            ctx.strokeStyle = isDark
+              ? `rgba(212, 175, 55, ${alpha})`
+              : `rgba(217, 119, 6, ${alpha * 0.8})`;
             ctx.lineWidth = 0.75;
             ctx.stroke();
           }
@@ -139,7 +159,7 @@ export const TechBackground: React.FC = () => {
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
       <canvas ref={canvasRef} className="w-full h-full block" />
       {/* Top subtle vignette */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background pointer-events-none transition-colors duration-300" />
     </div>
   );
 };

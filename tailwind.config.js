@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -8,12 +9,17 @@ export default {
     extend: {
       colors: {
         background: {
-          DEFAULT: '#08080b',
-          subtle: '#0c0c10',
-          card: '#111117',
-          surface: '#16161f',
-          elevated: '#1c1c28',
-          border: 'rgba(255, 255, 255, 0.08)'
+          DEFAULT: 'var(--color-bg, #08080b)',
+          subtle: 'var(--color-bg-subtle, #0c0c10)',
+          card: 'var(--color-surface, #111117)',
+          surface: 'var(--color-surface, #16161f)',
+          elevated: 'var(--color-surface-elevated, #1c1c28)',
+          border: 'var(--color-border, rgba(255, 255, 255, 0.08))'
+        },
+        surface: {
+          DEFAULT: 'var(--color-surface, #16161f)',
+          card: 'var(--color-surface, #111117)',
+          subtle: 'var(--color-bg-subtle, #0c0c10)',
         },
         gold: {
           50: '#fffbeb',
