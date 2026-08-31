@@ -26,7 +26,7 @@ JONANDA LLC operates as both an institutional technology company developing its 
 ### 🪙 Product Ecosystem Portfolio (`/ecosystem`)
 * **Jonanda Coin (JNDA)**: AI-integrated Web3 ecosystem and decentralized digital asset platform (`https://jonanda.com`).
 * **LOZULA Cybersecurity**: Cybersecurity technology, vulnerability assessments, and threat intelligence platform (`https://lozula.com`).
-* **Jonanda Mail**: Centralized business email and multi-project communication platform (`Coming Soon`).
+* **JONANDA MAIL**: Centralized business email and multi-project communication platform (`https://mail.jonanda.com`).
 * **Jonanda Studio**: Next-generation AI workspace, agent workflows, and automation infrastructure (`Coming Soon`).
 * **Jonanda SEO**: Automated SEO intelligence, website audits, and search visibility platform (`Coming Soon`).
 * **Jonanda Influencer**: Managed creator and brand collaboration workflow platform (`Coming Soon`).

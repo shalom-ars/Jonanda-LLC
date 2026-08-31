@@ -51,14 +51,6 @@ export const MAIN_NAV_MENU: MainNavItem[] = [
         iconName: 'Layers'
       },
       {
-        label: 'Coming Soon Portfolio',
-        href: '/coming-soon',
-        description: 'Jonanda Studio, SEO, Influencer & Security Toolkit',
-        iconName: 'Clock',
-        badge: 'Upcoming',
-        badgeColor: 'purple'
-      },
-      {
         label: 'Jonanda Coin (JNDA)',
         href: 'https://jonanda.com',
         description: 'Web3 & AI digital asset ecosystem',
@@ -75,6 +67,23 @@ export const MAIN_NAV_MENU: MainNavItem[] = [
         badge: 'Live',
         badgeColor: 'emerald',
         isExternal: true
+      },
+      {
+        label: 'JONANDA MAIL',
+        href: 'https://mail.jonanda.com',
+        description: 'Centralized business email & webmail platform',
+        iconName: 'Mail',
+        badge: 'Live',
+        badgeColor: 'emerald',
+        isExternal: true
+      },
+      {
+        label: 'Coming Soon Portfolio',
+        href: '/coming-soon',
+        description: 'Jonanda Studio, SEO, Influencer & Security Toolkit',
+        iconName: 'Clock',
+        badge: 'Upcoming',
+        badgeColor: 'purple'
       }
     ]
   },
@@ -121,6 +130,7 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
 export const FOOTER_ECOSYSTEM_LINKS: NavItem[] = [
   { label: 'Jonanda Coin (JNDA)', href: 'https://jonanda.com', isExternal: true },
   { label: 'LOZULA Cybersecurity', href: 'https://lozula.com', isExternal: true },
+  { label: 'JONANDA MAIL', href: 'https://mail.jonanda.com', isExternal: true },
   { label: 'Coming Soon Portfolio', href: '/coming-soon' },
   { label: 'Ecosystem Overview', href: '/ecosystem' },
 ];

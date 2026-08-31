@@ -44,7 +44,7 @@ export const EcosystemCard: React.FC<EcosystemCardProps> = ({
             {product.category}
           </span>
 
-          {/* Status Badge (Never truncates) */}
+          {/* Status Badge */}
           <div className="shrink-0">
             {product.status === 'Live & Operational' && (
               <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 whitespace-nowrap">
@@ -98,7 +98,9 @@ export const EcosystemCard: React.FC<EcosystemCardProps> = ({
           ) : (
             <div
               className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
-                isComingSoon
+                product.id === 'jonanda-mail'
+                  ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 shadow-sm'
+                  : isComingSoon
                   ? 'bg-purple-500/10 border border-purple-500/30 text-purple-300 shadow-sm'
                   : product.status === 'Ecosystem Initiative'
                   ? 'bg-gold-500/10 border border-gold-500/30 text-gold-400'

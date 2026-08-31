@@ -15,7 +15,8 @@ import {
   Building2,
   ShieldCheck,
   Globe,
-  Handshake
+  Handshake,
+  Mail
 } from 'lucide-react';
 import { MAIN_NAV_MENU, MainNavItem, NavDropdownItem } from '../../data/navigationData';
 import { Button } from './Button';
@@ -30,7 +31,8 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Building2,
   ShieldCheck,
   Globe,
-  Handshake
+  Handshake,
+  Mail
 };
 
 export const Navbar: React.FC = () => {

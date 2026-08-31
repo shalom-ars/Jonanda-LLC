@@ -24,7 +24,7 @@ export interface EcosystemProduct {
 }
 
 export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
-  // --- CURRENT OFFICIAL ECOSYSTEM (LIVE / ACTIVE) ---
+  // --- CURRENT OFFICIAL ECOSYSTEM (LIVE / ACTIVE PLATFORMS) ---
   {
     id: 'jonanda-coin',
     name: 'Jonanda Coin (JNDA)',
@@ -75,33 +75,33 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
     featured: true,
     launchOrder: 2
   },
-
-  // --- COMING SOON PROJECT PORTFOLIO (UNDER ACTIVE DEVELOPMENT) ---
   {
     id: 'jonanda-mail',
     name: 'JONANDA MAIL',
     category: 'Business Email & Communication',
-    tagline: 'Centralized email, webmail, and campaign infrastructure for the JONANDA ecosystem',
-    description: 'The centralized business email and multi-project communication platform engineered for JONANDA LLC and its ecosystem ventures.',
+    tagline: 'Centralized email, webmail, and communication infrastructure for the JONANDA ecosystem',
+    description: 'The official centralized business email and multi-project communication platform engineered for JONANDA LLC and its ecosystem ventures.',
     fullDescription: 'JONANDA MAIL delivers multi-tenant business email, threaded webmail, verified domain DNS orchestration (SPF, DKIM, DMARC, MX), audience campaign automation, and deliverability analytics under a unified enterprise control plane.',
     capabilities: [
-      'Multi-project email identity management',
-      'Threaded webmail and inbox collaboration',
-      'Automated DNS and domain deliverability controls',
-      'Visual email template builder and campaign delivery',
-      'Multi-tenant role-based access security'
+      'Multi-Project Business Email Identities',
+      'Threaded Webmail & Secure Inbox Collaboration',
+      'Automated DNS, SPF, DKIM & DMARC Orchestration',
+      'Visual Campaign Delivery & Audience Messaging',
+      'Zero-Trust Access Control & Multi-Tenant Security'
     ],
-    status: 'Coming Soon',
-    statusColor: 'purple',
-    tier: 'coming-soon',
+    status: 'Live & Operational',
+    statusColor: 'emerald',
+    tier: 'current',
     iconName: 'Mail',
     logoType: 'icon',
-    ctaText: 'Coming Soon',
+    ctaText: 'Launch JONANDA MAIL',
     ctaLink: 'https://mail.jonanda.com',
     isExternal: true,
     featured: true,
     launchOrder: 3
   },
+
+  // --- COMING SOON PROJECT PORTFOLIO (UNDER ACTIVE DEVELOPMENT) ---
   {
     id: 'jonanda-studio',
     name: 'Jonanda Studio',
@@ -110,11 +110,11 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
     description: 'A next-generation AI and software platform being developed within the JONANDA LLC technology ecosystem.',
     fullDescription: 'Jonanda Studio is an intelligent software and AI workspace engineered to orchestrate multi-step autonomous workflows, cognitive processing agents, and developer tooling within a unified, high-performance environment.',
     capabilities: [
-      'AI-powered workflows',
-      'Intelligent automation',
-      'AI agents',
-      'Productivity tools',
-      'Software development infrastructure'
+      'AI-Powered Workflows',
+      'Intelligent Automation',
+      'Autonomous AI Agents',
+      'Developer Productivity Tools',
+      'Software Engineering Infrastructure'
     ],
     status: 'Coming Soon',
     statusColor: 'purple',
@@ -134,13 +134,11 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
     description: 'An advanced SEO platform designed to analyze, optimize, monitor, and improve websites using automated SEO intelligence.',
     fullDescription: 'Jonanda SEO provides automated technical website audits, on-page optimization analysis, structured keyword tracking, and actionable search intelligence to enhance discoverability and indexing health across digital platforms.',
     capabilities: [
-      'Technical SEO analysis',
-      'On-page SEO',
-      'Keyword research',
-      'Website audits',
-      'Search visibility monitoring',
-      'SEO reports',
-      'Performance recommendations'
+      'Technical SEO Analysis',
+      'On-Page Optimization Audits',
+      'Keyword Tracking & Research',
+      'Search Visibility Monitoring',
+      'Performance Recommendations'
     ],
     status: 'Coming Soon',
     statusColor: 'purple',
@@ -160,13 +158,11 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
     description: 'A managed creator and brand collaboration platform designed to connect businesses with relevant creators and manage campaigns from discovery through completion.',
     fullDescription: 'Jonanda Influencer simplifies the collaboration lifecycle for modern enterprises by providing structured discovery filters, standardized onboarding pipelines, campaign milestones, negotiation management, and unified performance telemetry.',
     capabilities: [
-      'Creator discovery',
-      'Brand onboarding',
-      'Creator-brand matching',
-      'Campaign management',
-      'Collaboration workflow',
-      'Negotiation management',
-      'Performance tracking'
+      'Creator Discovery & Matching',
+      'Brand Onboarding Pipelines',
+      'Campaign Lifecycle Management',
+      'Contract & Negotiation Tracking',
+      'Performance Telemetry'
     ],
     status: 'Coming Soon',
     statusColor: 'purple',
@@ -186,14 +182,11 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
     description: 'An authorized defensive cybersecurity toolkit being developed for security assessment and security operations workflows.',
     fullDescription: 'Designed exclusively for authorized defensive diagnostics, the Jonanda Security Toolkit provides network asset scanning, DNS reconnaissance, API security validation, whitelist boundary controls, and audit reporting for security teams.',
     capabilities: [
-      'Website security scanning',
-      'Port and service discovery',
-      'DNS and subdomain discovery',
-      'API security checks',
-      'Vulnerability reporting',
-      'Scope/whitelist controls',
-      'Audit logs',
-      'Security dashboard'
+      'Perimeter Security Scanning',
+      'Port & Service Discovery',
+      'DNS & Subdomain Mapping',
+      'API Endpoint Validation',
+      'Defensive Security Dashboard'
     ],
     status: 'Coming Soon',
     statusColor: 'purple',
