@@ -83,7 +83,7 @@ export const Navbar: React.FC = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/90 dark:bg-background/85 backdrop-blur-xl border-b border-black/[0.06] dark:border-white/[0.08] shadow-lg shadow-black/5 dark:shadow-black/40 py-2.5 sm:py-3'
+          ? 'bg-white/95 dark:bg-[#08080b]/95 backdrop-blur-xl border-b border-gray-200 dark:border-white/[0.08] shadow-lg shadow-black/5 dark:shadow-black/60 py-2.5 sm:py-3'
           : 'bg-transparent py-4 sm:py-5'
       }`}
     >
@@ -118,9 +118,9 @@ export const Navbar: React.FC = () => {
           </Link>
 
           {/* ========================================================= */}
-          {/* DESKTOP COMPACT NAVIGATION (WITH DROPDOWNS)               */}
+          {/* DESKTOP COMPACT NAVIGATION (WITH SOLID DROPDOWNS)         */}
           {/* ========================================================= */}
-          <nav className="hidden md:flex items-center gap-1 bg-white/80 dark:bg-surface/70 backdrop-blur-md px-3 py-1.5 rounded-full border border-gray-200/80 dark:border-white/[0.08] shadow-sm">
+          <nav className="hidden md:flex items-center gap-1 bg-white/90 dark:bg-[#12121a] px-3 py-1.5 rounded-full border border-gray-200 dark:border-white/10 shadow-md">
             {MAIN_NAV_MENU.map((item: MainNavItem) => {
               const hasDropdown = Boolean(item.children && item.children.length > 0);
               const isOpen = activeDropdown === item.label;
@@ -156,7 +156,7 @@ export const Navbar: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setActiveDropdown(isOpen ? null : item.label)}
-                    className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-full transition-all duration-200 focus:outline-none ${
+                    className={`inline-flex items-center gap-1 px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-full transition-all duration-200 focus:outline-none ${
                       isActive || isOpen
                         ? 'text-amber-700 dark:text-gold-300 bg-amber-500/10 dark:bg-white/10 shadow-sm border border-amber-500/20 dark:border-white/10 font-bold'
                         : 'text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'
@@ -165,39 +165,39 @@ export const Navbar: React.FC = () => {
                   >
                     <span>{item.label}</span>
                     <ChevronDown
-                      className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                      className={`w-3.5 h-3.5 shrink-0 transition-transform duration-200 ${
                         isOpen ? 'rotate-180 text-amber-600 dark:text-gold-300' : 'text-gray-400'
                       }`}
                     />
                   </button>
 
-                  {/* Floating Glassmorphic Dropdown Menu */}
+                  {/* Fully Opaque Solid Dropdown Menu (No background bleed-through) */}
                   {isOpen && item.children && (
-                    <div className="absolute top-full left-0 mt-2.5 w-80 rounded-2xl bg-white/95 dark:bg-surface/95 backdrop-blur-2xl border border-gray-200 dark:border-white/10 shadow-2xl p-2.5 space-y-1 z-50 animate-fadeIn">
+                    <div className="absolute top-full left-0 mt-3 w-80 sm:w-96 rounded-2xl bg-white dark:bg-[#0e0e16] border border-gray-200 dark:border-gold-500/30 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.85)] p-3 space-y-1.5 z-[100] animate-fadeIn">
                       {item.children.map((child: NavDropdownItem) => {
                         const IconComp = child.iconName ? iconMap[child.iconName] || Globe : Globe;
                         const isSelected = !child.isExternal && location.pathname === child.href;
 
                         const content = (
                           <div
-                            className={`flex items-start gap-3 p-2.5 rounded-xl transition-all duration-200 group/item ${
+                            className={`flex items-start gap-3.5 p-3 rounded-xl transition-all duration-200 group/item ${
                               isSelected
-                                ? 'bg-amber-500/10 dark:bg-gold-500/10 border border-amber-500/20 dark:border-gold-500/20'
-                                : 'hover:bg-gray-100 dark:hover:bg-white/[0.06] border border-transparent'
+                                ? 'bg-amber-500/10 dark:bg-gold-500/15 border border-amber-500/20 dark:border-gold-500/30'
+                                : 'hover:bg-gray-100 dark:hover:bg-white/[0.07] border border-transparent'
                             }`}
                           >
-                            <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-background/80 border border-gray-200 dark:border-white/[0.08] flex items-center justify-center text-amber-600 dark:text-gold-400 shrink-0 mt-0.5 group-hover/item:border-gold-500/30 group-hover/item:text-gold-300 transition-colors">
+                            <div className="w-9 h-9 rounded-xl bg-amber-500/10 dark:bg-gold-500/10 border border-amber-500/20 dark:border-gold-500/30 flex items-center justify-center text-amber-600 dark:text-gold-400 shrink-0 mt-0.5 group-hover/item:border-gold-500/50 group-hover/item:text-amber-700 dark:group-hover/item:text-gold-300 transition-colors shadow-sm">
                               <IconComp className="w-4 h-4" />
                             </div>
 
-                            <div className="flex-grow space-y-0.5">
-                              <div className="flex items-center justify-between gap-1.5">
-                                <span className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white group-hover/item:text-amber-600 dark:group-hover/item:text-gold-200 transition-colors leading-snug">
+                            <div className="flex-grow space-y-1">
+                              <div className="flex items-center justify-between gap-2">
+                                <span className="text-sm font-bold text-gray-900 dark:text-white group-hover/item:text-amber-700 dark:group-hover/item:text-gold-200 transition-colors leading-snug">
                                   {child.label}
                                 </span>
                                 {child.badge && (
                                   <span
-                                    className={`text-[9px] font-bold px-1.5 py-0.2 rounded uppercase tracking-wider shrink-0 ${
+                                    className={`text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider shrink-0 ${
                                       child.badgeColor === 'emerald'
                                         ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
                                         : child.badgeColor === 'amber'
@@ -214,7 +214,7 @@ export const Navbar: React.FC = () => {
                                 )}
                               </div>
                               {child.description && (
-                                <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-tight">
+                                <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
                                   {child.description}
                                 </p>
                               )}
@@ -294,7 +294,7 @@ export const Navbar: React.FC = () => {
       {/* MOBILE DRAWER MENU (WITH EXPANDABLE ACCORDIONS)           */}
       {/* ========================================================= */}
       {isMobileMenuOpen && (
-        <div className="md:hidden fixed inset-x-0 top-[58px] bg-white/95 dark:bg-background/95 backdrop-blur-2xl border-b border-gray-200 dark:border-white/10 shadow-2xl transition-all duration-300 animate-fadeIn max-h-[85vh] overflow-y-auto">
+        <div className="md:hidden fixed inset-x-0 top-[58px] bg-white dark:bg-[#0b0b12] border-b border-gray-200 dark:border-white/10 shadow-2xl transition-all duration-300 animate-fadeIn max-h-[85vh] overflow-y-auto z-[100]">
           <div className="max-w-7xl mx-auto px-4 py-6 space-y-4">
             <nav className="flex flex-col space-y-1">
               {MAIN_NAV_MENU.map((item: MainNavItem) => {
@@ -320,7 +320,7 @@ export const Navbar: React.FC = () => {
                 }
 
                 return (
-                  <div key={item.label} className="rounded-xl overflow-hidden bg-gray-50/80 dark:bg-surface/30 border border-gray-200/60 dark:border-white/[0.04]">
+                  <div key={item.label} className="rounded-xl overflow-hidden bg-gray-50 dark:bg-[#14141e] border border-gray-200 dark:border-white/[0.08]">
                     <button
                       type="button"
                       onClick={() => toggleMobileSubmenu(item.label)}
@@ -335,14 +335,14 @@ export const Navbar: React.FC = () => {
                     </button>
 
                     {isExpanded && item.children && (
-                      <div className="px-3 pb-3 space-y-1 border-t border-gray-200/60 dark:border-white/[0.04] pt-2">
+                      <div className="px-3 pb-3 space-y-1 border-t border-gray-200 dark:border-white/[0.06] pt-2">
                         {item.children.map((child: NavDropdownItem) => {
                           const IconComp = child.iconName ? iconMap[child.iconName] || Globe : Globe;
                           const isChildActive = !child.isExternal && location.pathname === child.href;
 
                           const childContent = (
                             <div
-                              className={`flex items-center gap-3 p-2 rounded-lg text-sm transition-colors ${
+                              className={`flex items-center gap-3 p-2.5 rounded-lg text-sm transition-colors ${
                                 isChildActive
                                   ? 'bg-amber-500/15 dark:bg-gold-500/15 text-amber-700 dark:text-gold-300 font-bold'
                                   : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-black dark:hover:text-white'
@@ -351,13 +351,18 @@ export const Navbar: React.FC = () => {
                               <IconComp className="w-4 h-4 text-amber-600 dark:text-gold-400 shrink-0" />
                               <div className="flex-grow">
                                 <div className="flex items-center justify-between">
-                                  <span>{child.label}</span>
+                                  <span className="font-semibold">{child.label}</span>
                                   {child.badge && (
-                                    <span className="text-[9px] font-bold px-1.5 py-0.2 rounded uppercase bg-gold-500/15 text-amber-700 dark:text-gold-300 border border-gold-500/30">
+                                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase bg-gold-500/15 text-amber-700 dark:text-gold-300 border border-gold-500/30">
                                       {child.badge}
                                     </span>
                                   )}
                                 </div>
+                                {child.description && (
+                                  <p className="text-[11px] text-gray-500 dark:text-gray-400 line-clamp-1 font-normal">
+                                    {child.description}
+                                  </p>
+                                )}
                               </div>
                               {child.isExternal && <ExternalLink className="w-3 h-3 opacity-50 shrink-0" />}
                             </div>
