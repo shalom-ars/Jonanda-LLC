@@ -9,10 +9,15 @@ import {
   ArrowRight,
   ExternalLink,
   ShieldCheck,
-  Inbox
+  Inbox,
+  Sparkles,
+  GitBranch,
+  Clock,
+  Play
 } from 'lucide-react';
 import { SEOHead } from '../../components/common/SEOHead';
 import { Button } from '../../components/common/Button';
+import { CorporateCard } from '../../components/common/CorporateCard';
 import { useMail } from '../../context/MailContext';
 
 export const MailHubPage: React.FC = () => {
@@ -46,7 +51,7 @@ export const MailHubPage: React.FC = () => {
           </h1>
 
           <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
-            Governed communication layer for JONANDA LLC. Manage audiences, broadcast templated updates, and trigger automated partner & creator sequences via JONANDA FLOW.
+            Governed communication layer for JONANDA LLC. Manage audiences, broadcast templated updates, and trigger visual automation pipelines via JONANDA FLOW.
           </p>
 
           <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
@@ -54,14 +59,18 @@ export const MailHubPage: React.FC = () => {
               href="https://mail.jonanda.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center font-bold transition-all duration-300 rounded-lg text-sm px-5 py-2.5 gap-2 bg-gold-gradient text-gray-950 shadow-gold-sm hover:brightness-105"
+              className="inline-flex items-center justify-center font-bold transition-all duration-300 rounded-xl text-sm px-5 py-2.5 gap-2 bg-gold-gradient text-gray-950 shadow-gold-sm hover:brightness-105"
             >
               <span>Open Webmail (mail.jonanda.com)</span>
               <ExternalLink className="w-4 h-4" />
             </a>
 
-            <Button href="/flow" variant="secondary" size="md" icon={<Zap className="w-4 h-4" />}>
-              Open JONANDA Flow
+            <Button href="/flow/new" variant="primary" size="md" icon={<Zap className="w-4 h-4" />}>
+              Build Flow Automation
+            </Button>
+
+            <Button href="/flow/templates" variant="outline" size="md" icon={<FileText className="w-4 h-4" />}>
+              Email Templates Library
             </Button>
           </div>
         </div>
@@ -70,7 +79,7 @@ export const MailHubPage: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <Link
             to="/mail/inbox"
-            className="p-6 rounded-2xl bg-white dark:bg-surface/70 border border-gray-200 dark:border-white/10 hover:border-emerald-500/40 transition-all shadow-sm group flex flex-col justify-between"
+            className="p-6 rounded-2xl bg-white dark:bg-[#11111a] border border-gray-200 dark:border-white/10 hover:border-emerald-500/40 transition-all shadow-sm group flex flex-col justify-between"
           >
             <div className="space-y-3">
               <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
@@ -91,7 +100,7 @@ export const MailHubPage: React.FC = () => {
 
           <Link
             to="/mail/contacts"
-            className="p-6 rounded-2xl bg-white dark:bg-surface/70 border border-gray-200 dark:border-white/10 hover:border-amber-500/40 transition-all shadow-sm group flex flex-col justify-between"
+            className="p-6 rounded-2xl bg-white dark:bg-[#11111a] border border-gray-200 dark:border-white/10 hover:border-amber-500/40 transition-all shadow-sm group flex flex-col justify-between"
           >
             <div className="space-y-3">
               <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-gold-400 flex items-center justify-center">
@@ -112,7 +121,7 @@ export const MailHubPage: React.FC = () => {
 
           <Link
             to="/mail/campaigns"
-            className="p-6 rounded-2xl bg-white dark:bg-surface/70 border border-gray-200 dark:border-white/10 hover:border-purple-500/40 transition-all shadow-sm group flex flex-col justify-between"
+            className="p-6 rounded-2xl bg-white dark:bg-[#11111a] border border-gray-200 dark:border-white/10 hover:border-purple-500/40 transition-all shadow-sm group flex flex-col justify-between"
           >
             <div className="space-y-3">
               <div className="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
@@ -133,7 +142,7 @@ export const MailHubPage: React.FC = () => {
 
           <Link
             to="/mail/templates"
-            className="p-6 rounded-2xl bg-white dark:bg-surface/70 border border-gray-200 dark:border-white/10 hover:border-blue-500/40 transition-all shadow-sm group flex flex-col justify-between"
+            className="p-6 rounded-2xl bg-white dark:bg-[#11111a] border border-gray-200 dark:border-white/10 hover:border-blue-500/40 transition-all shadow-sm group flex flex-col justify-between"
           >
             <div className="space-y-3">
               <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
@@ -153,8 +162,104 @@ export const MailHubPage: React.FC = () => {
           </Link>
         </div>
 
+        {/* Section: Email Visual Automation Engine (n8n Concept) */}
+        <div className="space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-200 dark:border-white/10 pb-4">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-amber-500/10 text-xs font-bold text-amber-700 dark:text-gold-300 border border-amber-500/30 mb-1">
+                <Zap className="w-3.5 h-3.5" />
+                <span>Visual Workflow Automation</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white">
+                Automate Email Sequences with JONANDA FLOW
+              </h2>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                Connect triggers, conditional branching, webhook payloads, and AI personalization directly into JONANDA MAIL.
+              </p>
+            </div>
+
+            <Button href="/flow/new" variant="primary" size="sm" icon={<Play className="w-3.5 h-3.5" />}>
+              Open Canvas Builder
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <CorporateCard className="p-6 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-gold-400 flex items-center justify-center">
+                  <GitBranch className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+                  Ready Template
+                </span>
+              </div>
+
+              <div>
+                <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                  Partner Intake & Approval Sequence
+                </h3>
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                  Intake Form &rarr; Ops Alert &rarr; Conditional Approval &rarr; Welcome Email &rarr; CRM Tagging.
+                </p>
+              </div>
+
+              <Button href="/flow/templates" variant="outline" size="sm" className="w-full justify-center">
+                Clone to Builder
+              </Button>
+            </CorporateCard>
+
+            <CorporateCard className="p-6 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/30">
+                  AI Powered
+                </span>
+              </div>
+
+              <div>
+                <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                  AI Creator Email Personalizer
+                </h3>
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                  Creator Applied &rarr; AI Profile Analysis &rarr; Tailored Talking Points &rarr; Personalized Delivery.
+                </p>
+              </div>
+
+              <Button href="/flow/templates" variant="outline" size="sm" className="w-full justify-center">
+                Clone to Builder
+              </Button>
+            </CorporateCard>
+
+            <CorporateCard className="p-6 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                  <Clock className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-500/15 text-blue-700 dark:text-blue-300 border border-blue-500/30">
+                  Multi-Step Delay
+                </span>
+              </div>
+
+              <div>
+                <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                  Campaign Brief & Reminder Drip
+                </h3>
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                  Invitation &rarr; Acceptance Check &rarr; 3-Day Delay &rarr; Draft Submission Reminder.
+                </p>
+              </div>
+
+              <Button href="/flow/templates" variant="outline" size="sm" className="w-full justify-center">
+                Clone to Builder
+              </Button>
+            </CorporateCard>
+          </div>
+        </div>
+
         {/* Infrastructure Compliance Banner */}
-        <div className="rounded-3xl bg-slate-100 dark:bg-surface/50 border border-gray-200 dark:border-white/10 p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div className="rounded-3xl bg-white dark:bg-[#11111a] border border-gray-200 dark:border-white/10 p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm">
           <div className="space-y-2 max-w-3xl">
             <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 dark:text-emerald-400">
               <ShieldCheck className="w-4 h-4" />

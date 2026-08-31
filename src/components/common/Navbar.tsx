@@ -126,9 +126,9 @@ export const Navbar: React.FC = () => {
           </Link>
 
           {/* ========================================================= */}
-          {/* DESKTOP COMPACT NAVIGATION (WITH SOLID DROPDOWNS)         */}
+          {/* DESKTOP COMPACT NAVIGATION (WITH 2-COLUMN MEGA DROPDOWNS) */}
           {/* ========================================================= */}
-          <nav className="hidden md:flex items-center gap-1 bg-white/90 dark:bg-[#12121a] px-3 py-1.5 rounded-full border border-gray-200 dark:border-white/10 shadow-md">
+          <nav className="hidden md:flex items-center gap-1 bg-white/95 dark:bg-[#12121a] px-3 py-1.5 rounded-full border border-gray-200 dark:border-white/10 shadow-md">
             {MAIN_NAV_MENU.map((item: MainNavItem) => {
               const hasDropdown = Boolean(item.children && item.children.length > 0);
               const isOpen = activeDropdown === item.label;
@@ -137,6 +137,7 @@ export const Navbar: React.FC = () => {
               );
               const isDirectActive = item.href && location.pathname === item.href;
               const isActive = isDirectActive || isChildActive;
+              const isMega = item.children && item.children.length > 5;
 
               if (!hasDropdown && item.href) {
                 return (
@@ -179,81 +180,184 @@ export const Navbar: React.FC = () => {
                     />
                   </button>
 
-                  {/* Fully Opaque Solid Dropdown Menu (No background bleed-through) */}
+                  {/* Fully Opaque Solid Dropdown (2-Column Mega Menu for Flow & Mail) */}
                   {isOpen && item.children && (
-                    <div className="absolute top-full left-0 mt-3 w-80 sm:w-96 rounded-2xl bg-white dark:bg-[#0e0e16] border border-gray-200 dark:border-gold-500/30 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.85)] p-3 space-y-1.5 z-[100] animate-fadeIn">
-                      {item.children.map((child: NavDropdownItem) => {
-                        const IconComp = child.iconName ? iconMap[child.iconName] || Globe : Globe;
-                        const isSelected = !child.isExternal && location.pathname === child.href;
+                    <div
+                      className={`absolute top-full left-0 mt-3 rounded-3xl bg-white dark:bg-[#0e0e18] border border-gray-200 dark:border-gold-500/30 shadow-[0_25px_70px_-15px_rgba(0,0,0,0.8)] p-3.5 z-[100] animate-fadeIn ${
+                        isMega ? 'w-[660px] sm:w-[700px]' : 'w-80 sm:w-96'
+                      }`}
+                    >
+                      {isMega ? (
+                        <div>
+                          {/* 2-Column Grid */}
+                          <div className="grid grid-cols-2 gap-2 pb-3">
+                            {item.children.map((child: NavDropdownItem) => {
+                              const IconComp = child.iconName ? iconMap[child.iconName] || Globe : Globe;
+                              const isSelected = !child.isExternal && location.pathname === child.href;
 
-                        const content = (
-                          <div
-                            className={`flex items-start gap-3.5 p-3 rounded-xl transition-all duration-200 group/item ${
-                              isSelected
-                                ? 'bg-amber-500/10 dark:bg-gold-500/15 border border-amber-500/20 dark:border-gold-500/30'
-                                : 'hover:bg-gray-100 dark:hover:bg-white/[0.07] border border-transparent'
-                            }`}
-                          >
-                            <div className="w-9 h-9 rounded-xl bg-amber-500/10 dark:bg-gold-500/10 border border-amber-500/20 dark:border-gold-500/30 flex items-center justify-center text-amber-600 dark:text-gold-400 shrink-0 mt-0.5 group-hover/item:border-gold-500/50 group-hover/item:text-amber-700 dark:group-hover/item:text-gold-300 transition-colors shadow-sm">
-                              <IconComp className="w-4 h-4" />
-                            </div>
+                              const content = (
+                                <div
+                                  className={`flex items-start gap-3 p-2.5 rounded-2xl transition-all duration-200 group/item ${
+                                    isSelected
+                                      ? 'bg-amber-500/10 dark:bg-gold-500/15 border border-amber-500/20 dark:border-gold-500/30'
+                                      : 'hover:bg-gray-100 dark:hover:bg-white/[0.07] border border-transparent'
+                                  }`}
+                                >
+                                  <div className="w-8 h-8 rounded-xl bg-amber-500/10 dark:bg-gold-500/10 border border-amber-500/20 dark:border-gold-500/30 flex items-center justify-center text-amber-600 dark:text-gold-400 shrink-0 mt-0.5 group-hover/item:border-gold-500/50 group-hover/item:text-amber-700 dark:group-hover/item:text-gold-300 transition-colors shadow-sm">
+                                    <IconComp className="w-4 h-4" />
+                                  </div>
 
-                            <div className="flex-grow space-y-1">
-                              <div className="flex items-center justify-between gap-2">
-                                <span className="text-sm font-bold text-gray-900 dark:text-white group-hover/item:text-amber-700 dark:group-hover/item:text-gold-200 transition-colors leading-snug">
-                                  {child.label}
-                                </span>
-                                {child.badge && (
-                                  <span
-                                    className={`text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider shrink-0 ${
-                                      child.badgeColor === 'emerald'
-                                        ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
-                                        : child.badgeColor === 'amber'
-                                        ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30'
-                                        : child.badgeColor === 'purple'
-                                        ? 'bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/30'
-                                        : child.badgeColor === 'blue'
-                                        ? 'bg-blue-500/15 text-blue-700 dark:text-blue-300 border border-blue-500/30'
-                                        : 'bg-gold-500/15 text-amber-700 dark:text-gold-300 border border-gold-500/30'
-                                    }`}
+                                  <div className="flex-grow space-y-0.5">
+                                    <div className="flex items-center justify-between gap-1.5">
+                                      <span className="text-xs font-bold text-gray-900 dark:text-white group-hover/item:text-amber-700 dark:group-hover/item:text-gold-200 transition-colors leading-snug">
+                                        {child.label}
+                                      </span>
+                                      {child.badge && (
+                                        <span
+                                          className={`text-[8px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider shrink-0 ${
+                                            child.badgeColor === 'emerald'
+                                              ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
+                                              : child.badgeColor === 'amber'
+                                              ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30'
+                                              : child.badgeColor === 'purple'
+                                              ? 'bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/30'
+                                              : child.badgeColor === 'blue'
+                                              ? 'bg-blue-500/15 text-blue-700 dark:text-blue-300 border border-blue-500/30'
+                                              : 'bg-gold-500/15 text-amber-700 dark:text-gold-300 border border-gold-500/30'
+                                          }`}
+                                        >
+                                          {child.badge}
+                                        </span>
+                                      )}
+                                    </div>
+                                    {child.description && (
+                                      <p className="text-[10px] text-gray-500 dark:text-gray-400 line-clamp-1 leading-normal">
+                                        {child.description}
+                                      </p>
+                                    )}
+                                  </div>
+
+                                  {child.isExternal && (
+                                    <ExternalLink className="w-3 h-3 text-gray-400 group-hover/item:text-amber-600 dark:group-hover/item:text-gold-400 shrink-0 mt-1 opacity-70" />
+                                  )}
+                                </div>
+                              );
+
+                              if (child.isExternal) {
+                                return (
+                                  <a
+                                    key={child.label}
+                                    href={child.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="block"
                                   >
-                                    {child.badge}
-                                  </span>
-                                )}
-                              </div>
-                              {child.description && (
-                                <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
-                                  {child.description}
-                                </p>
-                              )}
-                            </div>
+                                    {content}
+                                  </a>
+                                );
+                              }
 
-                            {child.isExternal && (
-                              <ExternalLink className="w-3.5 h-3.5 text-gray-400 group-hover/item:text-amber-600 dark:group-hover/item:text-gold-400 shrink-0 mt-1 opacity-70" />
-                            )}
+                              return (
+                                <Link key={child.label} to={child.href} className="block">
+                                  {content}
+                                </Link>
+                              );
+                            })}
                           </div>
-                        );
 
-                        if (child.isExternal) {
-                          return (
+                          {/* Footer Banner */}
+                          <div className="pt-2.5 border-t border-gray-200 dark:border-white/10 flex items-center justify-between text-[11px] text-gray-500 px-2">
+                            <span className="flex items-center gap-1.5">
+                              <Zap className="w-3 h-3 text-amber-500" />
+                              <span>Automate email sequences & API webhooks</span>
+                            </span>
                             <a
-                              key={child.label}
-                              href={child.href}
+                              href="https://mail.jonanda.com"
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="block"
+                              className="font-bold text-amber-700 dark:text-gold-400 hover:underline inline-flex items-center gap-1"
                             >
-                              {content}
+                              <span>mail.jonanda.com</span>
+                              <ExternalLink className="w-2.5 h-2.5" />
                             </a>
-                          );
-                        }
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="space-y-1">
+                          {item.children.map((child: NavDropdownItem) => {
+                            const IconComp = child.iconName ? iconMap[child.iconName] || Globe : Globe;
+                            const isSelected = !child.isExternal && location.pathname === child.href;
 
-                        return (
-                          <Link key={child.label} to={child.href} className="block">
-                            {content}
-                          </Link>
-                        );
-                      })}
+                            const content = (
+                              <div
+                                className={`flex items-start gap-3.5 p-3 rounded-2xl transition-all duration-200 group/item ${
+                                  isSelected
+                                    ? 'bg-amber-500/10 dark:bg-gold-500/15 border border-amber-500/20 dark:border-gold-500/30'
+                                    : 'hover:bg-gray-100 dark:hover:bg-white/[0.07] border border-transparent'
+                                }`}
+                              >
+                                <div className="w-9 h-9 rounded-xl bg-amber-500/10 dark:bg-gold-500/10 border border-amber-500/20 dark:border-gold-500/30 flex items-center justify-center text-amber-600 dark:text-gold-400 shrink-0 mt-0.5 group-hover/item:border-gold-500/50 group-hover/item:text-amber-700 dark:group-hover/item:text-gold-300 transition-colors shadow-sm">
+                                  <IconComp className="w-4 h-4" />
+                                </div>
+
+                                <div className="flex-grow space-y-1">
+                                  <div className="flex items-center justify-between gap-2">
+                                    <span className="text-sm font-bold text-gray-900 dark:text-white group-hover/item:text-amber-700 dark:group-hover/item:text-gold-200 transition-colors leading-snug">
+                                      {child.label}
+                                    </span>
+                                    {child.badge && (
+                                      <span
+                                        className={`text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider shrink-0 ${
+                                          child.badgeColor === 'emerald'
+                                            ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
+                                            : child.badgeColor === 'amber'
+                                            ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30'
+                                            : child.badgeColor === 'purple'
+                                            ? 'bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/30'
+                                            : child.badgeColor === 'blue'
+                                            ? 'bg-blue-500/15 text-blue-700 dark:text-blue-300 border border-blue-500/30'
+                                            : 'bg-gold-500/15 text-amber-700 dark:text-gold-300 border border-gold-500/30'
+                                        }`}
+                                      >
+                                        {child.badge}
+                                      </span>
+                                    )}
+                                  </div>
+                                  {child.description && (
+                                    <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                                      {child.description}
+                                    </p>
+                                  )}
+                                </div>
+
+                                {child.isExternal && (
+                                  <ExternalLink className="w-3.5 h-3.5 text-gray-400 group-hover/item:text-amber-600 dark:group-hover/item:text-gold-400 shrink-0 mt-1 opacity-70" />
+                                )}
+                              </div>
+                            );
+
+                            if (child.isExternal) {
+                              return (
+                                <a
+                                  key={child.label}
+                                  href={child.href}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="block"
+                                >
+                                  {content}
+                                </a>
+                              );
+                            }
+
+                            return (
+                              <Link key={child.label} to={child.href} className="block">
+                                {content}
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
