@@ -28,20 +28,20 @@ export const HomePage: React.FC = () => {
 
         {/* Corporate CTA Inquiries Banner */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-5xl mx-auto rounded-3xl bg-gradient-to-b from-surface to-background-subtle border border-gold-500/30 p-8 sm:p-12 text-center relative overflow-hidden shadow-gold-md">
-            <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-48 bg-gold-500/15 blur-3xl pointer-events-none" />
+          <div className="max-w-5xl mx-auto rounded-3xl bg-white dark:bg-[#12121c] border border-amber-500/30 dark:border-gold-500/30 p-8 sm:p-12 text-center relative overflow-hidden shadow-xl dark:shadow-gold-md">
+            <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-48 bg-amber-500/10 dark:bg-gold-500/15 blur-3xl pointer-events-none" />
 
             <div className="space-y-6 relative z-10 max-w-2xl mx-auto">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/20 text-xs font-semibold text-gold-300">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 dark:bg-gold-500/10 border border-amber-500/20 dark:border-gold-500/20 text-xs font-semibold text-amber-800 dark:text-gold-300">
                 <Mail className="w-3.5 h-3.5" />
                 <span>Enterprise & Strategic Inquiries</span>
               </div>
 
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">
                 Partner with JONANDA LLC
               </h2>
 
-              <p className="text-sm sm:text-base text-gray-300">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
                 Explore technology partnerships, custom project development, and ecosystem integrations with our engineering teams.
               </p>
 

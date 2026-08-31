@@ -9,17 +9,18 @@ export default {
     extend: {
       colors: {
         background: {
-          DEFAULT: '#08080b',
-          subtle: '#0c0c10',
-          card: '#111117',
-          surface: '#16161f',
-          elevated: '#1c1c28',
-          border: 'rgba(255, 255, 255, 0.08)'
+          DEFAULT: 'var(--color-bg)',
+          subtle: 'var(--color-bg-subtle)',
+          card: 'var(--color-surface)',
+          surface: 'var(--color-surface)',
+          elevated: 'var(--color-surface-elevated)',
+          border: 'var(--color-border)'
         },
         surface: {
-          DEFAULT: '#16161f',
-          card: '#111117',
-          subtle: '#0c0c10',
+          DEFAULT: 'var(--color-surface)',
+          card: 'var(--color-surface)',
+          subtle: 'var(--color-bg-subtle)',
+          elevated: 'var(--color-surface-elevated)',
         },
         gold: {
           50: '#fffbeb',

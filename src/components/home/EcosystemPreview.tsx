@@ -7,7 +7,7 @@ import { CURRENT_ECOSYSTEM_PRODUCTS, COMING_SOON_PRODUCTS } from '../../data/eco
 
 export const EcosystemPreview: React.FC = () => {
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 relative z-10 border-t border-white/[0.04]">
+    <section className="py-20 px-4 sm:px-6 lg:px-8 relative z-10 border-t border-gray-200/60 dark:border-white/[0.04]">
       <div className="max-w-7xl mx-auto space-y-16">
         {/* Section Heading */}
         <SectionHeading
@@ -19,14 +19,14 @@ export const EcosystemPreview: React.FC = () => {
 
         {/* --- PART 1: LIVE & ACTIVE PLATFORMS --- */}
         <div className="space-y-6">
-          <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+          <div className="flex items-center justify-between border-b border-gray-200 dark:border-white/[0.08] pb-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <h3 className="text-sm font-bold uppercase tracking-wider text-white">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <h3 className="text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-white">
                 Live & Active Platforms
               </h3>
             </div>
-            <span className="text-xs text-gray-400 font-mono">
+            <span className="text-xs text-gray-500 dark:text-gray-400 font-mono">
               Operational Platforms
             </span>
           </div>
@@ -40,13 +40,13 @@ export const EcosystemPreview: React.FC = () => {
 
         {/* --- PART 2: COMING SOON PORTFOLIO --- */}
         <div className="space-y-6 pt-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.08] pb-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-200 dark:border-white/[0.08] pb-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-2 h-2 rounded-full bg-purple-400" />
-              <h3 className="text-sm font-bold uppercase tracking-wider text-white">
+              <div className="w-2 h-2 rounded-full bg-purple-500" />
+              <h3 className="text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-white">
                 Coming Soon Portfolio
               </h3>
-              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded bg-purple-500/15 text-purple-300 border border-purple-500/30 uppercase tracking-wider">
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/30 uppercase tracking-wider">
                 In Active Development
               </span>
             </div>
@@ -54,7 +54,7 @@ export const EcosystemPreview: React.FC = () => {
               href="/coming-soon"
               variant="ghost"
               size="sm"
-              className="text-xs text-purple-300 hover:text-purple-200 p-0 self-start sm:self-auto hover:bg-transparent"
+              className="text-xs text-purple-700 dark:text-purple-300 hover:text-purple-800 dark:hover:text-purple-200 p-0 self-start sm:self-auto hover:bg-transparent"
               icon={<ArrowRight className="w-3.5 h-3.5" />}
             >
               View Full Coming Soon Page
