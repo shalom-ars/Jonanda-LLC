@@ -88,6 +88,14 @@ export const MAIN_NAV_MENU: MainNavItem[] = [
         iconName: 'Building2'
       },
       {
+        label: 'Partners & Alliances',
+        href: '/partners',
+        description: 'Technology, research & enterprise partners',
+        iconName: 'Handshake',
+        badge: 'Network',
+        badgeColor: 'blue'
+      },
+      {
         label: 'Corporate Governance',
         href: '/company',
         description: 'Legal structure, entity records & roadmap',
@@ -104,6 +112,7 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
   { label: 'Project Development', href: '/project-development' },
   { label: 'Ecosystem', href: '/ecosystem' },
   { label: 'Coming Soon', href: '/coming-soon' },
+  { label: 'Partners', href: '/partners' },
   { label: 'Technology', href: '/technology' },
   { label: 'Company', href: '/company' },
   { label: 'Contact', href: '/contact' },
@@ -125,6 +134,7 @@ export const FOOTER_SERVICES_LINKS: NavItem[] = [
 
 export const FOOTER_COMPANY_LINKS: NavItem[] = [
   { label: 'About JONANDA LLC', href: '/about' },
+  { label: 'Partnerships & Alliances', href: '/partners' },
   { label: 'Technology & Capabilities', href: '/technology' },
   { label: 'Corporate Information', href: '/company' },
   { label: 'Contact & Inquiries', href: '/contact' },

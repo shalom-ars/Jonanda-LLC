@@ -3,17 +3,18 @@ import { SEOHead } from '../components/common/SEOHead';
 import { Hero } from '../components/home/Hero';
 import { EcosystemPreview } from '../components/home/EcosystemPreview';
 import { TechPillarsPreview } from '../components/home/TechPillarsPreview';
+import { PartnershipPreview } from '../components/home/PartnershipPreview';
 import { CorporateSnapshot } from '../components/home/CorporateSnapshot';
 import { CoreValues } from '../components/home/CoreValues';
 import { Button } from '../components/common/Button';
-import { ArrowRight, Mail } from 'lucide-react';
+import { ArrowRight, Mail, Handshake } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
   return (
     <>
       <SEOHead
         title="JONANDA LLC | Building Technology for the Next Digital Economy"
-        description="JONANDA LLC is a technology company developing products and services across AI, Web3, cybersecurity, software and digital infrastructure."
+        description="JONANDA LLC is a technology enterprise developing products and services across AI, Web3, cybersecurity, software engineering, and digital infrastructure."
         canonicalPath="/"
       />
 
@@ -21,6 +22,7 @@ export const HomePage: React.FC = () => {
         <Hero />
         <EcosystemPreview />
         <TechPillarsPreview />
+        <PartnershipPreview />
         <CorporateSnapshot />
         <CoreValues />
 
@@ -40,25 +42,26 @@ export const HomePage: React.FC = () => {
               </h2>
 
               <p className="text-sm sm:text-base text-gray-300">
-                Explore technology partnerships, corporate inquiries, and ecosystem integrations with our engineering teams.
+                Explore technology partnerships, custom project development, and ecosystem integrations with our engineering teams.
               </p>
 
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Button
-                  href="/contact"
+                  href="/partners"
                   variant="primary"
                   size="lg"
-                  icon={<ArrowRight className="w-4 h-4" />}
+                  icon={<Handshake className="w-4 h-4" />}
                 >
-                  Initiate Corporate Contact
+                  Explore Partnerships
                 </Button>
 
                 <Button
-                  href="/ecosystem"
+                  href="/project-development"
                   variant="secondary"
                   size="lg"
+                  icon={<ArrowRight className="w-4 h-4" />}
                 >
-                  Explore Ecosystem
+                  Start a Project
                 </Button>
               </div>
             </div>

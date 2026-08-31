@@ -14,7 +14,8 @@ import {
   Shield,
   Building2,
   ShieldCheck,
-  Globe
+  Globe,
+  Handshake
 } from 'lucide-react';
 import { MAIN_NAV_MENU, MainNavItem, NavDropdownItem } from '../../data/navigationData';
 import { Button } from './Button';
@@ -28,7 +29,8 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Shield,
   Building2,
   ShieldCheck,
-  Globe
+  Globe,
+  Handshake
 };
 
 export const Navbar: React.FC = () => {
@@ -199,6 +201,8 @@ export const Navbar: React.FC = () => {
                                         ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
                                         : child.badgeColor === 'purple'
                                         ? 'bg-purple-500/15 text-purple-300 border border-purple-500/30'
+                                        : child.badgeColor === 'blue'
+                                        ? 'bg-blue-500/15 text-blue-300 border border-blue-500/30'
                                         : 'bg-gold-500/15 text-gold-300 border border-gold-500/30'
                                     }`}
                                   >
