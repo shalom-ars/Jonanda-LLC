@@ -30,6 +30,10 @@ import { WorkflowsListPage } from './pages/flow/WorkflowsListPage';
 import { FlowBuilderPage } from './pages/flow/FlowBuilderPage';
 import { FlowTemplatesPage } from './pages/flow/FlowTemplatesPage';
 import { FlowLogsPage } from './pages/flow/FlowLogsPage';
+import { FlowCredentialsPage } from './pages/flow/FlowCredentialsPage';
+import { FlowIntegrationsPage } from './pages/flow/FlowIntegrationsPage';
+import { FlowSettingsPage } from './pages/flow/FlowSettingsPage';
+import { AdminFlowPage } from './pages/flow/AdminFlowPage';
 
 // Mail Suite Pages
 import { MailHubPage } from './pages/mail/MailHubPage';
@@ -79,6 +83,12 @@ export const App: React.FC = () => {
                     <Route path="/flow/templates" element={<FlowTemplatesPage />} />
                     <Route path="/flow/executions" element={<FlowLogsPage />} />
                     <Route path="/flow/logs" element={<FlowLogsPage />} />
+                    <Route path="/flow/credentials" element={<FlowCredentialsPage />} />
+                    <Route path="/flow/integrations" element={<FlowIntegrationsPage />} />
+                    <Route path="/flow/settings" element={<FlowSettingsPage />} />
+
+                    {/* Platform Admin Console */}
+                    <Route path="/admin/flow" element={<AdminFlowPage />} />
 
                     {/* JONANDA MAIL Suite */}
                     <Route path="/mail" element={<MailHubPage />} />

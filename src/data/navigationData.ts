@@ -28,7 +28,7 @@ export const MAIN_NAV_MENU: MainNavItem[] = [
       {
         label: 'JONANDA FLOW Hub',
         href: '/flow',
-        description: 'Partner, creator & email visual automation engine',
+        description: 'Visual automation platform & workflow engine',
         iconName: 'Zap',
         badge: 'ENGINE',
         badgeColor: 'gold'
@@ -36,13 +36,13 @@ export const MAIN_NAV_MENU: MainNavItem[] = [
       {
         label: 'Workflow Automations',
         href: '/flow/workflows',
-        description: 'Active partner, creator & customer pipelines',
+        description: 'Active partner, creator, API & business pipelines',
         iconName: 'Layers'
       },
       {
         label: 'Visual Canvas Builder',
         href: '/flow/new',
-        description: 'Drag-and-drop workflow canvas with live test runner',
+        description: 'Drag-and-drop canvas with live test runner & minimap',
         iconName: 'Sparkles',
         badge: 'BUILDER',
         badgeColor: 'amber'
@@ -50,14 +50,44 @@ export const MAIN_NAV_MENU: MainNavItem[] = [
       {
         label: 'Blueprint Templates',
         href: '/flow/templates',
-        description: 'Pre-built partner, creator & customer templates',
+        description: 'Pre-built partner, creator, customer & API templates',
         iconName: 'FileText'
+      },
+      {
+        label: 'Integrations Catalog',
+        href: '/flow/integrations',
+        description: 'Connect AI, PostgreSQL, Webhooks & JONANDA tools',
+        iconName: 'Globe',
+        badge: 'APPS',
+        badgeColor: 'blue'
+      },
+      {
+        label: 'Credentials Vault',
+        href: '/flow/credentials',
+        description: 'Encrypted API keys, OAuth tokens & SMTP storage',
+        iconName: 'ShieldCheck',
+        badge: 'ENCRYPTED',
+        badgeColor: 'emerald'
       },
       {
         label: 'Execution Telemetry',
         href: '/flow/logs',
         description: 'Step-by-step diagnostic logs and audit history',
         iconName: 'Activity'
+      },
+      {
+        label: 'Settings & RBAC',
+        href: '/flow/settings',
+        description: 'Team permissions, quotas, and security keys',
+        iconName: 'Building2'
+      },
+      {
+        label: 'Platform Admin',
+        href: '/admin/flow',
+        description: 'Cluster health, worker telemetry & SSRF filters',
+        iconName: 'Shield',
+        badge: 'ADMIN',
+        badgeColor: 'amber'
       },
       {
         label: 'JONANDA MAIL Suite',
@@ -83,7 +113,7 @@ export const MAIN_NAV_MENU: MainNavItem[] = [
       {
         label: 'Workflow Automation',
         href: '/flow',
-        description: 'Automated partner & influencer relationship systems',
+        description: 'Visual automation platform & connected services',
         iconName: 'Zap',
         badge: 'FLOW',
         badgeColor: 'amber'
@@ -203,9 +233,10 @@ export const FOOTER_ECOSYSTEM_LINKS: NavItem[] = [
 export const FOOTER_SERVICES_LINKS: NavItem[] = [
   { label: 'Project Development', href: '/project-development' },
   { label: 'Visual Workflow Builder', href: '/flow/new' },
+  { label: 'Integrations Catalog', href: '/flow/integrations' },
+  { label: 'Credentials Vault', href: '/flow/credentials' },
   { label: 'Workflow Automations', href: '/flow/workflows' },
   { label: 'Blueprint Templates', href: '/flow/templates' },
-  { label: 'AI & SaaS Engineering', href: '/project-development#services' },
 ];
 
 export const FOOTER_COMPANY_LINKS: NavItem[] = [
@@ -213,6 +244,7 @@ export const FOOTER_COMPANY_LINKS: NavItem[] = [
   { label: 'Partnerships & Alliances', href: '/partners' },
   { label: 'Partner Intake Queue', href: '/partners/applications' },
   { label: 'Creator & Influencers', href: '/influencers/directory' },
+  { label: 'Platform Administration', href: '/admin/flow' },
   { label: 'Technology Architecture', href: '/technology' },
   { label: 'Corporate Governance', href: '/company' },
   { label: 'Contact & Inquiries', href: '/contact' },

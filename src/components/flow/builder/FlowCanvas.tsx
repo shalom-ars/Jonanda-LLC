@@ -1,11 +1,12 @@
-import React, { useState, useRef } from 'react';
-import { FlowNode, FlowEdge, Workflow } from '../../../types/flow';
+import React, { useState, useRef, useEffect } from 'react';
+import { FlowNode, FlowEdge, Workflow, WorkflowCategory } from '../../../types/flow';
 import { FLOW_NODE_DEFINITIONS } from '../../../data/flowNodesData';
 import { FlowNodeCard } from './FlowNodeCard';
 import { FlowEdgeRenderer } from './FlowEdgeRenderer';
 import { NodeLibrarySidebar } from './NodeLibrarySidebar';
 import { NodeConfigPanel } from './NodeConfigPanel';
 import { BuilderTopBar } from './BuilderTopBar';
+import { CanvasMinimap } from './CanvasMinimap';
 import { WorkflowTestModal } from './WorkflowTestModal';
 import { useFlow } from '../../../context/FlowContext';
 
@@ -14,14 +15,19 @@ interface FlowCanvasProps {
 }
 
 export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
-  const { saveWorkflow } = useFlow();
+  const { saveWorkflow, publishWorkflowVersion } = useFlow();
   const [workflow, setWorkflow] = useState<Workflow>(initialWorkflow);
+
+  // Undo / Redo History Stack
+  const [history, setHistory] = useState<Workflow[]>([initialWorkflow]);
+  const [historyIndex, setHistoryIndex] = useState(0);
 
   // Viewport State
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isPanning, setIsPanning] = useState(false);
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
+  const [isMinimapOpen, setIsMinimapOpen] = useState(true);
 
   // Sidebar & Modal States
   const [isLibraryOpen, setIsLibraryOpen] = useState(true);
@@ -42,9 +48,53 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
 
   const canvasRef = useRef<HTMLDivElement | null>(null);
 
+  // Push to history helper
+  const recordHistoryState = (nextWf: Workflow) => {
+    setHistory((prev) => {
+      const truncated = prev.slice(0, historyIndex + 1);
+      return [...truncated, nextWf].slice(-25); // Cap to 25 steps
+    });
+    setHistoryIndex((prev) => Math.min(prev + 1, 24));
+  };
+
+  const handleUndo = () => {
+    if (historyIndex > 0) {
+      const targetIndex = historyIndex - 1;
+      setHistoryIndex(targetIndex);
+      setWorkflow(history[targetIndex]);
+    }
+  };
+
+  const handleRedo = () => {
+    if (historyIndex < history.length - 1) {
+      const targetIndex = historyIndex + 1;
+      setHistoryIndex(targetIndex);
+      setWorkflow(history[targetIndex]);
+    }
+  };
+
+  // Keyboard Shortcuts Listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+        e.preventDefault();
+        handleUndo();
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.shiftKey && e.key === 'Z'))) {
+        e.preventDefault();
+        handleRedo();
+      } else if (e.key === 'Delete' || e.key === 'Backspace') {
+        if (selectedNodeId && !['input', 'textarea'].includes((e.target as HTMLElement).tagName.toLowerCase())) {
+          handleDeleteNode(selectedNodeId);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [historyIndex, history, selectedNodeId]);
+
   // Pan Canvas Handler
   const handleMouseDownOnCanvas = (e: React.MouseEvent) => {
-    // Only pan if clicked on raw canvas background
     if ((e.target as HTMLElement).classList.contains('canvas-background')) {
       setIsPanning(true);
       setPanStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
@@ -99,6 +149,9 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
   };
 
   const handleMouseUp = () => {
+    if (draggingNodeId) {
+      recordHistoryState(workflow);
+    }
     setIsPanning(false);
     setDraggingNodeId(null);
     setConnectingState(null);
@@ -141,9 +194,8 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
   // End Connection on Target Port
   const handleEndConnect = (targetNodeId: string, targetPortId: string) => {
     if (!connectingState) return;
-    if (connectingState.sourceNodeId === targetNodeId) return; // Disallow connecting node to itself
+    if (connectingState.sourceNodeId === targetNodeId) return;
 
-    // Prevent duplicate edges
     const exists = workflow.edges.some(
       (e) =>
         e.sourceNodeId === connectingState.sourceNodeId &&
@@ -160,10 +212,12 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
         animated: true
       };
 
-      setWorkflow((prev) => ({
-        ...prev,
-        edges: [...prev.edges, newEdge]
-      }));
+      const updated = {
+        ...workflow,
+        edges: [...workflow.edges, newEdge]
+      };
+      setWorkflow(updated);
+      recordHistoryState(updated);
     }
 
     setConnectingState(null);
@@ -174,7 +228,6 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
     const definition = FLOW_NODE_DEFINITIONS[type];
     if (!definition) return;
 
-    // Place node in center of current view
     const rect = canvasRef.current?.getBoundingClientRect();
     const centerX = rect ? (rect.width / 2 - pan.x) / zoom - 120 : 200;
     const centerY = rect ? (rect.height / 2 - pan.y) / zoom - 40 : 200;
@@ -185,30 +238,33 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
       category: definition.category,
       title: definition.title,
       position: {
-        x: Math.round(centerX + (Math.random() - 0.5) * 50),
-        y: Math.round(centerY + (Math.random() - 0.5) * 50)
+        x: Math.round(centerX + (Math.random() - 0.5) * 40),
+        y: Math.round(centerY + (Math.random() - 0.5) * 40)
       },
       config: { ...definition.defaultConfig },
       status: 'idle'
     };
 
-    setWorkflow((prev) => ({
-      ...prev,
-      nodes: [...prev.nodes, newNode]
-    }));
-
+    const updated = {
+      ...workflow,
+      nodes: [...workflow.nodes, newNode]
+    };
+    setWorkflow(updated);
+    recordHistoryState(updated);
     setSelectedNodeId(newNode.id);
   };
 
   // Delete Node
   const handleDeleteNode = (nodeId: string) => {
-    setWorkflow((prev) => ({
-      ...prev,
-      nodes: prev.nodes.filter((n) => n.id !== nodeId),
-      edges: prev.edges.filter(
+    const updated = {
+      ...workflow,
+      nodes: workflow.nodes.filter((n) => n.id !== nodeId),
+      edges: workflow.edges.filter(
         (e) => e.sourceNodeId !== nodeId && e.targetNodeId !== nodeId
       )
-    }));
+    };
+    setWorkflow(updated);
+    recordHistoryState(updated);
 
     if (selectedNodeId === nodeId) {
       setSelectedNodeId(null);
@@ -230,20 +286,23 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
       }
     };
 
-    setWorkflow((prev) => ({
-      ...prev,
-      nodes: [...prev.nodes, duplicate]
-    }));
-
+    const updated = {
+      ...workflow,
+      nodes: [...workflow.nodes, duplicate]
+    };
+    setWorkflow(updated);
+    recordHistoryState(updated);
     setSelectedNodeId(duplicate.id);
   };
 
   // Delete Edge
   const handleDeleteEdge = (edgeId: string) => {
-    setWorkflow((prev) => ({
-      ...prev,
-      edges: prev.edges.filter((e) => e.id !== edgeId)
-    }));
+    const updated = {
+      ...workflow,
+      edges: workflow.edges.filter((e) => e.id !== edgeId)
+    };
+    setWorkflow(updated);
+    recordHistoryState(updated);
   };
 
   // Update Config from Right Panel
@@ -252,9 +311,9 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
     config: Record<string, any>,
     title?: string
   ) => {
-    setWorkflow((prev) => ({
-      ...prev,
-      nodes: prev.nodes.map((n) =>
+    const updated = {
+      ...workflow,
+      nodes: workflow.nodes.map((n) =>
         n.id === nodeId
           ? {
               ...n,
@@ -263,13 +322,14 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
             }
           : n
       )
-    }));
+    };
+    setWorkflow(updated);
   };
 
-  // Auto Arrange Nodes horizontally
+  // Auto Arrange Nodes
   const handleAutoArrange = () => {
     const spacingX = 320;
-    const spacingY = 120;
+    const spacingY = 130;
 
     const arrangedNodes = workflow.nodes.map((node, index) => ({
       ...node,
@@ -279,14 +339,26 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
       }
     }));
 
-    setWorkflow((prev) => ({
-      ...prev,
+    const updated = {
+      ...workflow,
       nodes: arrangedNodes
-    }));
+    };
+    setWorkflow(updated);
+    recordHistoryState(updated);
+  };
+
+  // Fit to screen
+  const handleFitToScreen = () => {
+    setZoom(0.85);
+    setPan({ x: 40, y: 20 });
   };
 
   const handleSave = () => {
     saveWorkflow(workflow);
+  };
+
+  const handlePublish = () => {
+    publishWorkflowVersion(workflow.id, 'Published immutable release');
   };
 
   const selectedNode = workflow.nodes.find((n) => n.id === selectedNodeId) || null;
@@ -297,7 +369,7 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
       <BuilderTopBar
         workflow={workflow}
         onUpdateWorkflowName={(name) => setWorkflow((prev) => ({ ...prev, name }))}
-        onUpdateCategory={(category) => setWorkflow((prev) => ({ ...prev, category }))}
+        onUpdateCategory={(category) => setWorkflow((prev) => ({ ...prev, category: category as WorkflowCategory }))}
         onToggleStatus={() =>
           setWorkflow((prev) => ({
             ...prev,
@@ -305,6 +377,7 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
           }))
         }
         onSave={handleSave}
+        onPublishVersion={handlePublish}
         onTest={() => setIsTestModalOpen(true)}
         zoom={zoom}
         onZoomIn={() => setZoom((prev) => Math.min(prev + 0.15, 2.0))}
@@ -314,6 +387,13 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
           setPan({ x: 0, y: 0 });
         }}
         onAutoArrange={handleAutoArrange}
+        onFitToScreen={handleFitToScreen}
+        canUndo={historyIndex > 0}
+        canRedo={historyIndex < history.length - 1}
+        onUndo={handleUndo}
+        onRedo={handleRedo}
+        isMinimapOpen={isMinimapOpen}
+        onToggleMinimap={() => setIsMinimapOpen(!isMinimapOpen)}
       />
 
       {/* Node Library Left Sidebar */}
@@ -405,6 +485,16 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
           </div>
         </div>
       </div>
+
+      {/* Floating Canvas Minimap */}
+      {isMinimapOpen && (
+        <CanvasMinimap
+          nodes={workflow.nodes}
+          pan={pan}
+          zoom={zoom}
+          onPanChange={(newPan) => setPan(newPan)}
+        />
+      )}
 
       {/* Node Config Right Sidebar */}
       {selectedNode && (

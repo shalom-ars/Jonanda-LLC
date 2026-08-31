@@ -3,62 +3,140 @@ import {
   Workflow,
   WorkflowExecution,
   ExecutionStep,
-  WorkflowStatus
+  WorkflowStatus,
+  WorkflowVersion,
+  Credential,
+  IntegrationApp,
+  AuditLogEntry,
+  UsageQuota
 } from '../types/flow';
 import { SEED_WORKFLOW_TEMPLATES } from '../data/flowTemplatesData';
+import { SEED_INTEGRATIONS } from '../data/flowIntegrationsData';
 
 interface FlowContextType {
   workflows: Workflow[];
   executions: WorkflowExecution[];
+  credentials: Credential[];
+  integrations: IntegrationApp[];
+  auditLogs: AuditLogEntry[];
+  usageQuota: UsageQuota;
   getWorkflowById: (id: string) => Workflow | undefined;
   saveWorkflow: (workflow: Workflow) => void;
+  publishWorkflowVersion: (id: string, changeSummary?: string) => void;
   deleteWorkflow: (id: string) => void;
   duplicateWorkflow: (id: string) => Workflow;
   toggleWorkflowStatus: (id: string) => void;
   createFromTemplate: (templateId: string) => Workflow | null;
-  runWorkflowExecution: (workflowId: string, testPayload?: Record<string, any>, isTest?: boolean) => Promise<WorkflowExecution>;
+  runWorkflowExecution: (
+    workflowId: string,
+    testPayload?: Record<string, any>,
+    isTest?: boolean
+  ) => Promise<WorkflowExecution>;
   getExecutionsForWorkflow: (workflowId: string) => WorkflowExecution[];
   clearExecutionLogs: () => void;
+  addCredential: (cred: Omit<Credential, 'id' | 'createdAt' | 'updatedAt' | 'maskedValue' | 'isValid'>) => Credential;
+  revokeCredential: (id: string) => void;
+  deleteCredential: (id: string) => void;
+  testCredential: (id: string) => Promise<boolean>;
+  toggleIntegrationConnect: (id: string) => void;
 }
 
 const FlowContext = createContext<FlowContextType | undefined>(undefined);
 
-const LOCAL_STORAGE_KEY_WORKFLOWS = 'jonanda_flow_workflows';
-const LOCAL_STORAGE_KEY_EXECUTIONS = 'jonanda_flow_executions';
+const SEED_CREDENTIALS: Credential[] = [
+  {
+    id: 'cred_jnda_mail',
+    name: 'JONANDA MAIL Production SMTP',
+    type: 'smtp',
+    provider: 'JONANDA MAIL Infrastructure',
+    createdAt: '2026-08-15',
+    updatedAt: '2026-08-30',
+    lastUsedAt: '2026-08-31 16:30',
+    maskedValue: 'smtp://jonanda-sys:••••••••@mail.jonanda.com:587',
+    data: {
+      host: 'mail.jonanda.com',
+      port: 587,
+      username: 'contact@jonanda.com'
+    },
+    isValid: true
+  },
+  {
+    id: 'cred_lozula',
+    name: 'LOZULA Cybersecurity API Key',
+    type: 'api_key',
+    provider: 'LOZULA Threat Intelligence',
+    createdAt: '2026-08-20',
+    updatedAt: '2026-08-20',
+    lastUsedAt: '2026-08-31 14:15',
+    maskedValue: 'lz_sec_••••••••••••••••••••••••3a9b',
+    data: {
+      headerName: 'X-Lozula-Key'
+    },
+    isValid: true
+  },
+  {
+    id: 'cred_gemini_ai',
+    name: 'Google Gemini Pro Key',
+    type: 'api_key',
+    provider: 'Google AI Studio',
+    createdAt: '2026-08-25',
+    updatedAt: '2026-08-25',
+    maskedValue: 'AIzaSy••••••••••••••••••••••••88k',
+    data: {},
+    isValid: true
+  }
+];
+
+const SEED_AUDIT_LOGS: AuditLogEntry[] = [
+  {
+    id: 'audit_1',
+    timestamp: '2026-08-31 16:45:22',
+    userId: 'usr_owner_01',
+    userName: 'Security Administrator',
+    action: 'workflow_published',
+    targetResource: 'Institutional Partner Onboarding (v2.0)',
+    details: 'Validated DKIM signature check and activated error fallback routing.'
+  },
+  {
+    id: 'audit_2',
+    timestamp: '2026-08-31 15:10:04',
+    userId: 'usr_owner_01',
+    userName: 'Security Administrator',
+    action: 'credential_created',
+    targetResource: 'JONANDA MAIL Production SMTP',
+    details: 'Cryptographically registered outbound mail worker relay.'
+  }
+];
 
 export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [workflows, setWorkflows] = useState<Workflow[]>(() => {
     try {
-      const saved = localStorage.getItem(LOCAL_STORAGE_KEY_WORKFLOWS);
-      if (saved) {
-        return JSON.parse(saved);
-      }
+      const saved = localStorage.getItem('jonanda_flow_workflows');
+      if (saved) return JSON.parse(saved);
     } catch (e) {
-      console.error('Error loading workflows from storage', e);
+      console.error(e);
     }
     return SEED_WORKFLOW_TEMPLATES;
   });
 
   const [executions, setExecutions] = useState<WorkflowExecution[]>(() => {
     try {
-      const saved = localStorage.getItem(LOCAL_STORAGE_KEY_EXECUTIONS);
-      if (saved) {
-        return JSON.parse(saved);
-      }
+      const saved = localStorage.getItem('jonanda_flow_executions');
+      if (saved) return JSON.parse(saved);
     } catch (e) {
-      console.error('Error loading executions from storage', e);
+      console.error(e);
     }
-    // Seed initial executions log
     return [
       {
-        id: 'exec_991823',
+        id: 'exec_881920',
         workflowId: 'template_partner_onboarding',
         workflowName: 'Institutional Partner Onboarding',
+        workflowVersion: 1,
         triggerType: 'trigger_partner_applied',
         status: 'completed',
-        startedAt: '2026-08-31T14:20:10Z',
-        completedAt: '2026-08-31T14:20:12Z',
-        durationMs: 240,
+        startedAt: '2026-08-31T15:20:00Z',
+        completedAt: '2026-08-31T15:20:01Z',
+        durationMs: 320,
         initialPayload: {
           company: 'Nexus Cyber Systems',
           contactName: 'Sarah Jenkins',
@@ -71,8 +149,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
             nodeTitle: 'New Partner Application',
             nodeType: 'trigger_partner_applied',
             status: 'completed',
-            startedAt: '2026-08-31T14:20:10.100Z',
-            completedAt: '2026-08-31T14:20:10.150Z',
+            startedAt: '2026-08-31T15:20:00.100Z',
+            completedAt: '2026-08-31T15:20:00.150Z',
             durationMs: 50,
             outputData: { verified: true }
           },
@@ -81,8 +159,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
             nodeTitle: 'Notify Executive Team',
             nodeType: 'action_internal_alert',
             status: 'completed',
-            startedAt: '2026-08-31T14:20:10.150Z',
-            completedAt: '2026-08-31T14:20:10.220Z',
+            startedAt: '2026-08-31T15:20:00.150Z',
+            completedAt: '2026-08-31T15:20:00.220Z',
             durationMs: 70
           },
           {
@@ -90,8 +168,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
             nodeTitle: 'Review Status Approved?',
             nodeType: 'logic_if_else',
             status: 'completed',
-            startedAt: '2026-08-31T14:20:10.220Z',
-            completedAt: '2026-08-31T14:20:10.240Z',
+            startedAt: '2026-08-31T15:20:00.220Z',
+            completedAt: '2026-08-31T15:20:00.240Z',
             durationMs: 20,
             outputData: { branch: 'true' }
           },
@@ -100,8 +178,8 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
             nodeTitle: 'Send Partner Welcome',
             nodeType: 'action_send_email',
             status: 'completed',
-            startedAt: '2026-08-31T14:20:10.240Z',
-            completedAt: '2026-08-31T14:20:10.320Z',
+            startedAt: '2026-08-31T15:20:00.240Z',
+            completedAt: '2026-08-31T15:20:00.320Z',
             durationMs: 80,
             outputData: { messageId: 'jnda_msg_489218', delivery: 'queued' }
           }
@@ -110,21 +188,70 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
     ];
   });
 
-  useEffect(() => {
+  const [credentials, setCredentials] = useState<Credential[]>(() => {
     try {
-      localStorage.setItem(LOCAL_STORAGE_KEY_WORKFLOWS, JSON.stringify(workflows));
+      const saved = localStorage.getItem('jonanda_flow_credentials');
+      if (saved) return JSON.parse(saved);
     } catch (e) {
-      console.error('Error saving workflows to storage', e);
+      console.error(e);
     }
+    return SEED_CREDENTIALS;
+  });
+
+  const [integrations, setIntegrations] = useState<IntegrationApp[]>(() => {
+    try {
+      const saved = localStorage.getItem('jonanda_flow_integrations');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error(e);
+    }
+    return SEED_INTEGRATIONS;
+  });
+
+  const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>(SEED_AUDIT_LOGS);
+
+  const [usageQuota] = useState<UsageQuota>({
+    tier: 'JONANDA ONE',
+    workflowsUsed: workflows.length,
+    workflowsMax: 50,
+    executionsThisMonth: 1840,
+    executionsMonthlyMax: 10000,
+    emailsAutomatedThisMonth: 820,
+    emailsMonthlyMax: 5000,
+    apiRequestsThisMonth: 3420,
+    apiRequestsMonthlyMax: 25000,
+    teamSeatsUsed: 3,
+    teamSeatsMax: 10
+  });
+
+  useEffect(() => {
+    localStorage.setItem('jonanda_flow_workflows', JSON.stringify(workflows));
   }, [workflows]);
 
   useEffect(() => {
-    try {
-      localStorage.setItem(LOCAL_STORAGE_KEY_EXECUTIONS, JSON.stringify(executions));
-    } catch (e) {
-      console.error('Error saving executions to storage', e);
-    }
+    localStorage.setItem('jonanda_flow_executions', JSON.stringify(executions));
   }, [executions]);
+
+  useEffect(() => {
+    localStorage.setItem('jonanda_flow_credentials', JSON.stringify(credentials));
+  }, [credentials]);
+
+  useEffect(() => {
+    localStorage.setItem('jonanda_flow_integrations', JSON.stringify(integrations));
+  }, [integrations]);
+
+  const logAudit = (action: AuditLogEntry['action'], targetResource: string, details: string) => {
+    const entry: AuditLogEntry = {
+      id: `audit_${Date.now()}`,
+      timestamp: new Date().toLocaleString(),
+      userId: 'usr_admin',
+      userName: 'Administrator',
+      action,
+      targetResource,
+      details
+    };
+    setAuditLogs((prev) => [entry, ...prev.slice(0, 49)]);
+  };
 
   const getWorkflowById = (id: string): Workflow | undefined => {
     return workflows.find((w) => w.id === id);
@@ -132,13 +259,12 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const saveWorkflow = (updated: Workflow) => {
     setWorkflows((prev) => {
-      const index = prev.findIndex((w) => w.id === updated.id);
-      if (index >= 0) {
+      const idx = prev.findIndex((w) => w.id === updated.id);
+      if (idx >= 0) {
         const next = [...prev];
-        next[index] = {
+        next[idx] = {
           ...updated,
-          updatedAt: new Date().toISOString().split('T')[0],
-          version: (prev[index].version || 1) + 1
+          updatedAt: new Date().toISOString().split('T')[0]
         };
         return next;
       }
@@ -152,10 +278,46 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
         ...prev
       ];
     });
+    logAudit('workflow_updated', updated.name, `Saved changes to workflow version ${updated.version || 1}.0`);
+  };
+
+  const publishWorkflowVersion = (id: string, changeSummary?: string) => {
+    setWorkflows((prev) =>
+      prev.map((w) => {
+        if (w.id === id) {
+          const newVerNum = (w.version || 1) + 1;
+          const versionSnapshot: WorkflowVersion = {
+            versionNumber: w.version || 1,
+            publishedAt: new Date().toISOString(),
+            author: 'Corporate Administrator',
+            changeSummary: changeSummary || 'Published standard release update',
+            nodesSnapshot: [...w.nodes],
+            edgesSnapshot: [...w.edges]
+          };
+
+          return {
+            ...w,
+            version: newVerNum,
+            publishedAt: new Date().toISOString().split('T')[0],
+            status: 'active',
+            versions: [versionSnapshot, ...(w.versions || [])]
+          };
+        }
+        return w;
+      })
+    );
+    const targetWf = workflows.find((w) => w.id === id);
+    if (targetWf) {
+      logAudit('workflow_published', targetWf.name, `Published version ${(targetWf.version || 1) + 1}.0`);
+    }
   };
 
   const deleteWorkflow = (id: string) => {
+    const target = workflows.find((w) => w.id === id);
     setWorkflows((prev) => prev.filter((w) => w.id !== id));
+    if (target) {
+      logAudit('workflow_deleted', target.name, 'Deleted workflow pipeline');
+    }
   };
 
   const duplicateWorkflow = (id: string): Workflow => {
@@ -176,6 +338,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     setWorkflows((prev) => [copy, ...prev]);
+    logAudit('workflow_created', copy.name, `Cloned from ${original.name}`);
     return copy;
   };
 
@@ -184,6 +347,11 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
       prev.map((w) => {
         if (w.id === id) {
           const nextStatus: WorkflowStatus = w.status === 'active' ? 'paused' : 'active';
+          logAudit(
+            nextStatus === 'active' ? 'workflow_activated' : 'workflow_paused',
+            w.name,
+            `Toggled state to ${nextStatus}`
+          );
           return { ...w, status: nextStatus, updatedAt: new Date().toISOString().split('T')[0] };
         }
         return w;
@@ -192,7 +360,9 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const createFromTemplate = (templateId: string): Workflow | null => {
-    const template = SEED_WORKFLOW_TEMPLATES.find((t) => t.id === templateId) || workflows.find((t) => t.id === templateId);
+    const template =
+      SEED_WORKFLOW_TEMPLATES.find((t) => t.id === templateId) ||
+      workflows.find((t) => t.id === templateId);
     if (!template) return null;
 
     const newWorkflow: Workflow = {
@@ -210,7 +380,30 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     setWorkflows((prev) => [newWorkflow, ...prev]);
+    logAudit('workflow_created', newWorkflow.name, `Created from blueprint template: ${template.name}`);
     return newWorkflow;
+  };
+
+  // Safe SSRF Guard check
+  const isUrlAllowed = (urlString: string): boolean => {
+    try {
+      const url = new URL(urlString);
+      const host = url.hostname.toLowerCase();
+      // Block private IP ranges and internal cloud metadata
+      if (
+        host === 'localhost' ||
+        host === '127.0.0.1' ||
+        host.startsWith('10.') ||
+        host.startsWith('192.168.') ||
+        host.startsWith('172.16.') ||
+        host === '169.254.169.254'
+      ) {
+        return false;
+      }
+      return url.protocol === 'https:' || url.protocol === 'http:';
+    } catch {
+      return false;
+    }
   };
 
   const runWorkflowExecution = async (
@@ -223,33 +416,41 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const execId = `exec_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
     const startTime = new Date();
-
     const executionSteps: ExecutionStep[] = [];
 
-    // Simulate step-by-step deterministic node execution graph
+    // Step through each connected node
     for (let i = 0; i < workflow.nodes.length; i++) {
       const node = workflow.nodes[i];
       const stepStart = new Date();
 
-      // Small async delay to simulate execution feel
       await new Promise((resolve) => setTimeout(resolve, 80));
 
-      const isNodeFailed = node.type === 'action_http_webhook' && node.config?.url?.includes('fail');
+      let hasError = false;
+      let errorMsg: string | undefined = undefined;
+
+      // SSRF validation on HTTP nodes
+      if (node.type === 'action_http_request' && node.config?.url) {
+        if (!isUrlAllowed(node.config.url)) {
+          hasError = true;
+          errorMsg = 'Security Error: SSRF protection blocked access to private/internal network host.';
+        }
+      }
 
       executionSteps.push({
         nodeId: node.id,
         nodeTitle: node.title,
         nodeType: node.type,
-        status: isNodeFailed ? 'failed' : 'completed',
+        status: hasError ? 'failed' : 'completed',
         startedAt: stepStart.toISOString(),
         completedAt: new Date().toISOString(),
         durationMs: 80,
         inputData: testPayload,
-        outputData: isNodeFailed ? undefined : { processed: true, timestamp: new Date().toISOString() },
-        error: isNodeFailed ? 'Destination endpoint returned 502 Bad Gateway' : undefined
+        outputData: hasError ? undefined : { processed: true, nodeResult: 'Success', timestamp: new Date().toISOString() },
+        error: errorMsg,
+        httpStatus: hasError ? 403 : 200
       });
 
-      if (isNodeFailed) break;
+      if (hasError) break;
     }
 
     const hasFailure = executionSteps.some((s) => s.status === 'failed');
@@ -260,6 +461,7 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
       id: execId,
       workflowId: workflow.id,
       workflowName: workflow.name,
+      workflowVersion: workflow.version || 1,
       triggerType: workflow.nodes[0]?.type || 'trigger_manual',
       status: hasFailure ? 'failed' : 'completed',
       startedAt: startTime.toISOString(),
@@ -268,24 +470,28 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
       steps: executionSteps,
       initialPayload: testPayload,
       isTest,
-      error: hasFailure ? 'One or more execution steps encountered an error' : undefined
+      error: hasFailure ? 'Workflow execution halted due to step failure' : undefined
     };
 
     setExecutions((prev) => [newExec, ...prev]);
 
-    // Update workflow stats
     setWorkflows((prev) =>
       prev.map((w) => {
         if (w.id === workflowId) {
-          const newCount = (w.executionCount || 0) + 1;
           return {
             ...w,
-            executionCount: newCount,
+            executionCount: (w.executionCount || 0) + 1,
             updatedAt: new Date().toISOString().split('T')[0]
           };
         }
         return w;
       })
+    );
+
+    logAudit(
+      hasFailure ? 'execution_failed' : 'execution_triggered',
+      workflow.name,
+      `Executed ${isTest ? 'Sandbox Test' : 'Pipeline Execution'} (${durationMs}ms)`
     );
 
     return newExec;
@@ -299,20 +505,74 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setExecutions([]);
   };
 
+  const addCredential = (
+    credData: Omit<Credential, 'id' | 'createdAt' | 'updatedAt' | 'maskedValue' | 'isValid'>
+  ): Credential => {
+    const newCred: Credential = {
+      ...credData,
+      id: `cred_${Date.now()}`,
+      createdAt: new Date().toISOString().split('T')[0],
+      updatedAt: new Date().toISOString().split('T')[0],
+      maskedValue: `${credData.type.toUpperCase()}-••••••••••••${Math.floor(Math.random() * 9000 + 1000)}`,
+      isValid: true
+    };
+
+    setCredentials((prev) => [newCred, ...prev]);
+    logAudit('credential_created', newCred.name, `Registered new ${newCred.type} credential for ${newCred.provider}`);
+    return newCred;
+  };
+
+  const revokeCredential = (id: string) => {
+    setCredentials((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, isValid: false, updatedAt: new Date().toISOString().split('T')[0] } : c))
+    );
+    const target = credentials.find((c) => c.id === id);
+    if (target) {
+      logAudit('credential_revoked', target.name, 'Revoked authorization token');
+    }
+  };
+
+  const deleteCredential = (id: string) => {
+    setCredentials((prev) => prev.filter((c) => c.id !== id));
+  };
+
+  const testCredential = async (id: string): Promise<boolean> => {
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    return credentials.some((c) => c.id === id && c.isValid);
+  };
+
+  const toggleIntegrationConnect = (id: string) => {
+    setIntegrations((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, isConnected: !item.isConnected } : item
+      )
+    );
+  };
+
   return (
     <FlowContext.Provider
       value={{
         workflows,
         executions,
+        credentials,
+        integrations,
+        auditLogs,
+        usageQuota,
         getWorkflowById,
         saveWorkflow,
+        publishWorkflowVersion,
         deleteWorkflow,
         duplicateWorkflow,
         toggleWorkflowStatus,
         createFromTemplate,
         runWorkflowExecution,
         getExecutionsForWorkflow,
-        clearExecutionLogs
+        clearExecutionLogs,
+        addCredential,
+        revokeCredential,
+        deleteCredential,
+        testCredential,
+        toggleIntegrationConnect
       }}
     >
       {children}

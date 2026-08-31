@@ -2,417 +2,472 @@ import { FlowNodeDefinition } from '../types/flow';
 
 export const FLOW_NODE_DEFINITIONS: Record<string, FlowNodeDefinition> = {
   // ==========================================
-  // TRIGGERS
+  // 1. TRIGGER NODES
   // ==========================================
-  'trigger_partner_applied': {
-    type: 'trigger_partner_applied',
-    category: 'trigger',
-    title: 'New Partner Application',
-    subtitle: 'Fires when an enterprise applies to the partner network',
-    iconName: 'Handshake',
-    color: 'emerald',
-    description: 'Triggers immediately upon submission of a corporate partnership brief.',
-    defaultConfig: {
-      track: 'all',
-      autoValidate: true
-    },
-    inputs: [],
-    outputs: [
-      { id: 'out', label: 'Payload', type: 'output', dataType: 'object' }
-    ]
-  },
-  'trigger_partner_approved': {
-    type: 'trigger_partner_approved',
-    category: 'trigger',
-    title: 'Partner Approved',
-    subtitle: 'Fires when partner application status changes to approved',
-    iconName: 'CheckCircle2',
-    color: 'emerald',
-    description: 'Triggers when a partner application is officially verified.',
-    defaultConfig: {
-      minimumTier: 'Standard'
-    },
-    inputs: [],
-    outputs: [
-      { id: 'out', label: 'Partner Data', type: 'output', dataType: 'object' }
-    ]
-  },
-  'trigger_influencer_applied': {
-    type: 'trigger_influencer_applied',
-    category: 'trigger',
-    title: 'Influencer Application',
-    subtitle: 'Fires when a creator or influencer registers',
-    iconName: 'Users',
-    color: 'purple',
-    description: 'Captures creator application data, social handles, and niche.',
-    defaultConfig: {
-      platform: 'all',
-      minFollowers: 5000
-    },
-    inputs: [],
-    outputs: [
-      { id: 'out', label: 'Creator Data', type: 'output', dataType: 'object' }
-    ]
-  },
-  'trigger_influencer_approved': {
-    type: 'trigger_influencer_approved',
-    category: 'trigger',
-    title: 'Influencer Approved',
-    subtitle: 'Fires when a creator is approved for campaigns',
-    iconName: 'Sparkles',
-    color: 'purple',
-    description: 'Triggers when an influencer is accepted into the active roster.',
-    defaultConfig: {},
-    inputs: [],
-    outputs: [
-      { id: 'out', label: 'Influencer Info', type: 'output', dataType: 'object' }
-    ]
-  },
-  'trigger_campaign_accepted': {
-    type: 'trigger_campaign_accepted',
-    category: 'trigger',
-    title: 'Campaign Accepted',
-    subtitle: 'Fires when an influencer accepts a campaign invite',
-    iconName: 'Briefcase',
-    color: 'blue',
-    description: 'Triggers when an influencer accepts terms for a campaign brief.',
-    defaultConfig: {
-      campaignId: 'any'
-    },
-    inputs: [],
-    outputs: [
-      { id: 'out', label: 'Campaign Data', type: 'output', dataType: 'object' }
-    ]
-  },
-  'trigger_content_submitted': {
-    type: 'trigger_content_submitted',
-    category: 'trigger',
-    title: 'Content Submitted',
-    subtitle: 'Fires when draft content is uploaded for review',
-    iconName: 'FileText',
-    color: 'amber',
-    description: 'Triggers when draft media, post links, or copy are submitted.',
-    defaultConfig: {
-      requireMediaUrl: true
-    },
-    inputs: [],
-    outputs: [
-      { id: 'out', label: 'Submission Data', type: 'output', dataType: 'object' }
-    ]
-  },
-  'trigger_customer_registered': {
-    type: 'trigger_customer_registered',
-    category: 'trigger',
-    title: 'Customer Registered',
-    subtitle: 'Fires on new user account or product signup',
-    iconName: 'UserPlus',
-    color: 'blue',
-    description: 'Fires when a new user joins any JONANDA ecosystem product.',
-    defaultConfig: {
-      productSource: 'all'
-    },
-    inputs: [],
-    outputs: [
-      { id: 'out', label: 'User Data', type: 'output', dataType: 'object' }
-    ]
-  },
-  'trigger_webhook': {
-    type: 'trigger_webhook',
-    category: 'trigger',
-    title: 'Incoming Webhook',
-    subtitle: 'HTTP POST trigger with token signature verification',
-    iconName: 'Globe',
-    color: 'cyan',
-    description: 'Listens for external payload events from custom APIs and systems.',
-    defaultConfig: {
-      endpointPath: '/webhook/v1/custom-event',
-      secretToken: 'jnda_wh_sec_994812a',
-      requireSignature: true
-    },
-    inputs: [],
-    outputs: [
-      { id: 'out', label: 'Payload', type: 'output', dataType: 'object' }
-    ]
-  },
-  'trigger_schedule': {
+  trigger_schedule: {
     type: 'trigger_schedule',
     category: 'trigger',
     title: 'Schedule / Cron',
-    subtitle: 'Periodic timer trigger (Daily, Weekly, Hourly)',
+    subtitle: 'Runs periodically or at specific times',
+    description: 'Triggers workflow execution at scheduled recurring intervals (every minute, hourly, daily, weekly, monthly, or custom cron expression).',
     iconName: 'Clock',
-    color: 'gold',
-    description: 'Executes workflow on a recurring cadence or specific time.',
-    defaultConfig: {
-      cron: '0 9 * * 1', // Every Monday at 9:00 AM
-      timezone: 'UTC'
-    },
+    color: 'emerald',
     inputs: [],
-    outputs: [
-      { id: 'out', label: 'Timestamp', type: 'output', dataType: 'string' }
-    ]
+    outputs: [{ id: 'out', label: 'Trigger', type: 'output' }],
+    defaultConfig: { interval: 'daily', time: '09:00', cron: '0 9 * * *', timezone: 'UTC' }
   },
-  'trigger_manual': {
+  trigger_webhook: {
+    type: 'trigger_webhook',
+    category: 'trigger',
+    title: 'Webhook Endpoint',
+    subtitle: 'Receives external HTTP POST/GET payloads',
+    description: 'Generates a unique incoming URL with cryptographic signature verification and secret token authentication.',
+    iconName: 'Globe',
+    color: 'emerald',
+    inputs: [],
+    outputs: [{ id: 'out', label: 'Received', type: 'output' }],
+    defaultConfig: { method: 'POST', authType: 'secret_header', responseMode: 'immediate_200' }
+  },
+  trigger_manual: {
     type: 'trigger_manual',
     category: 'trigger',
-    title: 'Manual Trigger',
-    subtitle: 'Triggered on-demand by administrator click',
+    title: 'Manual On-Demand',
+    subtitle: 'Fired by user click or API invocation',
+    description: 'Allows manual test executions, button triggers, or ad-hoc batch processing runs.',
     iconName: 'Play',
-    color: 'gold',
-    description: 'Runs workflow on-demand with custom test payload.',
-    defaultConfig: {},
+    color: 'emerald',
     inputs: [],
-    outputs: [
-      { id: 'out', label: 'Trigger Data', type: 'output', dataType: 'object' }
-    ]
+    outputs: [{ id: 'out', label: 'Start', type: 'output' }],
+    defaultConfig: { requireConfirmation: false }
+  },
+  trigger_email_event: {
+    type: 'trigger_email_event',
+    category: 'trigger',
+    title: 'Email Event Trigger',
+    subtitle: 'Email received, opened, clicked, or bounced',
+    description: 'Fires in response to mail events from JONANDA MAIL delivery infrastructure.',
+    iconName: 'Mail',
+    color: 'emerald',
+    inputs: [],
+    outputs: [{ id: 'out', label: 'Event', type: 'output' }],
+    defaultConfig: { eventType: 'email_opened', trackLinks: true }
+  },
+  trigger_partner_applied: {
+    type: 'trigger_partner_applied',
+    category: 'trigger',
+    title: 'Partner Applied',
+    subtitle: 'New corporate partnership form intake',
+    description: 'Triggers when a company applies to the JONANDA Partner Network.',
+    iconName: 'Handshake',
+    color: 'emerald',
+    inputs: [],
+    outputs: [{ id: 'out', label: 'Application', type: 'output' }],
+    defaultConfig: { track: 'all', autoValidate: true }
+  },
+  trigger_partner_approved: {
+    type: 'trigger_partner_approved',
+    category: 'trigger',
+    title: 'Partner Approved',
+    subtitle: 'Admin validates partner application',
+    description: 'Triggers immediately when a partnership application transitions to approved status.',
+    iconName: 'CheckCircle2',
+    color: 'emerald',
+    inputs: [],
+    outputs: [{ id: 'out', label: 'Approved', type: 'output' }],
+    defaultConfig: { tierFilter: 'all' }
+  },
+  trigger_influencer_applied: {
+    type: 'trigger_influencer_applied',
+    category: 'trigger',
+    title: 'Creator Applied',
+    subtitle: 'New influencer joins program',
+    description: 'Fired when a content creator submits an application with their channel metrics.',
+    iconName: 'Users',
+    color: 'emerald',
+    inputs: [],
+    outputs: [{ id: 'out', label: 'Creator', type: 'output' }],
+    defaultConfig: { minFollowers: 1000 }
+  },
+  trigger_campaign_accepted: {
+    type: 'trigger_campaign_accepted',
+    category: 'trigger',
+    title: 'Campaign Accepted',
+    subtitle: 'Creator accepts sponsorship invitation',
+    description: 'Triggers when a creator accepts a brand brief invitation.',
+    iconName: 'Briefcase',
+    color: 'emerald',
+    inputs: [],
+    outputs: [{ id: 'out', label: 'Accepted', type: 'output' }],
+    defaultConfig: {}
+  },
+  trigger_content_submitted: {
+    type: 'trigger_content_submitted',
+    category: 'trigger',
+    title: 'Content Submitted',
+    subtitle: 'Creator uploads draft review media',
+    description: 'Triggers when sponsored content draft or final link is submitted for brand review.',
+    iconName: 'FileText',
+    color: 'emerald',
+    inputs: [],
+    outputs: [{ id: 'out', label: 'Submission', type: 'output' }],
+    defaultConfig: { requireDraftCheck: true }
+  },
+  trigger_customer_event: {
+    type: 'trigger_customer_event',
+    category: 'trigger',
+    title: 'Customer Lifecycle Event',
+    subtitle: 'Signup, subscription, or payment',
+    description: 'Triggers on customer registration, JONANDA ONE subscription change, or support event.',
+    iconName: 'UserPlus',
+    color: 'emerald',
+    inputs: [],
+    outputs: [{ id: 'out', label: 'Customer', type: 'output' }],
+    defaultConfig: { event: 'signup' }
+  },
+  trigger_ecosystem_event: {
+    type: 'trigger_ecosystem_event',
+    category: 'trigger',
+    title: 'JONANDA Ecosystem Event',
+    subtitle: 'Product activated, LOZULA security alert',
+    description: 'Triggers on events originating across JONANDA ONE, LOZULA, or JONANDA Studio products.',
+    iconName: 'Layers',
+    color: 'emerald',
+    inputs: [],
+    outputs: [{ id: 'out', label: 'Ecosystem', type: 'output' }],
+    defaultConfig: { product: 'lozula', severity: 'medium' }
   },
 
   // ==========================================
-  // ACTIONS
+  // 2. ACTION NODES
   // ==========================================
-  'action_send_email': {
+  action_send_email: {
     type: 'action_send_email',
     category: 'action',
     title: 'Send JONANDA Mail',
-    subtitle: 'Dispatches templated email via JONANDA Mail engine',
+    subtitle: 'Dispatches templated email message',
+    description: 'Sends a personalized email via JONANDA MAIL with DKIM verification, dynamic token interpolation, and open/click tracking.',
     iconName: 'Mail',
-    color: 'gold',
-    description: 'Sends personalized email with variables like {{first_name}} and {{company}}.',
+    color: 'amber',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [{ id: 'out', label: 'Sent', type: 'output' }],
     defaultConfig: {
-      fromName: 'JONANDA LLC Relations',
-      fromEmail: 'contact@jonanda.com',
       to: '{{email}}',
-      subject: 'Welcome to JONANDA Ecosystem',
-      templateId: 'partner-welcome-v1',
-      bodyText: 'Hello {{first_name}},\n\nWelcome to JONANDA LLC. Your application has been processed.',
-      trackOpens: true,
-      trackClicks: true
-    },
-    inputs: [
-      { id: 'in', label: 'Input', type: 'input', dataType: 'object' }
-    ],
-    outputs: [
-      { id: 'out', label: 'Sent Result', type: 'output', dataType: 'object' }
-    ]
+      subject: 'Update from JONANDA Ecosystem',
+      bodyText: 'Hello {{first_name}},\n\nHere is your automated update.',
+      templateId: ''
+    }
   },
-  'action_add_tag': {
+  action_send_campaign: {
+    type: 'action_send_campaign',
+    category: 'action',
+    title: 'Broadcast Campaign',
+    subtitle: 'Dispatches targeted batch to audience',
+    description: 'Queues a multi-recipient batch campaign to an audience list with suppression list enforcement.',
+    iconName: 'Send',
+    color: 'amber',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [{ id: 'out', label: 'Queued', type: 'output' }],
+    defaultConfig: { targetList: 'Corporate Partners', batchSize: 50 }
+  },
+  action_http_request: {
+    type: 'action_http_request',
+    category: 'action',
+    title: 'HTTP / API Request',
+    subtitle: 'Universal REST GET, POST, PUT, DELETE',
+    description: 'Performs external REST API requests with headers, JSON payload, authentication credentials, timeout, and SSRF security protection.',
+    iconName: 'Globe',
+    color: 'amber',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [
+      { id: 'out', label: 'Response (2xx)', type: 'output' },
+      { id: 'error', label: 'Error (4xx/5xx)', type: 'output' }
+    ],
+    defaultConfig: {
+      method: 'POST',
+      url: 'https://api.example.com/v1/resource',
+      headers: { 'Content-Type': 'application/json' },
+      body: '{\n  "event": "automated_trigger"\n}',
+      timeoutMs: 10000,
+      maxRetries: 2
+    }
+  },
+  action_add_tag: {
     type: 'action_add_tag',
     category: 'action',
-    title: 'Add Contact Tag',
-    subtitle: 'Assigns tags for audience segmentation',
+    title: 'Add / Remove Tag',
+    subtitle: 'Updates contact or partner tags',
+    description: 'Modifies tags on a recipient in the centralized JONANDA Audience ledger.',
     iconName: 'Tag',
-    color: 'indigo',
-    description: 'Labels contact in JONANDA MAIL with specific segment tag.',
-    defaultConfig: {
-      tag: 'Strategic Partner',
-      list: 'Partners Network'
-    },
-    inputs: [
-      { id: 'in', label: 'Input', type: 'input', dataType: 'object' }
-    ],
-    outputs: [
-      { id: 'out', label: 'Updated Contact', type: 'output', dataType: 'object' }
-    ]
+    color: 'amber',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [{ id: 'out', label: 'Tagged', type: 'output' }],
+    defaultConfig: { operation: 'add', tag: 'Verified Partner' }
   },
-  'action_update_partner': {
+  action_update_partner: {
     type: 'action_update_partner',
     category: 'action',
-    title: 'Update Partner Status',
-    subtitle: 'Modifies tier or status in Partner ledger',
-    iconName: 'ShieldCheck',
-    color: 'emerald',
-    description: 'Updates partner record in database with new status or metadata.',
-    defaultConfig: {
-      targetStatus: 'active',
-      tier: 'Strategic'
-    },
-    inputs: [
-      { id: 'in', label: 'Input', type: 'input', dataType: 'object' }
-    ],
-    outputs: [
-      { id: 'out', label: 'Partner Record', type: 'output', dataType: 'object' }
-    ]
+    title: 'Update Partner Record',
+    subtitle: 'Modifies status, tier, or notes',
+    description: 'Updates corporate partner metadata, verification status, and technical assigned track.',
+    iconName: 'Handshake',
+    color: 'amber',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [{ id: 'out', label: 'Updated', type: 'output' }],
+    defaultConfig: { targetStatus: 'active', tier: 'Strategic' }
   },
-  'action_update_influencer': {
+  action_update_influencer: {
     type: 'action_update_influencer',
     category: 'action',
-    title: 'Update Influencer Status',
-    subtitle: 'Modifies creator tier or campaign status',
-    iconName: 'Sparkles',
-    color: 'purple',
-    description: 'Updates influencer record with approval rating and tags.',
-    defaultConfig: {
-      targetStatus: 'active',
-      assignRoster: 'Web3 & AI Creators'
-    },
-    inputs: [
-      { id: 'in', label: 'Input', type: 'input', dataType: 'object' }
-    ],
-    outputs: [
-      { id: 'out', label: 'Influencer Record', type: 'output', dataType: 'object' }
-    ]
+    title: 'Update Creator Record',
+    subtitle: 'Approves or categorizes creator',
+    description: 'Updates creator verification level, roster status, and assigned brand campaign invitations.',
+    iconName: 'Users',
+    color: 'amber',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [{ id: 'out', label: 'Updated', type: 'output' }],
+    defaultConfig: { targetStatus: 'active', assignRoster: 'Web3 & AI Creators' }
   },
-  'action_wait_delay': {
+  action_wait_delay: {
     type: 'action_wait_delay',
     category: 'action',
     title: 'Wait / Delay',
-    subtitle: 'Pauses execution flow for specified duration',
+    subtitle: 'Pauses execution for duration',
+    description: 'Delays workflow execution for a specified amount of time (minutes, hours, or days) before proceeding.',
     iconName: 'Hourglass',
     color: 'amber',
-    description: 'Delays the next step (e.g. Wait 2 days before sending follow-up).',
-    defaultConfig: {
-      duration: 2,
-      unit: 'days' // 'minutes' | 'hours' | 'days'
-    },
-    inputs: [
-      { id: 'in', label: 'Input', type: 'input', dataType: 'object' }
-    ],
-    outputs: [
-      { id: 'out', label: 'Continue', type: 'output', dataType: 'object' }
-    ]
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [{ id: 'out', label: 'Resumed', type: 'output' }],
+    defaultConfig: { duration: 2, unit: 'days' }
   },
-  'action_http_webhook': {
-    type: 'action_http_webhook',
-    category: 'action',
-    title: 'Outgoing HTTP Request',
-    subtitle: 'Calls external REST API or webhook endpoint',
-    iconName: 'ExternalLink',
-    color: 'cyan',
-    description: 'Dispatches payload to external CRM, Slack, Discord, or server.',
-    defaultConfig: {
-      method: 'POST',
-      url: 'https://api.external.com/v1/notify',
-      headers: '{\n  "Content-Type": "application/json"\n}',
-      retryOnFailure: true,
-      maxRetries: 3
-    },
-    inputs: [
-      { id: 'in', label: 'Input', type: 'input', dataType: 'object' }
-    ],
-    outputs: [
-      { id: 'out', label: 'Response', type: 'output', dataType: 'object' }
-    ]
-  },
-  'action_internal_alert': {
+  action_internal_alert: {
     type: 'action_internal_alert',
     category: 'action',
-    title: 'Internal Team Alert',
-    subtitle: 'Notifies executive or administrative team',
+    title: 'Internal Alert Notification',
+    subtitle: 'Notifies executive or ops team',
+    description: 'Dispatches high-priority system alerts to operations via email, webhook, or team channel.',
     iconName: 'Bell',
-    color: 'rose',
-    description: 'Sends notification to JONANDA operations dashboard or email.',
-    defaultConfig: {
-      priority: 'high',
-      channel: 'email',
-      message: 'New high-priority partner application received from {{company}}.'
-    },
-    inputs: [
-      { id: 'in', label: 'Input', type: 'input', dataType: 'object' }
-    ],
-    outputs: [
-      { id: 'out', label: 'Status', type: 'output', dataType: 'object' }
-    ]
+    color: 'amber',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [{ id: 'out', label: 'Dispatched', type: 'output' }],
+    defaultConfig: { priority: 'high', channel: 'email', message: 'New workflow notification: {{title}}' }
   },
 
   // ==========================================
-  // LOGIC
+  // 3. LOGIC & ROUTING NODES
   // ==========================================
-  'logic_if_else': {
+  logic_if_else: {
     type: 'logic_if_else',
     category: 'logic',
-    title: 'If / Else Condition',
-    subtitle: 'Branches workflow based on boolean rule',
+    title: 'IF / ELSE Condition',
+    subtitle: 'Branches based on boolean evaluation',
+    description: 'Evaluates dynamic expressions (e.g. {{status}} == "approved") and routes execution to YES (True) or NO (False) output paths.',
     iconName: 'GitBranch',
-    color: 'orange',
-    description: 'Evaluates condition: True branches to True path, False to False path.',
-    defaultConfig: {
-      field: 'status',
-      operator: 'equals', // 'equals' | 'not_equals' | 'contains' | 'greater_than'
-      value: 'approved'
-    },
-    inputs: [
-      { id: 'in', label: 'Input', type: 'input', dataType: 'object' }
-    ],
+    color: 'purple',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
     outputs: [
-      { id: 'true', label: 'YES / True', type: 'output', dataType: 'object' },
-      { id: 'false', label: 'NO / False', type: 'output', dataType: 'object' }
-    ]
+      { id: 'true', label: 'TRUE (YES)', type: 'output' },
+      { id: 'false', label: 'FALSE (NO)', type: 'output' }
+    ],
+    defaultConfig: { field: 'status', operator: 'equals', value: 'approved' }
   },
-  'logic_filter': {
+  logic_switch: {
+    type: 'logic_switch',
+    category: 'logic',
+    title: 'Switch Router',
+    subtitle: 'Multi-way conditional router',
+    description: 'Routes execution through multiple branches based on matched values (e.g. Enterprise, Strategic, Standard).',
+    iconName: 'GitFork',
+    color: 'purple',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [
+      { id: 'route_1', label: 'Case 1', type: 'output' },
+      { id: 'route_2', label: 'Case 2', type: 'output' },
+      { id: 'default', label: 'Default', type: 'output' }
+    ],
+    defaultConfig: { property: 'tier', case1: 'Enterprise', case2: 'Strategic' }
+  },
+  logic_filter: {
     type: 'logic_filter',
     category: 'logic',
-    title: 'Filter Payload',
-    subtitle: 'Stops workflow if criteria not met',
+    title: 'Data Filter',
+    subtitle: 'Stops execution if conditions unmet',
+    description: 'Filters incoming data payload. If conditions are met, continues downstream; otherwise terminates gracefully.',
     iconName: 'Filter',
-    color: 'orange',
-    description: 'Filters incoming data; non-matching items terminate silently.',
-    defaultConfig: {
-      field: 'followers',
-      operator: 'greater_than',
-      value: '10000'
-    },
-    inputs: [
-      { id: 'in', label: 'Input', type: 'input', dataType: 'object' }
-    ],
-    outputs: [
-      { id: 'passed', label: 'Passed', type: 'output', dataType: 'object' }
-    ]
+    color: 'purple',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [{ id: 'passed', label: 'Passed', type: 'output' }],
+    defaultConfig: { field: 'followers', operator: 'greater_than', value: '5000' }
   },
-  'logic_stop': {
-    type: 'logic_stop',
+  logic_loop: {
+    type: 'logic_loop',
     category: 'logic',
-    title: 'Stop Workflow',
-    subtitle: 'Terminates execution path with message',
-    iconName: 'StopCircle',
-    color: 'rose',
-    description: 'Concludes execution path without error.',
-    defaultConfig: {
-      reason: 'Standard workflow termination'
-    },
-    inputs: [
-      { id: 'in', label: 'Input', type: 'input', dataType: 'object' }
+    title: 'Loop / For Each',
+    subtitle: 'Iterates over items in an array',
+    description: 'Executes child nodes for each item in an array (e.g. iterate through a list of creator profiles or database records).',
+    iconName: 'RotateCw',
+    color: 'purple',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [
+      { id: 'loop_item', label: 'Each Item', type: 'output' },
+      { id: 'done', label: 'On Complete', type: 'output' }
     ],
-    outputs: []
+    defaultConfig: { arrayField: 'items', maxIterations: 100 }
+  },
+  logic_terminate: {
+    type: 'logic_terminate',
+    category: 'logic',
+    title: 'Stop / Terminate',
+    subtitle: 'Ends workflow pipeline execution',
+    description: 'Explicitly stops workflow execution and returns final status code and response payload.',
+    iconName: 'StopCircle',
+    color: 'purple',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [],
+    defaultConfig: { reason: 'Completed normally', status: 'completed' }
   },
 
   // ==========================================
-  // DATA
+  // 4. DATA TRANSFORMATION & CODE NODES
   // ==========================================
-  'data_get_contact': {
-    type: 'data_get_contact',
+  data_transform: {
+    type: 'data_transform',
     category: 'data',
-    title: 'Get Contact Record',
-    subtitle: 'Fetches contact details from JONANDA MAIL database',
+    title: 'Transform Data',
+    subtitle: 'Map, format, and structure JSON',
+    description: 'Maps, parses, reformats, or merges payload properties using safe data mapping expressions.',
     iconName: 'Database',
     color: 'blue',
-    description: 'Retrieves full history, tags, and status by email address.',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [{ id: 'out', label: 'Result', type: 'output' }],
     defaultConfig: {
-      lookupField: 'email',
-      lookupValue: '{{email}}'
-    },
-    inputs: [
-      { id: 'in', label: 'Input', type: 'input', dataType: 'object' }
-    ],
-    outputs: [
-      { id: 'out', label: 'Contact Data', type: 'output', dataType: 'object' }
-    ]
+      mapping: '{\n  "fullName": "{{contactName}}",\n  "company": "{{companyName}}",\n  "processedAt": "{{now}}"\n}'
+    }
   },
-  'data_set_variable': {
+  data_set_variable: {
     type: 'data_set_variable',
     category: 'data',
-    title: 'Set Workflow Variable',
-    subtitle: 'Stores variable for downstream nodes',
+    title: 'Set Variables',
+    subtitle: 'Defines workflow memory variables',
+    description: 'Sets or updates execution-scoped variables accessible across downstream nodes.',
     iconName: 'Variable',
     color: 'blue',
-    description: 'Creates reusable variable (e.g. {{campaign_portal_url}}).',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [{ id: 'out', label: 'Out', type: 'output' }],
+    defaultConfig: { variableName: 'portal_url', value: 'https://llc.jonanda.com/partners' }
+  },
+  code_sandbox_function: {
+    type: 'code_sandbox_function',
+    category: 'code',
+    title: 'Code / Function (Sandboxed)',
+    subtitle: 'Restricted safe JavaScript transform',
+    description: 'Executes pure sandboxed data transformations without host OS or filesystem access.',
+    iconName: 'Code',
+    color: 'blue',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [{ id: 'out', label: 'Out', type: 'output' }],
     defaultConfig: {
-      key: 'portal_url',
-      value: 'https://llc.jonanda.com/partners/directory'
-    },
-    inputs: [
-      { id: 'in', label: 'Input', type: 'input', dataType: 'object' }
-    ],
+      code: '// Pure transform function\nreturn {\n  ...items,\n  computedScore: items.followers ? items.followers * 0.05 : 10\n};'
+    }
+  },
+
+  // ==========================================
+  // 5. AI ENGINE NODES
+  // ==========================================
+  ai_generate_text: {
+    type: 'ai_generate_text',
+    category: 'ai',
+    title: 'AI Text Generator',
+    subtitle: 'LLM content & summary generation',
+    description: 'Generates summaries, personalized copy, rewrites, or structured JSON data using enterprise AI models.',
+    iconName: 'Sparkles',
+    color: 'purple',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [{ id: 'out', label: 'Output', type: 'output' }],
+    defaultConfig: {
+      prompt: 'Summarize this partner inquiry and evaluate fit: {{notes}}',
+      model: 'gemini-pro',
+      temperature: 0.3
+    }
+  },
+  ai_email_personalizer: {
+    type: 'ai_email_personalizer',
+    category: 'ai',
+    title: 'AI Email Personalizer',
+    subtitle: 'Dynamic custom copy tailored to recipient',
+    description: 'Generates custom introductory hooks and relevant talking points based on recipient profile data.',
+    iconName: 'Sparkles',
+    color: 'purple',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [{ id: 'out', label: 'Personalized', type: 'output' }],
+    defaultConfig: {
+      contextFields: ['creatorName', 'niche', 'followersCount'],
+      tone: 'Professional & Collaborative'
+    }
+  },
+  ai_decision_router: {
+    type: 'ai_decision_router',
+    category: 'ai',
+    title: 'AI Decision Router',
+    subtitle: 'Intelligent intent and sentiment routing',
+    description: 'Classifies inbound text or inquiries and routes to the best-matched operational pathway.',
+    iconName: 'Sparkles',
+    color: 'purple',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
     outputs: [
-      { id: 'out', label: 'Enriched Data', type: 'output', dataType: 'object' }
-    ]
+      { id: 'high_priority', label: 'High Priority', type: 'output' },
+      { id: 'standard', label: 'Standard', type: 'output' }
+    ],
+    defaultConfig: { criteria: 'Classify partnership urgency and enterprise scale.' }
+  },
+
+  // ==========================================
+  // 6. DATABASE NODES
+  // ==========================================
+  database_query: {
+    type: 'database_query',
+    category: 'database',
+    title: 'Database Query / Execute',
+    subtitle: 'PostgreSQL, MySQL, Supabase connector',
+    description: 'Performs structured queries, inserts, updates, or selects against configured database credentials.',
+    iconName: 'Database',
+    color: 'blue',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [{ id: 'out', label: 'Rows', type: 'output' }],
+    defaultConfig: {
+      operation: 'SELECT',
+      query: 'SELECT * FROM partners WHERE status = $1',
+      parameters: ['active']
+    }
+  },
+
+  // ==========================================
+  // 7. JONANDA PRODUCT INTEGRATIONS
+  // ==========================================
+  integration_lozula_security: {
+    type: 'integration_lozula_security',
+    category: 'integration',
+    title: 'LOZULA Cybersecurity',
+    subtitle: 'Vulnerability scan & defensive audits',
+    description: 'Triggers security assessments, code audits, or retrieves threat telemetry from LOZULA platform.',
+    iconName: 'ShieldCheck',
+    color: 'emerald',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [
+      { id: 'passed', label: 'Clean', type: 'output' },
+      { id: 'alert', label: 'Threat Detected', type: 'output' }
+    ],
+    defaultConfig: { scanType: 'threat_assessment', targetDomain: '{{domain}}' }
+  },
+  integration_jonanda_seo: {
+    type: 'integration_jonanda_seo',
+    category: 'integration',
+    title: 'JONANDA SEO Toolkit',
+    subtitle: 'Keyword tracking & ranking audits',
+    description: 'Automates keyword clustering, backlink verification, and periodic search ranking audits.',
+    iconName: 'Search',
+    color: 'blue',
+    inputs: [{ id: 'in', label: 'In', type: 'input' }],
+    outputs: [{ id: 'out', label: 'Audit Data', type: 'output' }],
+    defaultConfig: { auditDepth: 'standard' }
   }
 };

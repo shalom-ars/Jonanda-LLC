@@ -8,7 +8,12 @@ import {
   ZoomIn,
   ZoomOut,
   Layers,
-  Zap
+  Zap,
+  Undo2,
+  Redo2,
+  Maximize2,
+  MapPin,
+  UploadCloud
 } from 'lucide-react';
 import { Workflow, WorkflowCategory } from '../../../types/flow';
 import { Button } from '../../common/Button';
@@ -19,12 +24,20 @@ interface BuilderTopBarProps {
   onUpdateCategory: (category: WorkflowCategory) => void;
   onToggleStatus: () => void;
   onSave: () => void;
+  onPublishVersion: () => void;
   onTest: () => void;
   zoom: number;
   onZoomIn: () => void;
   onZoomOut: () => void;
   onResetZoom: () => void;
   onAutoArrange: () => void;
+  onFitToScreen: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
+  onUndo: () => void;
+  onRedo: () => void;
+  isMinimapOpen: boolean;
+  onToggleMinimap: () => void;
 }
 
 export const BuilderTopBar: React.FC<BuilderTopBarProps> = ({
@@ -33,12 +46,20 @@ export const BuilderTopBar: React.FC<BuilderTopBarProps> = ({
   onUpdateCategory,
   onToggleStatus,
   onSave,
+  onPublishVersion,
   onTest,
   zoom,
   onZoomIn,
   onZoomOut,
   onResetZoom,
-  onAutoArrange
+  onAutoArrange,
+  onFitToScreen,
+  canUndo,
+  canRedo,
+  onUndo,
+  onRedo,
+  isMinimapOpen,
+  onToggleMinimap
 }) => {
   const [isEditingName, setIsEditingName] = useState(false);
   const [nameInput, setNameInput] = useState(workflow.name);
@@ -74,7 +95,7 @@ export const BuilderTopBar: React.FC<BuilderTopBarProps> = ({
         {/* Brand Label */}
         <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded bg-gold-500/10 border border-gold-500/20 text-[10px] font-bold text-amber-700 dark:text-gold-300">
           <Zap className="w-3 h-3" />
-          <span>FLOW BUILDER</span>
+          <span>JONANDA FLOW</span>
         </div>
 
         {/* Editable Name */}
@@ -94,7 +115,7 @@ export const BuilderTopBar: React.FC<BuilderTopBarProps> = ({
             onClick={() => setIsEditingName(true)}
             className="text-sm font-bold text-gray-900 dark:text-white hover:text-amber-600 dark:hover:text-gold-300 transition-colors flex items-center gap-2 group"
           >
-            <span className="truncate max-w-[180px] sm:max-w-xs">{workflow.name}</span>
+            <span className="truncate max-w-[150px] sm:max-w-xs">{workflow.name}</span>
             <span className="text-[10px] text-gray-400 opacity-0 group-hover:opacity-100">
               (edit)
             </span>
@@ -105,13 +126,15 @@ export const BuilderTopBar: React.FC<BuilderTopBarProps> = ({
         <select
           value={workflow.category}
           onChange={(e) => onUpdateCategory(e.target.value as WorkflowCategory)}
-          className="hidden sm:inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 focus:outline-none"
+          className="hidden md:inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 focus:outline-none"
         >
           <option value="partner">partner</option>
           <option value="influencer">influencer</option>
           <option value="brand">brand</option>
           <option value="customer">customer</option>
           <option value="ecosystem">ecosystem</option>
+          <option value="api">api</option>
+          <option value="ai">ai</option>
           <option value="custom">custom</option>
         </select>
 
@@ -121,8 +144,30 @@ export const BuilderTopBar: React.FC<BuilderTopBarProps> = ({
         </span>
       </div>
 
-      {/* Middle: Canvas View Controls (Zoom / Auto-Arrange) */}
-      <div className="hidden md:flex items-center gap-1 bg-gray-100 dark:bg-white/5 p-1 rounded-xl border border-gray-200 dark:border-white/10">
+      {/* Middle: Canvas View Controls (Undo, Redo, Zoom, Auto-Arrange, Minimap) */}
+      <div className="hidden lg:flex items-center gap-1 bg-gray-100 dark:bg-white/5 p-1 rounded-xl border border-gray-200 dark:border-white/10">
+        <button
+          type="button"
+          disabled={!canUndo}
+          onClick={onUndo}
+          className="p-1.5 rounded-lg text-gray-500 hover:text-gray-900 dark:hover:text-white disabled:opacity-30"
+          title="Undo (Ctrl+Z)"
+        >
+          <Undo2 className="w-3.5 h-3.5" />
+        </button>
+
+        <button
+          type="button"
+          disabled={!canRedo}
+          onClick={onRedo}
+          className="p-1.5 rounded-lg text-gray-500 hover:text-gray-900 dark:hover:text-white disabled:opacity-30"
+          title="Redo (Ctrl+Y)"
+        >
+          <Redo2 className="w-3.5 h-3.5" />
+        </button>
+
+        <div className="w-[1px] h-4 bg-gray-300 dark:bg-white/10 mx-1" />
+
         <button
           type="button"
           onClick={onZoomOut}
@@ -154,16 +199,49 @@ export const BuilderTopBar: React.FC<BuilderTopBarProps> = ({
 
         <button
           type="button"
+          onClick={onFitToScreen}
+          className="p-1.5 rounded-lg text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-white/10"
+          title="Fit to Screen"
+        >
+          <Maximize2 className="w-3.5 h-3.5" />
+        </button>
+
+        <button
+          type="button"
           onClick={onAutoArrange}
           className="p-1.5 rounded-lg text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-white/10"
           title="Auto Arrange Nodes"
         >
           <Layers className="w-3.5 h-3.5" />
         </button>
+
+        <button
+          type="button"
+          onClick={onToggleMinimap}
+          className={`p-1.5 rounded-lg transition-colors ${
+            isMinimapOpen
+              ? 'bg-amber-500/20 text-amber-700 dark:text-gold-400'
+              : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'
+          }`}
+          title="Toggle Radar Minimap"
+        >
+          <MapPin className="w-3.5 h-3.5" />
+        </button>
       </div>
 
-      {/* Right: Actions (Status Toggle, Test Run, Save) */}
-      <div className="flex items-center gap-2.5">
+      {/* Right: Actions (Publish Version, Status Toggle, Test Run, Save) */}
+      <div className="flex items-center gap-2">
+        {/* Publish Version */}
+        <button
+          type="button"
+          onClick={onPublishVersion}
+          className="hidden sm:flex px-2.5 py-1.5 rounded-lg bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 text-xs font-bold text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-white/10 transition-colors items-center gap-1.5"
+          title="Publish immutable version snapshot"
+        >
+          <UploadCloud className="w-3.5 h-3.5 text-blue-500" />
+          <span>Publish v{workflow.version + 1}.0</span>
+        </button>
+
         {/* Status Toggle */}
         <button
           type="button"
@@ -187,7 +265,7 @@ export const BuilderTopBar: React.FC<BuilderTopBarProps> = ({
         <button
           type="button"
           onClick={onTest}
-          className="px-3.5 py-1.5 rounded-lg bg-gray-100 dark:bg-white/5 hover:bg-amber-500/15 hover:border-amber-500/30 text-xs font-bold text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-white/10 transition-colors flex items-center gap-1.5"
+          className="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-white/5 hover:bg-amber-500/15 hover:border-amber-500/30 text-xs font-bold text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-white/10 transition-colors flex items-center gap-1.5"
         >
           <Play className="w-3.5 h-3.5 text-amber-600 dark:text-gold-400" />
           <span className="hidden sm:inline">Test Run</span>

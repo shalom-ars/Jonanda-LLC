@@ -22,9 +22,12 @@ import {
   Database,
   Variable,
   Trash2,
-  Copy
+  Copy,
+  Code,
+  RotateCw,
+  Search
 } from 'lucide-react';
-import { FlowNode } from '../../../types/flow';
+import { FlowNode, NodeCategory } from '../../../types/flow';
 import { FLOW_NODE_DEFINITIONS } from '../../../data/flowNodesData';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -48,7 +51,10 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Filter,
   StopCircle,
   Database,
-  Variable
+  Variable,
+  Code,
+  RotateCw,
+  Search
 };
 
 interface FlowNodeCardProps {
@@ -82,19 +88,27 @@ export const FlowNodeCard: React.FC<FlowNodeCardProps> = ({
 
   const IconComp = iconMap[definition.iconName] || Sparkles;
 
-  // Category badge colors
-  const categoryStyles = {
+  // Category badge colors covering all 8 NodeCategory types
+  const categoryStyles: Record<NodeCategory, string> = {
     trigger: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30',
     action: 'bg-amber-500/15 text-amber-700 dark:text-gold-300 border-amber-500/30',
     logic: 'bg-purple-500/15 text-purple-700 dark:text-purple-300 border-purple-500/30',
-    data: 'bg-blue-500/15 text-blue-700 dark:text-blue-300 border-blue-500/30'
+    data: 'bg-blue-500/15 text-blue-700 dark:text-blue-300 border-blue-500/30',
+    ai: 'bg-pink-500/15 text-pink-700 dark:text-pink-300 border-pink-500/30',
+    database: 'bg-cyan-500/15 text-cyan-700 dark:text-cyan-300 border-cyan-500/30',
+    integration: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30',
+    code: 'bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border-indigo-500/30'
   };
 
-  const iconBgStyles = {
+  const iconBgStyles: Record<NodeCategory, string> = {
     trigger: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
     action: 'bg-amber-500/10 text-amber-600 dark:text-gold-400 border-amber-500/30',
     logic: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/30',
-    data: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/30'
+    data: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/30',
+    ai: 'bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-500/30',
+    database: 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/30',
+    integration: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
+    code: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/30'
   };
 
   return (
@@ -116,10 +130,10 @@ export const FlowNodeCard: React.FC<FlowNodeCardProps> = ({
       {/* Node Top Row: Icon + Category Badge + Action Buttons */}
       <div className="flex items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-2">
-          <div className={`w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 ${iconBgStyles[node.category]}`}>
+          <div className={`w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 ${iconBgStyles[node.category] || iconBgStyles.action}`}>
             <IconComp className="w-4 h-4" />
           </div>
-          <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border ${categoryStyles[node.category]}`}>
+          <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border ${categoryStyles[node.category] || categoryStyles.action}`}>
             {node.category}
           </span>
         </div>
