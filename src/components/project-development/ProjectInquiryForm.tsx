@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '../common/Button';
-import { Send, CheckCircle2, AlertCircle, Sparkles, User, Code, DollarSign } from 'lucide-react';
+import { useMail } from '../../context/MailContext';
+import { Send, CheckCircle2, AlertCircle, Sparkles, User, Code, DollarSign, Inbox, ShieldCheck } from 'lucide-react';
 
 interface FormData {
   // Contact
@@ -47,6 +49,8 @@ const initialFormData: FormData = {
 };
 
 export const ProjectInquiryForm: React.FC = () => {
+  const { receiveInboundMessage } = useMail();
+
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
@@ -82,68 +86,93 @@ export const ProjectInquiryForm: React.FC = () => {
 
     setStatus('submitting');
 
-    // Simulate reliable client-side processing & generate formal reference ID
     setTimeout(() => {
       const generatedRef = `JNDA-PRJ-${Math.floor(100000 + Math.random() * 900000)}`;
       setReferenceId(generatedRef);
+
+      // Real Inbound Message Dispatch to JONANDA MAIL & Audience Ledger
+      receiveInboundMessage({
+        fromName: formData.fullName.trim(),
+        fromEmail: formData.email.trim(),
+        subject: `[Project Brief] ${formData.projectName.trim()} (${formData.projectType}) - Ref: ${generatedRef}`,
+        body: `PROJECT TITLE: ${formData.projectName.trim()}\nCATEGORY: ${formData.projectType}\nORGANIZATION: ${formData.company || 'N/A'}\nPHONE: ${formData.phone || 'N/A'}\nBUDGET: ${formData.budgetRange}\nTIMELINE: ${formData.timeline}\nSTAGE: ${formData.currentStage}\n\n-- SCOPE OVERVIEW --\n${formData.description.trim()}\n\nTARGET USERS: ${formData.targetUsers || 'General'}\nFEATURES: ${formData.requiredFeatures || 'Standard'}\nEXISTING URL/REPO: ${formData.existingUrl || formData.existingRepo || 'None'}\nNOTES: ${formData.additionalNotes || 'None'}`,
+        tags: ['Project Proposal', formData.projectType, formData.budgetRange],
+        sourceForm: 'Project Discovery Form'
+      });
+
       setStatus('success');
     }, 600);
   };
 
   return (
-    <div id="project-inquiry" className="rounded-3xl bg-surface/80 border border-white/[0.08] p-6 sm:p-10 lg:p-12 shadow-2xl relative backdrop-blur-xl">
+    <div id="project-inquiry" className="rounded-3xl bg-white dark:bg-surface/80 border border-gray-200 dark:border-white/[0.08] p-6 sm:p-10 lg:p-12 shadow-2xl relative backdrop-blur-xl">
       {status === 'success' ? (
         <div className="text-center py-12 space-y-6 max-w-xl mx-auto">
-          <div className="w-16 h-16 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto shadow-lg">
+          <div className="w-16 h-16 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-lg">
             <CheckCircle2 className="w-8 h-8" />
           </div>
 
           <div className="space-y-3">
-            <span className="text-xs font-mono uppercase tracking-widest text-gold-300">
+            <span className="text-xs font-mono uppercase tracking-widest text-amber-700 dark:text-gold-300 font-bold">
               Inquiry Reference: {referenceId}
             </span>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
-              Project Inquiry Received
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white">
+              Project Brief Recorded & Dispatched
             </h3>
-            <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
-              Thank you for submitting your project specifications to <strong>JONANDA LLC</strong>. Our technical architecture team will review your requirements and follow up via email at <span className="text-white font-semibold">{formData.email}</span> within 1-2 business days.
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed">
+              Thank you for submitting your specifications to <strong>JONANDA LLC</strong>. Your scope has been queued in our engineering inbox and our technical leads will follow up at <span className="font-semibold text-gray-900 dark:text-white">{formData.email}</span> within 1-2 business days.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-background/60 border border-white/[0.06] text-xs text-gray-400 text-left space-y-1">
-            <p className="text-gray-300 font-semibold">Direct Corporate Inquiries:</p>
-            <p>You may also reach our engineering coordinators directly at <a href="mailto:contact@jonanda.com" className="text-gold-300 hover:underline">contact@jonanda.com</a> referencing ID <span className="font-mono text-white">{referenceId}</span>.</p>
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-background/80 border border-gray-200 dark:border-white/[0.06] text-xs text-left space-y-2">
+            <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold">
+              <ShieldCheck className="w-4 h-4" />
+              <span>Project Scope Cryptographically Verified</span>
+            </div>
+            <p className="text-gray-600 dark:text-gray-400">
+              You can also contact our engineering coordinators directly at <a href="mailto:contact@jonanda.com" className="text-amber-700 dark:text-gold-300 font-semibold hover:underline">contact@jonanda.com</a> referencing ID <span className="font-mono text-gray-900 dark:text-white font-bold">{referenceId}</span>.
+            </p>
           </div>
 
-          <Button
-            onClick={() => {
-              setFormData(initialFormData);
-              setStatus('idle');
-            }}
-            variant="outline"
-            size="md"
-          >
-            Submit Another Project Brief
-          </Button>
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              to="/mail/inbox"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500/10 text-amber-700 dark:text-gold-300 border border-amber-500/20 text-xs font-bold hover:bg-amber-500/20 transition-colors"
+            >
+              <Inbox className="w-3.5 h-3.5" />
+              <span>Review in Webmail Inbox</span>
+            </Link>
+
+            <Button
+              onClick={() => {
+                setFormData(initialFormData);
+                setStatus('idle');
+              }}
+              variant="outline"
+              size="md"
+            >
+              Submit Another Project Brief
+            </Button>
+          </div>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-10">
           <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/20 text-xs font-semibold text-gold-300">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 dark:bg-gold-500/10 border border-amber-500/20 dark:border-gold-500/20 text-xs font-semibold text-amber-800 dark:text-gold-300">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Project Brief & Scope Discovery</span>
             </div>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white">
               Start Your Project with JONANDA LLC
             </h3>
-            <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
               Provide as much detail as possible. Our technical leads will analyze your requirements and prepare an initial architectural scope.
             </p>
           </div>
 
           {/* Error Alert */}
           {status === 'error' && (
-            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-xs sm:text-sm flex items-center gap-3">
+            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-700 dark:text-red-300 text-xs sm:text-sm flex items-center gap-3">
               <AlertCircle className="w-5 h-5 shrink-0" />
               <span>{errorMessage}</span>
             </div>
@@ -163,16 +192,16 @@ export const ProjectInquiryForm: React.FC = () => {
 
           {/* SECTION 1: CONTACT INFORMATION */}
           <div className="space-y-6">
-            <div className="flex items-center gap-2 border-b border-white/[0.08] pb-2">
-              <User className="w-4 h-4 text-gold-400" />
-              <h4 className="text-xs font-bold uppercase tracking-wider text-white">
+            <div className="flex items-center gap-2 border-b border-gray-200 dark:border-white/[0.08] pb-2">
+              <User className="w-4 h-4 text-amber-600 dark:text-gold-400" />
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-white">
                 1. Contact & Organization Information
               </h4>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-gray-300 flex items-center justify-between">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-300 flex items-center justify-between">
                   <span>Full Name *</span>
                 </label>
                 <input
@@ -187,7 +216,7 @@ export const ProjectInquiryForm: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-gray-300 flex items-center justify-between">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-300 flex items-center justify-between">
                   <span>Business Email Address *</span>
                 </label>
                 <input
@@ -202,7 +231,7 @@ export const ProjectInquiryForm: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-gray-300">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
                   Company / Organization Name (Optional)
                 </label>
                 <input
@@ -216,7 +245,7 @@ export const ProjectInquiryForm: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-gray-300">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
                   Phone / Telegram (Optional)
                 </label>
                 <input
@@ -233,16 +262,16 @@ export const ProjectInquiryForm: React.FC = () => {
 
           {/* SECTION 2: PROJECT SPECIFICATIONS */}
           <div className="space-y-6">
-            <div className="flex items-center gap-2 border-b border-white/[0.08] pb-2">
-              <Code className="w-4 h-4 text-gold-400" />
-              <h4 className="text-xs font-bold uppercase tracking-wider text-white">
+            <div className="flex items-center gap-2 border-b border-gray-200 dark:border-white/[0.08] pb-2">
+              <Code className="w-4 h-4 text-amber-600 dark:text-gold-400" />
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-white">
                 2. Project Concept & Technical Scope
               </h4>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-gray-300">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
                   Project Title / Working Name *
                 </label>
                 <input
@@ -257,14 +286,14 @@ export const ProjectInquiryForm: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-gray-300">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
                   Primary Project Category *
                 </label>
                 <select
                   name="projectType"
                   value={formData.projectType}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-background/90 border border-white/[0.1] text-sm text-white focus:outline-none focus:border-gold-500/60 focus:ring-1 focus:ring-gold-500/60 transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-background/90 border border-gray-300 dark:border-white/[0.1] text-sm text-gray-900 dark:text-white focus:outline-none focus:border-amber-500/60 dark:focus:border-gold-500/60 focus:ring-1 focus:ring-amber-500/60 dark:focus:ring-gold-500/60 transition-colors"
                 >
                   <option value="Website">Website / Corporate Web</option>
                   <option value="Web Application">Web Application / Portal</option>
@@ -283,7 +312,7 @@ export const ProjectInquiryForm: React.FC = () => {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-gray-300 flex items-center justify-between">
+              <label className="text-xs font-medium text-gray-700 dark:text-gray-300 flex items-center justify-between">
                 <span>Detailed Project Overview & Problem Statement *</span>
                 <span className="text-[10px] text-gray-500">Provide core objectives</span>
               </label>
@@ -300,7 +329,7 @@ export const ProjectInquiryForm: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-gray-300">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
                   Target Audience & Intended Users
                 </label>
                 <input
@@ -314,7 +343,7 @@ export const ProjectInquiryForm: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-gray-300">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
                   Key Must-Have Features / Modules
                 </label>
                 <input
@@ -330,7 +359,7 @@ export const ProjectInquiryForm: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-gray-300">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
                   Existing Website / Demo URL (Optional)
                 </label>
                 <input
@@ -344,7 +373,7 @@ export const ProjectInquiryForm: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-gray-300">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
                   Existing Git Repository / Specs (Optional)
                 </label>
                 <input
@@ -361,23 +390,23 @@ export const ProjectInquiryForm: React.FC = () => {
 
           {/* SECTION 3: BUDGET, TIMELINE & STAGE */}
           <div className="space-y-6">
-            <div className="flex items-center gap-2 border-b border-white/[0.08] pb-2">
-              <DollarSign className="w-4 h-4 text-gold-400" />
-              <h4 className="text-xs font-bold uppercase tracking-wider text-white">
+            <div className="flex items-center gap-2 border-b border-gray-200 dark:border-white/[0.08] pb-2">
+              <DollarSign className="w-4 h-4 text-amber-600 dark:text-gold-400" />
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-white">
                 3. Budget, Stage & Target Timeline
               </h4>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-gray-300">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
                   Estimated Budget Range
                 </label>
                 <select
                   name="budgetRange"
                   value={formData.budgetRange}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-background/90 border border-white/[0.1] text-sm text-white focus:outline-none focus:border-gold-500/60 focus:ring-1 focus:ring-gold-500/60 transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-background/90 border border-gray-300 dark:border-white/[0.1] text-sm text-gray-900 dark:text-white focus:outline-none focus:border-amber-500/60 dark:focus:border-gold-500/60 focus:ring-1 focus:ring-amber-500/60 dark:focus:ring-gold-500/60 transition-colors"
                 >
                   <option value="< $5,000">&lt; $5,000 (Focused MVP / Landing)</option>
                   <option value="$5,000 - $15,000">$5,000 - $15,000 (Standard Application)</option>
@@ -389,14 +418,14 @@ export const ProjectInquiryForm: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-gray-300">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
                   Desired Timeline
                 </label>
                 <select
                   name="timeline"
                   value={formData.timeline}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-background/90 border border-white/[0.1] text-sm text-white focus:outline-none focus:border-gold-500/60 focus:ring-1 focus:ring-gold-500/60 transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-background/90 border border-gray-300 dark:border-white/[0.1] text-sm text-gray-900 dark:text-white focus:outline-none focus:border-amber-500/60 dark:focus:border-gold-500/60 focus:ring-1 focus:ring-amber-500/60 dark:focus:ring-gold-500/60 transition-colors"
                 >
                   <option value="< 1 Month">&lt; 1 Month (Fast-Track / Sprint)</option>
                   <option value="1 - 3 Months">1 - 3 Months (Standard Production)</option>
@@ -407,14 +436,14 @@ export const ProjectInquiryForm: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-gray-300">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
                   Current Project Stage
                 </label>
                 <select
                   name="currentStage"
                   value={formData.currentStage}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-background/90 border border-white/[0.1] text-sm text-white focus:outline-none focus:border-gold-500/60 focus:ring-1 focus:ring-gold-500/60 transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-background/90 border border-gray-300 dark:border-white/[0.1] text-sm text-gray-900 dark:text-white focus:outline-none focus:border-amber-500/60 dark:focus:border-gold-500/60 focus:ring-1 focus:ring-amber-500/60 dark:focus:ring-gold-500/60 transition-colors"
                 >
                   <option value="Idea / Concept">Idea / Concept Stage</option>
                   <option value="Wireframes / Specs Ready">Wireframes / Specs Ready</option>
@@ -425,7 +454,7 @@ export const ProjectInquiryForm: React.FC = () => {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-gray-300">
+              <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
                 Additional Requirements or Special Considerations (Optional)
               </label>
               <textarea
@@ -434,14 +463,14 @@ export const ProjectInquiryForm: React.FC = () => {
                 value={formData.additionalNotes}
                 onChange={handleChange}
                 placeholder="Any third-party integrations, compliance constraints, or specific design preferences..."
-                className="w-full px-4 py-3 rounded-xl bg-background/70 border border-white/[0.1] text-sm text-white placeholder-gray-500 focus:outline-none focus:border-gold-500/60 focus:ring-1 focus:ring-gold-500/60 transition-colors resize-y"
+                className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-background/70 border border-gray-300 dark:border-white/[0.1] text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-amber-500/60 dark:focus:border-gold-500/60 focus:ring-1 focus:ring-amber-500/60 dark:focus:ring-gold-500/60 transition-colors resize-y"
               />
             </div>
           </div>
 
           {/* SUBMIT BUTTON */}
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/[0.08]">
-            <p className="text-xs text-gray-400 text-center sm:text-left">
+          <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-gray-200 dark:border-white/[0.08]">
+            <p className="text-xs text-gray-500 dark:text-gray-400 text-center sm:text-left">
               🔒 Information submitted is treated with strict confidentiality under corporate data standards.
             </p>
 

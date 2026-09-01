@@ -6,7 +6,7 @@ export interface EmailContact {
   tags: string[];
   lists: string[];
   status: 'active' | 'unsubscribed' | 'bounced' | 'suppressed';
-  source: 'Partner Form' | 'Influencer Intake' | 'Inquiry' | 'Manual' | 'Flow';
+  source: 'Partner Form' | 'Influencer Intake' | 'Inquiry' | 'Manual' | 'Flow' | 'Direct Email' | 'Outgoing Email' | 'CSV Import' | 'Manual Entry' | string;
   createdAt: string;
   lastContactedAt?: string;
 }
@@ -14,7 +14,7 @@ export interface EmailContact {
 export interface EmailTemplate {
   id: string;
   name: string;
-  category: 'Partner' | 'Influencer' | 'Onboarding' | 'Campaign' | 'Security';
+  category: 'Partner' | 'Influencer' | 'Onboarding' | 'Campaign' | 'Security' | 'Support' | string;
   subject: string;
   previewText?: string;
   bodyHtml: string;

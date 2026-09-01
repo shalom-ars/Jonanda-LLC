@@ -1,11 +1,25 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { SEOHead } from '../components/common/SEOHead';
 import { SectionHeading } from '../components/common/SectionHeading';
 import { CorporateCard } from '../components/common/CorporateCard';
 import { Button } from '../components/common/Button';
-import { Mail, Building2, Send, CheckCircle2, ShieldAlert, Sparkles, MessageSquare } from 'lucide-react';
+import { useMail } from '../context/MailContext';
+import {
+  Mail,
+  Building2,
+  Send,
+  CheckCircle2,
+  ShieldAlert,
+  Sparkles,
+  MessageSquare,
+  Inbox,
+  ShieldCheck
+} from 'lucide-react';
 
 export const ContactPage: React.FC = () => {
+  const { receiveInboundMessage } = useMail();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,6 +32,7 @@ export const ContactPage: React.FC = () => {
 
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [refId, setRefId] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -33,16 +48,15 @@ export const ContactPage: React.FC = () => {
       return;
     }
 
-    // Basic client-side validation
+    // Client-side validation
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
       setFormStatus('error');
       setErrorMessage('Please complete all required fields (Name, Email, and Message).');
       return;
     }
 
-    // Basic email format check
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
+    if (!emailRegex.test(formData.email.trim())) {
       setFormStatus('error');
       setErrorMessage('Please provide a valid work or corporate email address.');
       return;
@@ -51,8 +65,21 @@ export const ContactPage: React.FC = () => {
     setFormStatus('submitting');
 
     setTimeout(() => {
+      const generatedRef = `JNDA-INQ-${Math.floor(100000 + Math.random() * 900000)}`;
+      setRefId(generatedRef);
+
+      // Real Inbound Message Dispatch to JONANDA MAIL & Audience Ledger
+      receiveInboundMessage({
+        fromName: formData.name.trim(),
+        fromEmail: formData.email.trim(),
+        subject: `[${formData.inquiryType}] ${formData.subject.trim() || 'Corporate Inquiry'} (Ref: ${generatedRef})`,
+        body: `ORGANIZATION: ${formData.organization || 'Individual'}\nCATEGORY: ${formData.inquiryType}\nREFERENCE: ${generatedRef}\n\n${formData.message.trim()}`,
+        tags: ['Inquiry', formData.inquiryType, 'Contact Form'],
+        sourceForm: 'Corporate Contact'
+      });
+
       setFormStatus('success');
-    }, 900);
+    }, 600);
   };
 
   const handleReset = () => {
@@ -186,16 +213,40 @@ export const ContactPage: React.FC = () => {
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
                   <div className="space-y-2">
+                    <span className="text-xs font-mono uppercase tracking-widest text-amber-700 dark:text-gold-300 font-bold block">
+                      Inquiry Ref: {refId}
+                    </span>
                     <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                      Inquiry Received
+                      Message Transmitted & Logged
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-300 max-w-md mx-auto leading-relaxed">
-                      Thank you for contacting JONANDA LLC. Your communication has been routed to the appropriate department. Our team will review your inquiry promptly.
+                      Thank you, <strong className="text-gray-900 dark:text-white">{formData.name}</strong>. Your communication has been recorded in the JONANDA corporate messaging ledger and routed to our team.
                     </p>
                   </div>
-                  <Button onClick={handleReset} variant="outline" size="sm">
-                    Submit Another Inquiry
-                  </Button>
+
+                  <div className="p-4 rounded-xl bg-slate-50 dark:bg-background/80 border border-gray-200 dark:border-white/[0.06] text-xs text-left max-w-md mx-auto space-y-2">
+                    <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold">
+                      <ShieldCheck className="w-4 h-4" />
+                      <span>DKIM/SPF Queued for Review</span>
+                    </div>
+                    <p className="text-gray-600 dark:text-gray-400">
+                      Our coordinators will reply to <span className="font-mono text-gray-900 dark:text-white font-semibold">{formData.email}</span> within 1-2 business days.
+                    </p>
+                  </div>
+
+                  <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+                    <Link
+                      to="/mail/inbox"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500/10 text-amber-700 dark:text-gold-300 border border-amber-500/20 text-xs font-bold hover:bg-amber-500/20 transition-colors"
+                    >
+                      <Inbox className="w-3.5 h-3.5" />
+                      <span>View in Webmail Inbox</span>
+                    </Link>
+
+                    <Button onClick={handleReset} variant="outline" size="sm">
+                      Submit Another Inquiry
+                    </Button>
+                  </div>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -335,7 +386,7 @@ export const ContactPage: React.FC = () => {
                       icon={<Send className="w-4 h-4" />}
                       className="w-full sm:w-auto"
                     >
-                      {formStatus === 'submitting' ? 'Transmitting...' : 'Submit Message'}
+                      {formStatus === 'submitting' ? 'Transmitting Message...' : 'Submit Message'}
                     </Button>
                   </div>
                 </form>

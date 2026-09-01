@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Users,
   Plus,
   Search,
   Trash2,
-  X
+  X,
+  Download,
+  Mail,
+  Upload,
+  CheckCircle2
 } from 'lucide-react';
 import { SEOHead } from '../../components/common/SEOHead';
 import { Button } from '../../components/common/Button';
@@ -12,10 +17,12 @@ import { useMail } from '../../context/MailContext';
 import { EmailContact } from '../../types/mail';
 
 export const MailContactsPage: React.FC = () => {
+  const navigate = useNavigate();
   const { contacts, addContact, deleteContact } = useMail();
   const [search, setSearch] = useState('');
   const [selectedTag, setSelectedTag] = useState('all');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const [newContact, setNewContact] = useState({
     name: '',
@@ -44,14 +51,56 @@ export const MailContactsPage: React.FC = () => {
       name: newContact.name.trim(),
       email: newContact.email.trim(),
       company: newContact.company.trim() || undefined,
-      tags: newContact.tags.split(',').map((t) => t.trim()),
-      lists: newContact.lists.split(',').map((l) => l.trim()),
+      tags: newContact.tags.split(',').map((t) => t.trim()).filter(Boolean),
+      lists: newContact.lists.split(',').map((l) => l.trim()).filter(Boolean),
       status: 'active',
-      source: 'Manual'
+      source: 'Manual Entry'
     });
 
     setNewContact({ name: '', email: '', company: '', tags: 'Strategic Partner', lists: 'Corporate Partners' });
     setIsAddModalOpen(false);
+    setToastMessage('New audience contact added successfully.');
+    setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  const handleExportCSV = () => {
+    const headers = ['Name', 'Email', 'Company', 'Tags', 'Lists', 'Status', 'Source', 'CreatedAt'];
+    const rows = contacts.map((c) => [
+      `"${c.name}"`,
+      `"${c.email}"`,
+      `"${c.company || ''}"`,
+      `"${c.tags.join(';')}"`,
+      `"${c.lists.join(';')}"`,
+      `"${c.status}"`,
+      `"${c.source}"`,
+      `"${c.createdAt}"`
+    ]);
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `jonanda_mail_contacts_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    setToastMessage('Audience contacts exported to CSV.');
+    setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  const handleImportSample = () => {
+    addContact({
+      name: 'Dr. Alexander Vance',
+      email: 'a.vance@ai-governance.org',
+      company: 'Global AI Institute',
+      tags: ['AI Research', 'Governance', 'Enterprise'],
+      lists: ['Corporate Partners', 'Research'],
+      status: 'active',
+      source: 'CSV Import'
+    });
+    setToastMessage('Sample audience contact imported successfully.');
+    setTimeout(() => setToastMessage(null), 3500);
   };
 
   return (
@@ -67,27 +116,62 @@ export const MailContactsPage: React.FC = () => {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-xs font-semibold text-amber-700 dark:text-gold-300 border border-amber-500/30 mb-3">
               <Users className="w-3.5 h-3.5" />
-              <span>Audience Management</span>
+              <span>Audience Management • JONANDA MAIL</span>
             </div>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">
-              Contacts & Audiences
+              Audience & Contact Ledger
             </h1>
             <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
-              Centralized recipient ledger linked directly to JONANDA FLOW automation nodes.
+              Centralized verified recipient registry linked with JONANDA FLOW automated pipelines.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              onClick={handleExportCSV}
+              variant="outline"
+              size="sm"
+              icon={<Download className="w-3.5 h-3.5" />}
+            >
+              Export CSV
+            </Button>
+
+            <Button
+              onClick={handleImportSample}
+              variant="secondary"
+              size="sm"
+              icon={<Upload className="w-3.5 h-3.5" />}
+            >
+              Import Sample
+            </Button>
+
             <Button
               onClick={() => setIsAddModalOpen(true)}
               variant="primary"
-              size="md"
+              size="sm"
               icon={<Plus className="w-4 h-4" />}
             >
               Add Contact
             </Button>
           </div>
         </div>
+
+        {/* Toast Alert */}
+        {toastMessage && (
+          <div className="p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 text-xs flex items-center justify-between shadow-lg animate-fadeIn">
+            <div className="flex items-center gap-2.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <span className="font-semibold">{toastMessage}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setToastMessage(null)}
+              className="p-1 hover:opacity-75"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
 
         {/* Filter Controls */}
         <div className="p-4 rounded-2xl bg-white dark:bg-surface/70 border border-gray-200 dark:border-white/10 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -183,14 +267,25 @@ export const MailContactsPage: React.FC = () => {
                     </td>
 
                     <td className="py-3.5 px-5 text-right">
-                      <button
-                        type="button"
-                        onClick={() => deleteContact(contact.id)}
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-500/10"
-                        title="Delete Contact"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => navigate('/mail/inbox')}
+                          className="p-1.5 rounded-lg text-gray-400 hover:text-amber-600 hover:bg-amber-500/10"
+                          title="Open in Inbox"
+                        >
+                          <Mail className="w-3.5 h-3.5" />
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => deleteContact(contact.id)}
+                          className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-500/10"
+                          title="Delete Contact"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -201,12 +296,17 @@ export const MailContactsPage: React.FC = () => {
 
         {/* Add Contact Modal */}
         {isAddModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fadeIn">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fadeIn">
             <div className="w-full max-w-md bg-white dark:bg-[#0e0e18] border border-gray-200 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden p-6 space-y-5">
               <div className="flex items-center justify-between border-b border-gray-200 dark:border-white/10 pb-3">
-                <h3 className="text-base font-bold text-gray-900 dark:text-white">
-                  Add New Audience Contact
-                </h3>
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-700 dark:text-gold-400 flex items-center justify-center">
+                    <Users className="w-4 h-4" />
+                  </div>
+                  <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                    Add Audience Contact
+                  </h3>
+                </div>
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
@@ -225,7 +325,7 @@ export const MailContactsPage: React.FC = () => {
                     value={newContact.name}
                     onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
                     placeholder="e.g. Jordan Lee"
-                    className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-[#141420] border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white"
+                    className="w-full px-3 py-2 rounded-xl bg-gray-50 dark:bg-[#141420] border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white"
                   />
                 </div>
 
@@ -237,7 +337,7 @@ export const MailContactsPage: React.FC = () => {
                     value={newContact.email}
                     onChange={(e) => setNewContact({ ...newContact, email: e.target.value })}
                     placeholder="name@company.com"
-                    className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-[#141420] border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white"
+                    className="w-full px-3 py-2 rounded-xl bg-gray-50 dark:bg-[#141420] border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white"
                   />
                 </div>
 
@@ -248,7 +348,7 @@ export const MailContactsPage: React.FC = () => {
                     value={newContact.company}
                     onChange={(e) => setNewContact({ ...newContact, company: e.target.value })}
                     placeholder="e.g. Apex AI Labs"
-                    className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-[#141420] border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white"
+                    className="w-full px-3 py-2 rounded-xl bg-gray-50 dark:bg-[#141420] border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white"
                   />
                 </div>
 
@@ -259,7 +359,7 @@ export const MailContactsPage: React.FC = () => {
                     value={newContact.tags}
                     onChange={(e) => setNewContact({ ...newContact, tags: e.target.value })}
                     placeholder="Partner, AI, VIP"
-                    className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-[#141420] border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white"
+                    className="w-full px-3 py-2 rounded-xl bg-gray-50 dark:bg-[#141420] border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white"
                   />
                 </div>
 

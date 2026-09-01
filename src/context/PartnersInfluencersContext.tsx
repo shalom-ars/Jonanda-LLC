@@ -6,9 +6,11 @@ interface PartnersInfluencersContextType {
   partnerApplications: PartnerApplication[];
   influencerApplications: InfluencerApplication[];
   campaigns: BrandCampaign[];
+  applyPartner: (appData: Omit<PartnerApplication, 'id' | 'appliedAt' | 'status'>) => PartnerApplication;
   approvePartner: (id: string) => Promise<void>;
   rejectPartner: (id: string) => Promise<void>;
   activatePartner: (id: string) => void;
+  applyInfluencer: (appData: Omit<InfluencerApplication, 'id' | 'appliedAt' | 'status'>) => InfluencerApplication;
   approveInfluencer: (id: string) => Promise<void>;
   rejectInfluencer: (id: string) => Promise<void>;
   createCampaign: (campaign: Omit<BrandCampaign, 'id' | 'invitedCount' | 'acceptedCount' | 'submissionsCount'>) => BrandCampaign;
@@ -147,6 +149,28 @@ export const PartnersInfluencersProvider: React.FC<{ children: React.ReactNode }
     localStorage.setItem('jonanda_brand_campaigns', JSON.stringify(campaigns));
   }, [campaigns]);
 
+  const applyPartner = (appData: Omit<PartnerApplication, 'id' | 'appliedAt' | 'status'>): PartnerApplication => {
+    const newApp: PartnerApplication = {
+      ...appData,
+      id: `ptnr_${Date.now()}`,
+      status: 'pending',
+      appliedAt: new Date().toISOString().split('T')[0]
+    };
+    setPartnerApplications((prev) => [newApp, ...prev]);
+    return newApp;
+  };
+
+  const applyInfluencer = (appData: Omit<InfluencerApplication, 'id' | 'appliedAt' | 'status'>): InfluencerApplication => {
+    const newApp: InfluencerApplication = {
+      ...appData,
+      id: `inf_${Date.now()}`,
+      status: 'pending',
+      appliedAt: new Date().toISOString().split('T')[0]
+    };
+    setInfluencerApplications((prev) => [newApp, ...prev]);
+    return newApp;
+  };
+
   const approvePartner = async (id: string) => {
     const app = partnerApplications.find((p) => p.id === id);
     setPartnerApplications((prev) =>
@@ -234,9 +258,11 @@ export const PartnersInfluencersProvider: React.FC<{ children: React.ReactNode }
         partnerApplications,
         influencerApplications,
         campaigns,
+        applyPartner,
         approvePartner,
         rejectPartner,
         activatePartner,
+        applyInfluencer,
         approveInfluencer,
         rejectInfluencer,
         createCampaign

@@ -1,14 +1,35 @@
 import React, { useState } from 'react';
-import { Users, Search } from 'lucide-react';
+import { Users, Search, Plus, Sparkles, CheckCircle2, X, Send } from 'lucide-react';
 import { SEOHead } from '../../components/common/SEOHead';
 import { CorporateCard } from '../../components/common/CorporateCard';
 import { Button } from '../../components/common/Button';
 import { usePartnersInfluencers } from '../../context/PartnersInfluencersContext';
+import { useMail } from '../../context/MailContext';
 
 export const InfluencerDirectoryPage: React.FC = () => {
-  const { influencerApplications } = usePartnersInfluencers();
+  const { influencerApplications, applyInfluencer } = usePartnersInfluencers();
+  const { receiveInboundMessage } = useMail();
+
   const [search, setSearch] = useState('');
   const [selectedNiche, setSelectedNiche] = useState('all');
+  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const [applyForm, setApplyForm] = useState<{
+    creatorName: string;
+    handle: string;
+    email: string;
+    platform: 'YouTube' | 'TikTok' | 'Instagram' | 'X (Twitter)' | 'LinkedIn';
+    niche: string;
+    followersCount: string;
+  }>({
+    creatorName: '',
+    handle: '',
+    email: '',
+    platform: 'YouTube',
+    niche: 'AI & Tech',
+    followersCount: '25K+'
+  });
 
   const activeInfluencers = influencerApplications.filter(
     (i) => i.status === 'active' || i.status === 'approved'
@@ -21,6 +42,33 @@ export const InfluencerDirectoryPage: React.FC = () => {
     const matchesNiche = selectedNiche === 'all' || i.niche === selectedNiche;
     return matchesSearch && matchesNiche;
   });
+
+  const handleApplySubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!applyForm.creatorName.trim() || !applyForm.handle.trim() || !applyForm.email.trim()) return;
+
+    applyInfluencer({
+      creatorName: applyForm.creatorName.trim(),
+      handle: applyForm.handle.trim(),
+      email: applyForm.email.trim(),
+      platform: applyForm.platform,
+      niche: applyForm.niche,
+      followersCount: applyForm.followersCount
+    });
+
+    receiveInboundMessage({
+      fromName: applyForm.creatorName.trim(),
+      fromEmail: applyForm.email.trim(),
+      subject: `[Creator Application] ${applyForm.creatorName.trim()} (${applyForm.handle.trim()})`,
+      body: `CREATOR: ${applyForm.creatorName.trim()}\nHANDLE: ${applyForm.handle.trim()}\nPLATFORM: ${applyForm.platform}\nAUDIENCE REACH: ${applyForm.followersCount}\nNICHE: ${applyForm.niche}\n\nSubmitted for JONANDA Creator Network roster.`,
+      tags: ['Creator Application', applyForm.niche, applyForm.platform],
+      sourceForm: 'Creator Directory Application'
+    });
+
+    setIsApplyModalOpen(false);
+    setToastMessage('Application submitted! Your profile has been queued for review.');
+    setTimeout(() => setToastMessage(null), 4000);
+  };
 
   return (
     <>
@@ -46,14 +94,36 @@ export const InfluencerDirectoryPage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <Button href="/influencers/applications" variant="outline" size="md">
-              Intake Applications
+            <Button
+              onClick={() => setIsApplyModalOpen(true)}
+              variant="primary"
+              size="md"
+              icon={<Plus className="w-4 h-4" />}
+            >
+              Apply as Creator
             </Button>
-            <Button href="/influencers/campaigns" variant="primary" size="md">
-              Launch Campaign
+            <Button href="/influencers/applications" variant="outline" size="md">
+              Intake Queue
             </Button>
           </div>
         </div>
+
+        {/* Toast Alert */}
+        {toastMessage && (
+          <div className="p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 text-xs flex items-center justify-between shadow-lg animate-fadeIn">
+            <div className="flex items-center gap-2.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <span className="font-semibold">{toastMessage}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setToastMessage(null)}
+              className="p-1 hover:opacity-75"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
 
         {/* Search & Filter */}
         <div className="p-4 rounded-2xl bg-white dark:bg-surface/70 border border-gray-200 dark:border-white/10 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -123,6 +193,109 @@ export const InfluencerDirectoryPage: React.FC = () => {
             </CorporateCard>
           ))}
         </div>
+
+        {/* Apply as Creator Modal */}
+        {isApplyModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fadeIn">
+            <div className="w-full max-w-md bg-white dark:bg-[#0e0e18] border border-gray-200 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden p-6 space-y-5">
+              <div className="flex items-center justify-between border-b border-gray-200 dark:border-white/10 pb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-600 flex items-center justify-center">
+                    <Sparkles className="w-4 h-4" />
+                  </div>
+                  <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                    Join JONANDA Creator Network
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsApplyModalOpen(false)}
+                  className="p-1 text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <form onSubmit={handleApplySubmit} className="space-y-3.5 text-xs">
+                <div className="space-y-1">
+                  <label className="font-semibold text-gray-700 dark:text-gray-300 block">Full Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={applyForm.creatorName}
+                    onChange={(e) => setApplyForm({ ...applyForm, creatorName: e.target.value })}
+                    placeholder="e.g. Elena Rostova"
+                    className="w-full px-3 py-2 rounded-xl bg-gray-50 dark:bg-[#141420] border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-semibold text-gray-700 dark:text-gray-300 block">Channel / Social Handle *</label>
+                  <input
+                    type="text"
+                    required
+                    value={applyForm.handle}
+                    onChange={(e) => setApplyForm({ ...applyForm, handle: e.target.value })}
+                    placeholder="@elena_ai_tech"
+                    className="w-full px-3 py-2 rounded-xl bg-gray-50 dark:bg-[#141420] border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-semibold text-gray-700 dark:text-gray-300 block">Contact Email *</label>
+                  <input
+                    type="email"
+                    required
+                    value={applyForm.email}
+                    onChange={(e) => setApplyForm({ ...applyForm, email: e.target.value })}
+                    placeholder="creator@media.io"
+                    className="w-full px-3 py-2 rounded-xl bg-gray-50 dark:bg-[#141420] border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label className="font-semibold text-gray-700 dark:text-gray-300 block">Primary Platform</label>
+                    <select
+                      value={applyForm.platform}
+                      onChange={(e) => setApplyForm({ ...applyForm, platform: e.target.value as 'YouTube' | 'TikTok' | 'Instagram' | 'X (Twitter)' | 'LinkedIn' })}
+                      className="w-full px-3 py-2 rounded-xl bg-gray-50 dark:bg-[#141420] border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white"
+                    >
+                      <option value="YouTube">YouTube</option>
+                      <option value="X (Twitter)">X (Twitter)</option>
+                      <option value="LinkedIn">LinkedIn</option>
+                      <option value="TikTok">TikTok</option>
+                      <option value="Instagram">Instagram</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="font-semibold text-gray-700 dark:text-gray-300 block">Niche</label>
+                    <select
+                      value={applyForm.niche}
+                      onChange={(e) => setApplyForm({ ...applyForm, niche: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-gray-50 dark:bg-[#141420] border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white"
+                    >
+                      <option value="AI & Tech">AI & Tech</option>
+                      <option value="Web3 & Crypto">Web3 & Crypto</option>
+                      <option value="Software Dev">Software Dev</option>
+                      <option value="Enterprise Tech">Enterprise Tech</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="pt-3 flex justify-end gap-2">
+                  <Button onClick={() => setIsApplyModalOpen(false)} variant="ghost" size="sm">
+                    Cancel
+                  </Button>
+                  <Button type="submit" variant="primary" size="sm" icon={<Send className="w-3.5 h-3.5" />}>
+                    Submit Application
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
