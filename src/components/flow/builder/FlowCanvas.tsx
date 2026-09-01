@@ -124,13 +124,11 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
           return nextZoom;
         });
       } else {
-        // Smooth direct wheel pan / zoom
+        // Smooth direct wheel pan
         if (Math.abs(e.deltaX) > 0 || Math.abs(e.deltaY) > 0) {
-          // If shift key held or multi-touch trackpad pan
           if (e.shiftKey) {
             setPan((prev) => ({ ...prev, x: prev.x - e.deltaY }));
           } else {
-            // Normal 2D panning via wheel/trackpad
             setPan((prev) => ({
               x: prev.x - e.deltaX * 1.2,
               y: prev.y - e.deltaY * 1.2
@@ -144,9 +142,20 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
     return () => canvasEl.removeEventListener('wheel', handleWheel);
   }, []);
 
-  // Global Window-Level Pan & Drag Listener for Smooth Continuous Dragging
+  // Universal Global Pointer & Mouse Listener with Failsafe Release
   useEffect(() => {
-    const handleGlobalMouseMove = (e: MouseEvent) => {
+    const handleGlobalMove = (e: PointerEvent | MouseEvent) => {
+      // Automatic Failsafe: If no mouse/pointer button is pressed, immediately release everything
+      if (e.buttons === 0 && (isPanning || draggingNodeId || connectingState)) {
+        if (draggingNodeId) {
+          recordHistoryState(workflow);
+        }
+        setIsPanning(false);
+        setDraggingNodeId(null);
+        setConnectingState(null);
+        return;
+      }
+
       if (isPanning) {
         setPan({
           x: e.clientX - panStart.x,
@@ -191,7 +200,7 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
       }
     };
 
-    const handleGlobalMouseUp = () => {
+    const handleGlobalRelease = () => {
       if (draggingNodeId) {
         recordHistoryState(workflow);
       }
@@ -200,21 +209,28 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
       setConnectingState(null);
     };
 
-    if (isPanning || draggingNodeId || connectingState) {
-      window.addEventListener('mousemove', handleGlobalMouseMove);
-      window.addEventListener('mouseup', handleGlobalMouseUp);
-    }
+    // Capture phase listeners ensure release is ALWAYS caught
+    window.addEventListener('pointermove', handleGlobalMove, { passive: true });
+    window.addEventListener('pointerup', handleGlobalRelease, true);
+    window.addEventListener('pointercancel', handleGlobalRelease, true);
+    window.addEventListener('mouseup', handleGlobalRelease, true);
+    window.addEventListener('blur', handleGlobalRelease);
+    document.addEventListener('mouseleave', handleGlobalRelease);
 
     return () => {
-      window.removeEventListener('mousemove', handleGlobalMouseMove);
-      window.removeEventListener('mouseup', handleGlobalMouseUp);
+      window.removeEventListener('pointermove', handleGlobalMove);
+      window.removeEventListener('pointerup', handleGlobalRelease, true);
+      window.removeEventListener('pointercancel', handleGlobalRelease, true);
+      window.removeEventListener('mouseup', handleGlobalRelease, true);
+      window.removeEventListener('blur', handleGlobalRelease);
+      document.removeEventListener('mouseleave', handleGlobalRelease);
     };
   }, [isPanning, draggingNodeId, connectingState, panStart, pan, zoom, dragOffset, workflow, recordHistoryState]);
 
   // Pan Canvas Initiator
-  const handleMouseDownOnCanvas = (e: React.MouseEvent) => {
+  const handlePointerDownOnCanvas = (e: React.PointerEvent) => {
     const target = e.target as HTMLElement;
-    // Don't initiate canvas panning if clicking inside a node card, port handle, button, or sidebar
+    // Don't initiate canvas panning if clicking inside a node card, port handle, button, sidebar, or minimap
     if (
       target.closest('.flow-node-card') ||
       target.closest('.port-handle') ||
@@ -235,7 +251,7 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
   };
 
   // Node Drag Initiator
-  const handleNodeMouseDown = (nodeId: string, e: React.MouseEvent) => {
+  const handleNodePointerDown = (nodeId: string, e: React.PointerEvent | React.MouseEvent) => {
     e.stopPropagation();
     const rect = canvasRef.current?.getBoundingClientRect();
     if (!rect) return;
@@ -255,7 +271,7 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
   };
 
   // Start Connection
-  const handleStartConnect = (nodeId: string, portId: string, e: React.MouseEvent) => {
+  const handleStartConnect = (nodeId: string, portId: string, e: React.PointerEvent | React.MouseEvent) => {
     e.stopPropagation();
     const rect = canvasRef.current?.getBoundingClientRect();
     if (!rect) return;
@@ -273,7 +289,10 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
   // End Connection on Target Port
   const handleEndConnect = (targetNodeId: string, targetPortId: string) => {
     if (!connectingState) return;
-    if (connectingState.sourceNodeId === targetNodeId) return;
+    if (connectingState.sourceNodeId === targetNodeId) {
+      setConnectingState(null);
+      return;
+    }
 
     const exists = workflow.edges.some(
       (e) =>
@@ -469,7 +488,7 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
   const selectedNode = workflow.nodes.find((n) => n.id === selectedNodeId) || null;
 
   return (
-    <div className="fixed inset-0 pt-[60px] bg-slate-100 dark:bg-[#08080f] overflow-hidden select-none">
+    <div className="fixed inset-0 pt-[60px] bg-slate-100 dark:bg-[#08080f] overflow-hidden select-none touch-none">
       {/* Top Bar */}
       <BuilderTopBar
         workflow={workflow}
@@ -511,8 +530,8 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
       {/* Main Canvas Viewport */}
       <div
         ref={canvasRef}
-        onMouseDown={handleMouseDownOnCanvas}
-        className={`w-full h-full relative overflow-hidden ${
+        onPointerDown={handlePointerDownOnCanvas}
+        className={`w-full h-full relative overflow-hidden touch-none ${
           isPanning ? 'cursor-grabbing' : 'cursor-grab'
         }`}
         style={{
@@ -568,11 +587,11 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
             {workflow.nodes.map((node) => (
               <div
                 key={node.id}
-                onMouseDown={(e) => handleNodeMouseDown(node.id, e)}
+                onPointerDown={(e) => handleNodePointerDown(node.id, e)}
                 style={{
                   transform: `translate3d(${node.position.x}px, ${node.position.y}px, 0)`
                 }}
-                className="absolute pointer-events-auto"
+                className="absolute pointer-events-auto touch-none"
               >
                 <FlowNodeCard
                   node={node}
@@ -593,7 +612,7 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
       </div>
 
       {/* Floating Canvas Quick Zoom & Navigation Dock */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1.5 p-1.5 rounded-2xl bg-white/90 dark:bg-[#0c0c14]/90 backdrop-blur-xl border border-gray-200 dark:border-white/10 shadow-2xl">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1.5 p-1.5 rounded-2xl bg-white/90 dark:bg-[#0c0c14]/90 backdrop-blur-xl border border-gray-200 dark:border-white/10 shadow-2xl pointer-events-auto">
         <button
           type="button"
           onClick={() => setZoom((prev) => Math.max(prev - 0.15, 0.25))}

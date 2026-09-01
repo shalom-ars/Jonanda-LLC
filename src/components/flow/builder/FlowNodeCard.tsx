@@ -63,7 +63,7 @@ interface FlowNodeCardProps {
   onSelect: (nodeId: string) => void;
   onDelete: (nodeId: string) => void;
   onDuplicate: (nodeId: string) => void;
-  onStartConnect: (nodeId: string, portId: string, e: React.MouseEvent) => void;
+  onStartConnect: (nodeId: string, portId: string, e: React.PointerEvent | React.MouseEvent) => void;
   onEndConnect: (nodeId: string, portId: string) => void;
 }
 
@@ -119,7 +119,7 @@ export const FlowNodeCard: React.FC<FlowNodeCardProps> = ({
       }}
       className={`
         flow-node-card
-        relative w-[240px] rounded-2xl p-3.5 select-none transition-all duration-200 cursor-grab active:cursor-grabbing
+        relative w-[240px] rounded-2xl p-3.5 select-none transition-shadow duration-150 cursor-grab active:cursor-grabbing touch-none
         bg-white dark:bg-[#12121c] border
         ${
           isSelected
@@ -179,6 +179,10 @@ export const FlowNodeCard: React.FC<FlowNodeCardProps> = ({
       {/* Left Input Port Handle */}
       {definition.inputs && definition.inputs.length > 0 && (
         <div
+          onPointerUp={(e) => {
+            e.stopPropagation();
+            onEndConnect(node.id, 'in');
+          }}
           onMouseUp={(e) => {
             e.stopPropagation();
             onEndConnect(node.id, 'in');
@@ -196,11 +200,15 @@ export const FlowNodeCard: React.FC<FlowNodeCardProps> = ({
           {definition.outputs.map((outPort) => (
             <div
               key={outPort.id}
+              onPointerDown={(e) => {
+                e.stopPropagation();
+                onStartConnect(node.id, outPort.id, e);
+              }}
               onMouseDown={(e) => {
                 e.stopPropagation();
                 onStartConnect(node.id, outPort.id, e);
               }}
-              className="port-handle w-5 h-5 rounded-full bg-white dark:bg-[#12121c] border-2 border-amber-500 dark:border-gold-400 hover:scale-125 flex items-center justify-center cursor-crosshair group/port shadow-sm transition-transform"
+              className="port-handle w-5 h-5 rounded-full bg-white dark:bg-[#12121c] border-2 border-amber-500 dark:border-gold-400 hover:scale-125 flex items-center justify-center cursor-crosshair group/port shadow-sm transition-transform touch-none"
               title={`Drag from ${outPort.label}`}
             >
               <div className="w-2 h-2 rounded-full bg-amber-500 dark:bg-gold-400 group-hover/port:bg-amber-400" />
