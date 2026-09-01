@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { FlowNode, FlowEdge, Workflow, WorkflowCategory } from '../../../types/flow';
 import { FLOW_NODE_DEFINITIONS } from '../../../data/flowNodesData';
 import { FlowNodeCard } from './FlowNodeCard';
@@ -9,6 +9,13 @@ import { BuilderTopBar } from './BuilderTopBar';
 import { CanvasMinimap } from './CanvasMinimap';
 import { WorkflowTestModal } from './WorkflowTestModal';
 import { useFlow } from '../../../context/FlowContext';
+import {
+  ZoomIn,
+  ZoomOut,
+  Maximize2,
+  Layers,
+  MapPin
+} from 'lucide-react';
 
 interface FlowCanvasProps {
   initialWorkflow: Workflow;
@@ -24,7 +31,7 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
 
   // Viewport State
   const [zoom, setZoom] = useState(1);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [pan, setPan] = useState({ x: 100, y: 80 });
   const [isPanning, setIsPanning] = useState(false);
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
   const [isMinimapOpen, setIsMinimapOpen] = useState(true);
@@ -49,13 +56,13 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
   const canvasRef = useRef<HTMLDivElement | null>(null);
 
   // Push to history helper
-  const recordHistoryState = (nextWf: Workflow) => {
+  const recordHistoryState = useCallback((nextWf: Workflow) => {
     setHistory((prev) => {
       const truncated = prev.slice(0, historyIndex + 1);
       return [...truncated, nextWf].slice(-25); // Cap to 25 steps
     });
     setHistoryIndex((prev) => Math.min(prev + 1, 24));
-  };
+  }, [historyIndex]);
 
   const handleUndo = () => {
     if (historyIndex > 0) {
@@ -93,72 +100,143 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [historyIndex, history, selectedNodeId]);
 
-  // Pan Canvas Handler
-  const handleMouseDownOnCanvas = (e: React.MouseEvent) => {
-    if ((e.target as HTMLElement).classList.contains('canvas-background')) {
-      setIsPanning(true);
-      setPanStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
-      setSelectedNodeId(null);
-      setSelectedEdgeId(null);
-    }
-  };
+  // High-Precision Smooth Wheel Zoom & Pan Engine (Anchored around cursor)
+  useEffect(() => {
+    const canvasEl = canvasRef.current;
+    if (!canvasEl) return;
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (isPanning) {
-      setPan({
-        x: e.clientX - panStart.x,
-        y: e.clientY - panStart.y
-      });
-    } else if (draggingNodeId) {
-      const rect = canvasRef.current?.getBoundingClientRect();
-      if (!rect) return;
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const rect = canvasEl.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
 
-      const mouseX = (e.clientX - rect.left - pan.x) / zoom;
-      const mouseY = (e.clientY - rect.top - pan.y) / zoom;
+      if (e.ctrlKey || e.metaKey) {
+        // Pinch zoom (trackpad) or Ctrl + Wheel
+        const zoomDelta = -e.deltaY * 0.008;
+        setZoom((prevZoom) => {
+          const nextZoom = Math.min(Math.max(prevZoom + zoomDelta, 0.25), 2.5);
+          const scaleChange = nextZoom / prevZoom;
+          setPan((prevPan) => ({
+            x: mouseX - (mouseX - prevPan.x) * scaleChange,
+            y: mouseY - (mouseY - prevPan.y) * scaleChange
+          }));
+          return nextZoom;
+        });
+      } else {
+        // Smooth direct wheel pan / zoom
+        if (Math.abs(e.deltaX) > 0 || Math.abs(e.deltaY) > 0) {
+          // If shift key held or multi-touch trackpad pan
+          if (e.shiftKey) {
+            setPan((prev) => ({ ...prev, x: prev.x - e.deltaY }));
+          } else {
+            // Normal 2D panning via wheel/trackpad
+            setPan((prev) => ({
+              x: prev.x - e.deltaX * 1.2,
+              y: prev.y - e.deltaY * 1.2
+            }));
+          }
+        }
+      }
+    };
 
-      setWorkflow((prev) => ({
-        ...prev,
-        nodes: prev.nodes.map((n) =>
-          n.id === draggingNodeId
-            ? {
-                ...n,
-                position: {
-                  x: Math.round(mouseX - dragOffset.x),
-                  y: Math.round(mouseY - dragOffset.y)
+    canvasEl.addEventListener('wheel', handleWheel, { passive: false });
+    return () => canvasEl.removeEventListener('wheel', handleWheel);
+  }, []);
+
+  // Global Window-Level Pan & Drag Listener for Smooth Continuous Dragging
+  useEffect(() => {
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      if (isPanning) {
+        setPan({
+          x: e.clientX - panStart.x,
+          y: e.clientY - panStart.y
+        });
+      } else if (draggingNodeId) {
+        const rect = canvasRef.current?.getBoundingClientRect();
+        if (!rect) return;
+
+        const mouseX = (e.clientX - rect.left - pan.x) / zoom;
+        const mouseY = (e.clientY - rect.top - pan.y) / zoom;
+
+        setWorkflow((prev) => ({
+          ...prev,
+          nodes: prev.nodes.map((n) =>
+            n.id === draggingNodeId
+              ? {
+                  ...n,
+                  position: {
+                    x: Math.round(mouseX - dragOffset.x),
+                    y: Math.round(mouseY - dragOffset.y)
+                  }
                 }
+              : n
+          )
+        }));
+      } else if (connectingState) {
+        const rect = canvasRef.current?.getBoundingClientRect();
+        if (!rect) return;
+
+        const mouseX = (e.clientX - rect.left - pan.x) / zoom;
+        const mouseY = (e.clientY - rect.top - pan.y) / zoom;
+
+        setConnectingState((prev) =>
+          prev
+            ? {
+                ...prev,
+                currentMousePos: { x: mouseX, y: mouseY }
               }
-            : n
-        )
-      }));
-    } else if (connectingState) {
-      const rect = canvasRef.current?.getBoundingClientRect();
-      if (!rect) return;
+            : null
+        );
+      }
+    };
 
-      const mouseX = (e.clientX - rect.left - pan.x) / zoom;
-      const mouseY = (e.clientY - rect.top - pan.y) / zoom;
+    const handleGlobalMouseUp = () => {
+      if (draggingNodeId) {
+        recordHistoryState(workflow);
+      }
+      setIsPanning(false);
+      setDraggingNodeId(null);
+      setConnectingState(null);
+    };
 
-      setConnectingState((prev) =>
-        prev
-          ? {
-              ...prev,
-              currentMousePos: { x: mouseX, y: mouseY }
-            }
-          : null
-      );
+    if (isPanning || draggingNodeId || connectingState) {
+      window.addEventListener('mousemove', handleGlobalMouseMove);
+      window.addEventListener('mouseup', handleGlobalMouseUp);
     }
-  };
 
-  const handleMouseUp = () => {
-    if (draggingNodeId) {
-      recordHistoryState(workflow);
+    return () => {
+      window.removeEventListener('mousemove', handleGlobalMouseMove);
+      window.removeEventListener('mouseup', handleGlobalMouseUp);
+    };
+  }, [isPanning, draggingNodeId, connectingState, panStart, pan, zoom, dragOffset, workflow, recordHistoryState]);
+
+  // Pan Canvas Initiator
+  const handleMouseDownOnCanvas = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    // Don't initiate canvas panning if clicking inside a node card, port handle, button, or sidebar
+    if (
+      target.closest('.flow-node-card') ||
+      target.closest('.port-handle') ||
+      target.closest('button') ||
+      target.closest('input') ||
+      target.closest('select') ||
+      target.closest('.node-library-sidebar') ||
+      target.closest('.node-config-panel') ||
+      target.closest('.canvas-minimap')
+    ) {
+      return;
     }
-    setIsPanning(false);
-    setDraggingNodeId(null);
-    setConnectingState(null);
+
+    setIsPanning(true);
+    setPanStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
+    setSelectedNodeId(null);
+    setSelectedEdgeId(null);
   };
 
   // Node Drag Initiator
   const handleNodeMouseDown = (nodeId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
     const rect = canvasRef.current?.getBoundingClientRect();
     if (!rect) return;
 
@@ -178,6 +256,7 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
 
   // Start Connection
   const handleStartConnect = (nodeId: string, portId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
     const rect = canvasRef.current?.getBoundingClientRect();
     if (!rect) return;
 
@@ -329,13 +408,13 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
   // Auto Arrange Nodes
   const handleAutoArrange = () => {
     const spacingX = 320;
-    const spacingY = 130;
+    const spacingY = 140;
 
     const arrangedNodes = workflow.nodes.map((node, index) => ({
       ...node,
       position: {
         x: 80 + (index % 4) * spacingX,
-        y: 120 + Math.floor(index / 4) * spacingY
+        y: 100 + Math.floor(index / 4) * spacingY
       }
     }));
 
@@ -347,10 +426,36 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
     recordHistoryState(updated);
   };
 
-  // Fit to screen
+  // Fit to screen (Centers all nodes cleanly)
   const handleFitToScreen = () => {
-    setZoom(0.85);
-    setPan({ x: 40, y: 20 });
+    if (workflow.nodes.length === 0) {
+      setZoom(1);
+      setPan({ x: 100, y: 80 });
+      return;
+    }
+
+    const minX = Math.min(...workflow.nodes.map((n) => n.position.x));
+    const maxX = Math.max(...workflow.nodes.map((n) => n.position.x + 240));
+    const minY = Math.min(...workflow.nodes.map((n) => n.position.y));
+    const maxY = Math.max(...workflow.nodes.map((n) => n.position.y + 100));
+
+    const contentWidth = maxX - minX + 160;
+    const contentHeight = maxY - minY + 160;
+
+    const rect = canvasRef.current?.getBoundingClientRect();
+    const viewportWidth = rect ? rect.width - 100 : 1000;
+    const viewportHeight = rect ? rect.height - 100 : 700;
+
+    const targetZoom = Math.min(
+      Math.max(Math.min(viewportWidth / contentWidth, viewportHeight / contentHeight), 0.4),
+      1.1
+    );
+
+    setZoom(targetZoom);
+    setPan({
+      x: rect ? rect.width / 2 - ((minX + maxX) / 2) * targetZoom : 80,
+      y: rect ? rect.height / 2 - ((minY + maxY) / 2) * targetZoom : 80
+    });
   };
 
   const handleSave = () => {
@@ -380,11 +485,11 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
         onPublishVersion={handlePublish}
         onTest={() => setIsTestModalOpen(true)}
         zoom={zoom}
-        onZoomIn={() => setZoom((prev) => Math.min(prev + 0.15, 2.0))}
-        onZoomOut={() => setZoom((prev) => Math.max(prev - 0.15, 0.4))}
+        onZoomIn={() => setZoom((prev) => Math.min(prev + 0.15, 2.5))}
+        onZoomOut={() => setZoom((prev) => Math.max(prev - 0.15, 0.25))}
         onResetZoom={() => {
           setZoom(1);
-          setPan({ x: 0, y: 0 });
+          setPan({ x: 100, y: 80 });
         }}
         onAutoArrange={handleAutoArrange}
         onFitToScreen={handleFitToScreen}
@@ -407,11 +512,11 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
       <div
         ref={canvasRef}
         onMouseDown={handleMouseDownOnCanvas}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        className="canvas-background w-full h-full relative cursor-grab active:cursor-grabbing overflow-hidden"
+        className={`w-full h-full relative overflow-hidden ${
+          isPanning ? 'cursor-grabbing' : 'cursor-grab'
+        }`}
         style={{
-          backgroundImage: `radial-gradient(circle, rgba(160, 160, 180, 0.15) 1px, transparent 1px)`,
+          backgroundImage: `radial-gradient(circle, rgba(160, 160, 180, 0.2) 1.2px, transparent 1.2px)`,
           backgroundSize: `${24 * zoom}px ${24 * zoom}px`,
           backgroundPosition: `${pan.x}px ${pan.y}px`
         }}
@@ -420,19 +525,20 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
         <div
           className="absolute inset-0 origin-top-left pointer-events-none"
           style={{
-            transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`
+            transform: `translate3d(${pan.x}px, ${pan.y}px, 0) scale(${zoom})`
           }}
         >
           {/* SVG Connection Layer */}
-          <svg className="absolute inset-0 w-[5000px] h-[5000px] pointer-events-auto overflow-visible">
+          <svg className="absolute inset-0 w-[8000px] h-[8000px] pointer-events-none overflow-visible">
             {workflow.edges.map((edge) => (
-              <FlowEdgeRenderer
-                key={edge.id}
-                edge={edge}
-                nodes={workflow.nodes}
-                selected={selectedEdgeId === edge.id}
-                onDelete={handleDeleteEdge}
-              />
+              <g key={edge.id} className="pointer-events-auto">
+                <FlowEdgeRenderer
+                  edge={edge}
+                  nodes={workflow.nodes}
+                  selected={selectedEdgeId === edge.id}
+                  onDelete={handleDeleteEdge}
+                />
+              </g>
             ))}
 
             {/* Connecting Wire Preview */}
@@ -458,15 +564,15 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
           </svg>
 
           {/* HTML Nodes Layer */}
-          <div className="absolute inset-0 pointer-events-auto">
+          <div className="absolute inset-0 pointer-events-none">
             {workflow.nodes.map((node) => (
               <div
                 key={node.id}
                 onMouseDown={(e) => handleNodeMouseDown(node.id, e)}
                 style={{
-                  transform: `translate(${node.position.x}px, ${node.position.y}px)`
+                  transform: `translate3d(${node.position.x}px, ${node.position.y}px, 0)`
                 }}
-                className="absolute"
+                className="absolute pointer-events-auto"
               >
                 <FlowNodeCard
                   node={node}
@@ -486,14 +592,82 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
         </div>
       </div>
 
+      {/* Floating Canvas Quick Zoom & Navigation Dock */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1.5 p-1.5 rounded-2xl bg-white/90 dark:bg-[#0c0c14]/90 backdrop-blur-xl border border-gray-200 dark:border-white/10 shadow-2xl">
+        <button
+          type="button"
+          onClick={() => setZoom((prev) => Math.max(prev - 0.15, 0.25))}
+          className="p-2 rounded-xl text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+          title="Zoom Out (-)"
+        >
+          <ZoomOut className="w-4 h-4" />
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setZoom(1);
+            setPan({ x: 100, y: 80 });
+          }}
+          className="px-2.5 py-1 rounded-xl text-xs font-mono font-bold text-gray-700 dark:text-gray-200 hover:text-amber-600 dark:hover:text-gold-400 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+          title="Reset Zoom to 100%"
+        >
+          {Math.round(zoom * 100)}%
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setZoom((prev) => Math.min(prev + 0.15, 2.5))}
+          className="p-2 rounded-xl text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+          title="Zoom In (+)"
+        >
+          <ZoomIn className="w-4 h-4" />
+        </button>
+
+        <div className="w-[1px] h-4 bg-gray-200 dark:bg-white/10 mx-1" />
+
+        <button
+          type="button"
+          onClick={handleFitToScreen}
+          className="p-2 rounded-xl text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+          title="Fit All Nodes in View"
+        >
+          <Maximize2 className="w-4 h-4" />
+        </button>
+
+        <button
+          type="button"
+          onClick={handleAutoArrange}
+          className="p-2 rounded-xl text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+          title="Auto Arrange Nodes"
+        >
+          <Layers className="w-4 h-4" />
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setIsMinimapOpen(!isMinimapOpen)}
+          className={`p-2 rounded-xl transition-colors ${
+            isMinimapOpen
+              ? 'bg-amber-500/20 text-amber-700 dark:text-gold-400'
+              : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10'
+          }`}
+          title="Toggle Radar Minimap"
+        >
+          <MapPin className="w-4 h-4" />
+        </button>
+      </div>
+
       {/* Floating Canvas Minimap */}
       {isMinimapOpen && (
-        <CanvasMinimap
-          nodes={workflow.nodes}
-          pan={pan}
-          zoom={zoom}
-          onPanChange={(newPan) => setPan(newPan)}
-        />
+        <div className="canvas-minimap">
+          <CanvasMinimap
+            nodes={workflow.nodes}
+            pan={pan}
+            zoom={zoom}
+            onPanChange={(newPan) => setPan(newPan)}
+          />
+        </div>
       )}
 
       {/* Node Config Right Sidebar */}
