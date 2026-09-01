@@ -14,7 +14,13 @@ import {
   ZoomOut,
   Maximize2,
   Layers,
-  MapPin
+  MapPin,
+  Send,
+  Hourglass,
+  GitBranch,
+  Globe,
+  Sparkles,
+  X
 } from 'lucide-react';
 
 interface FlowCanvasProps {
@@ -41,6 +47,10 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
   const [isTestModalOpen, setIsTestModalOpen] = useState(false);
+
+  // Edge Quick Insert State
+  const [quickInsertEdgeId, setQuickInsertEdgeId] = useState<string | null>(null);
+  const [quickInsertPosition, setQuickInsertPosition] = useState<{ x: number; y: number } | null>(null);
 
   // Dragging Node State
   const [draggingNodeId, setDraggingNodeId] = useState<string | null>(null);
@@ -230,7 +240,6 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
   // Pan Canvas Initiator
   const handlePointerDownOnCanvas = (e: React.PointerEvent) => {
     const target = e.target as HTMLElement;
-    // Don't initiate canvas panning if clicking inside a node card, port handle, button, sidebar, or minimap
     if (
       target.closest('.flow-node-card') ||
       target.closest('.port-handle') ||
@@ -239,11 +248,13 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
       target.closest('select') ||
       target.closest('.node-library-sidebar') ||
       target.closest('.node-config-panel') ||
-      target.closest('.canvas-minimap')
+      target.closest('.canvas-minimap') ||
+      target.closest('.quick-insert-menu')
     ) {
       return;
     }
 
+    setQuickInsertEdgeId(null);
     setIsPanning(true);
     setPanStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
     setSelectedNodeId(null);
@@ -268,6 +279,7 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
       y: mouseY - node.position.y
     });
     setSelectedNodeId(nodeId);
+    setQuickInsertEdgeId(null);
   };
 
   // Start Connection
@@ -321,7 +333,46 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
     setConnectingState(null);
   };
 
-  // Add Node from Sidebar
+  // Drag from Node Library Drop Handler
+  const handleCanvasDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+  };
+
+  const handleCanvasDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const type = e.dataTransfer.getData('text/plain');
+    if (!type) return;
+
+    const definition = FLOW_NODE_DEFINITIONS[type];
+    if (!definition) return;
+
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const dropX = Math.round((e.clientX - rect.left - pan.x) / zoom - 120);
+    const dropY = Math.round((e.clientY - rect.top - pan.y) / zoom - 40);
+
+    const newNode: FlowNode = {
+      id: `node_${Date.now()}`,
+      type,
+      category: definition.category,
+      title: definition.title,
+      position: { x: dropX, y: dropY },
+      config: { ...definition.defaultConfig },
+      status: 'idle'
+    };
+
+    const updated = {
+      ...workflow,
+      nodes: [...workflow.nodes, newNode]
+    };
+    setWorkflow(updated);
+    recordHistoryState(updated);
+    setSelectedNodeId(newNode.id);
+  };
+
+  // Add Node from Sidebar Button
   const handleAddNode = (type: string) => {
     const definition = FLOW_NODE_DEFINITIONS[type];
     if (!definition) return;
@@ -350,6 +401,66 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
     setWorkflow(updated);
     recordHistoryState(updated);
     setSelectedNodeId(newNode.id);
+  };
+
+  // Quick Insert Between Connected Edge
+  const handleOpenQuickInsert = (edgeId: string, posX: number, posY: number) => {
+    setQuickInsertEdgeId(edgeId);
+    setQuickInsertPosition({ x: posX, y: posY });
+  };
+
+  const handleQuickInsertNode = (type: string) => {
+    if (!quickInsertEdgeId || !quickInsertPosition) return;
+
+    const definition = FLOW_NODE_DEFINITIONS[type];
+    if (!definition) return;
+
+    const edge = workflow.edges.find((e) => e.id === quickInsertEdgeId);
+    if (!edge) return;
+
+    const newNode: FlowNode = {
+      id: `node_${Date.now()}`,
+      type,
+      category: definition.category,
+      title: definition.title,
+      position: {
+        x: Math.round(quickInsertPosition.x - 120),
+        y: Math.round(quickInsertPosition.y - 40)
+      },
+      config: { ...definition.defaultConfig },
+      status: 'idle'
+    };
+
+    // Replace single edge with: Source -> NewNode -> Target
+    const newEdge1: FlowEdge = {
+      id: `e_${Date.now()}_1`,
+      sourceNodeId: edge.sourceNodeId,
+      sourcePortId: edge.sourcePortId,
+      targetNodeId: newNode.id,
+      targetPortId: 'in',
+      animated: true
+    };
+
+    const newEdge2: FlowEdge = {
+      id: `e_${Date.now()}_2`,
+      sourceNodeId: newNode.id,
+      sourcePortId: 'out',
+      targetNodeId: edge.targetNodeId,
+      targetPortId: edge.targetPortId,
+      animated: true
+    };
+
+    const updated: Workflow = {
+      ...workflow,
+      nodes: [...workflow.nodes, newNode],
+      edges: [...workflow.edges.filter((e) => e.id !== quickInsertEdgeId), newEdge1, newEdge2]
+    };
+
+    setWorkflow(updated);
+    recordHistoryState(updated);
+    setSelectedNodeId(newNode.id);
+    setQuickInsertEdgeId(null);
+    setQuickInsertPosition(null);
   };
 
   // Delete Node
@@ -531,6 +642,8 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
       <div
         ref={canvasRef}
         onPointerDown={handlePointerDownOnCanvas}
+        onDragOver={handleCanvasDragOver}
+        onDrop={handleCanvasDrop}
         className={`w-full h-full relative overflow-hidden touch-none ${
           isPanning ? 'cursor-grabbing' : 'cursor-grab'
         }`}
@@ -556,6 +669,7 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
                   nodes={workflow.nodes}
                   selected={selectedEdgeId === edge.id}
                   onDelete={handleDeleteEdge}
+                  onOpenQuickInsert={handleOpenQuickInsert}
                 />
               </g>
             ))}
@@ -608,6 +722,74 @@ export const FlowCanvas: React.FC<FlowCanvasProps> = ({ initialWorkflow }) => {
               </div>
             ))}
           </div>
+
+          {/* Quick Insert Node Popover Menu */}
+          {quickInsertEdgeId && quickInsertPosition && (
+            <div
+              style={{
+                transform: `translate3d(${quickInsertPosition.x - 110}px, ${quickInsertPosition.y - 120}px, 0)`
+              }}
+              className="quick-insert-menu absolute pointer-events-auto p-2.5 rounded-2xl bg-white dark:bg-[#12121e] border border-amber-500/40 shadow-2xl space-y-2 z-50 w-56 animate-fadeIn"
+            >
+              <div className="flex items-center justify-between text-[10px] font-bold text-gray-500 border-b border-gray-200 dark:border-white/10 pb-1">
+                <span>INSERT STEP</span>
+                <button
+                  type="button"
+                  onClick={() => setQuickInsertEdgeId(null)}
+                  className="p-0.5 text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-1 text-[11px]">
+                <button
+                  type="button"
+                  onClick={() => handleQuickInsertNode('action_send_email')}
+                  className="p-1.5 rounded-lg hover:bg-amber-500/15 text-left font-semibold flex items-center gap-1.5 text-amber-700 dark:text-gold-300"
+                >
+                  <Send className="w-3 h-3" />
+                  <span>Send Mail</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleQuickInsertNode('action_wait_delay')}
+                  className="p-1.5 rounded-lg hover:bg-amber-500/15 text-left font-semibold flex items-center gap-1.5 text-blue-600 dark:text-blue-300"
+                >
+                  <Hourglass className="w-3 h-3" />
+                  <span>Wait Delay</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleQuickInsertNode('logic_if_else')}
+                  className="p-1.5 rounded-lg hover:bg-amber-500/15 text-left font-semibold flex items-center gap-1.5 text-purple-600 dark:text-purple-300"
+                >
+                  <GitBranch className="w-3 h-3" />
+                  <span>IF / ELSE</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleQuickInsertNode('action_http_request')}
+                  className="p-1.5 rounded-lg hover:bg-amber-500/15 text-left font-semibold flex items-center gap-1.5 text-emerald-600 dark:text-emerald-300"
+                >
+                  <Globe className="w-3 h-3" />
+                  <span>HTTP API</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleQuickInsertNode('ai_generate_text')}
+                  className="p-1.5 rounded-lg hover:bg-amber-500/15 text-left font-semibold flex items-center gap-1.5 text-pink-600 dark:text-pink-300 col-span-2"
+                >
+                  <Sparkles className="w-3 h-3" />
+                  <span>AI Personalizer</span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

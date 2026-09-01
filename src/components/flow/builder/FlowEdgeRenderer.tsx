@@ -6,13 +6,15 @@ interface FlowEdgeRendererProps {
   nodes: FlowNode[];
   selected?: boolean;
   onDelete?: (edgeId: string) => void;
+  onOpenQuickInsert?: (edgeId: string, posX: number, posY: number) => void;
 }
 
 export const FlowEdgeRenderer: React.FC<FlowEdgeRendererProps> = ({
   edge,
   nodes,
   selected = false,
-  onDelete
+  onDelete,
+  onOpenQuickInsert
 }) => {
   const sourceNode = nodes.find((n) => n.id === edge.sourceNodeId);
   const targetNode = nodes.find((n) => n.id === edge.targetNodeId);
@@ -24,11 +26,9 @@ export const FlowEdgeRenderer: React.FC<FlowEdgeRendererProps> = ({
   const nodeHeight = 85;
 
   // Calculate anchor coordinates
-  // Output port is at the right edge of source node
   const startX = sourceNode.position.x + nodeWidth;
   const startY = sourceNode.position.y + nodeHeight / 2;
 
-  // Input port is at the left edge of target node
   const endX = targetNode.position.x;
   const endY = targetNode.position.y + nodeHeight / 2;
 
@@ -47,7 +47,7 @@ export const FlowEdgeRenderer: React.FC<FlowEdgeRendererProps> = ({
         d={path}
         fill="none"
         stroke="transparent"
-        strokeWidth={20}
+        strokeWidth={24}
         onClick={() => onDelete && onDelete(edge.id)}
       />
 
@@ -68,9 +68,35 @@ export const FlowEdgeRenderer: React.FC<FlowEdgeRendererProps> = ({
         <animateMotion path={path} dur="3s" repeatCount="indefinite" />
       </circle>
 
+      {/* Center Quick Insert '+' Button & Label */}
+      <g
+        transform={`translate(${midX}, ${midY})`}
+        className="pointer-events-auto"
+        onClick={(e) => {
+          e.stopPropagation();
+          if (onOpenQuickInsert) {
+            onOpenQuickInsert(edge.id, midX, midY);
+          }
+        }}
+      >
+        <circle
+          r={10}
+          className="fill-white dark:fill-[#141424] stroke-gray-300 dark:stroke-white/20 group-hover:stroke-amber-500 dark:group-hover:stroke-gold-400 transition-transform group-hover:scale-125 shadow-sm"
+          strokeWidth={1.5}
+        />
+        <text
+          x={0}
+          y={3.5}
+          textAnchor="middle"
+          className="text-[10px] font-bold fill-gray-600 dark:fill-gray-300 group-hover:fill-amber-600 dark:group-hover:fill-gold-300 select-none"
+        >
+          +
+        </text>
+      </g>
+
       {/* Optional Branch Label (YES / NO / TRUE / FALSE) */}
       {edge.label && (
-        <g transform={`translate(${midX}, ${midY})`}>
+        <g transform={`translate(${midX}, ${midY - 16})`}>
           <rect
             x={-24}
             y={-10}

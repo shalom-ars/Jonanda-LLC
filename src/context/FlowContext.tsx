@@ -406,6 +406,25 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  // Dynamic Variable Interpolator
+  const interpolateTokens = (text: string, context: Record<string, any>): string => {
+    return text.replace(/\{\{([^{}]+)\}\}/g, (_, key) => {
+      const trimmed = key.trim();
+      if (trimmed in context) return String(context[trimmed]);
+      const parts = trimmed.split('.');
+      let val: any = context;
+      for (const part of parts) {
+        if (val && typeof val === 'object' && part in val) {
+          val = val[part];
+        } else {
+          return `{{${trimmed}}}`;
+        }
+      }
+      return val !== undefined ? String(val) : `{{${trimmed}}}`;
+    });
+  };
+
+  // Realistic Graph-Based Workflow Execution Engine
   const runWorkflowExecution = async (
     workflowId: string,
     testPayload: Record<string, any> = {},
@@ -417,40 +436,146 @@ export const FlowProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const execId = `exec_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
     const startTime = new Date();
     const executionSteps: ExecutionStep[] = [];
+    const executionContext: Record<string, any> = {
+      ...testPayload,
+      now: new Date().toISOString(),
+      'execution.id': execId
+    };
 
-    // Step through each connected node
-    for (let i = 0; i < workflow.nodes.length; i++) {
-      const node = workflow.nodes[i];
-      const stepStart = new Date();
+    // Find root nodes (nodes with no incoming edges or category === 'trigger')
+    const incomingEdgeTargetIds = new Set(workflow.edges.map((e) => e.targetNodeId));
+    let currentNodes = workflow.nodes.filter(
+      (n) => n.category === 'trigger' || !incomingEdgeTargetIds.has(n.id)
+    );
 
-      await new Promise((resolve) => setTimeout(resolve, 80));
+    if (currentNodes.length === 0 && workflow.nodes.length > 0) {
+      currentNodes = [workflow.nodes[0]];
+    }
 
-      let hasError = false;
-      let errorMsg: string | undefined = undefined;
+    const visitedNodes = new Set<string>();
 
-      // SSRF validation on HTTP nodes
-      if (node.type === 'action_http_request' && node.config?.url) {
-        if (!isUrlAllowed(node.config.url)) {
-          hasError = true;
-          errorMsg = 'Security Error: SSRF protection blocked access to private/internal network host.';
+    while (currentNodes.length > 0) {
+      const nextLevelNodes: typeof workflow.nodes = [];
+
+      for (const node of currentNodes) {
+        if (visitedNodes.has(node.id)) continue;
+        visitedNodes.add(node.id);
+
+        const stepStart = new Date();
+        await new Promise((resolve) => setTimeout(resolve, 90));
+
+        let hasError = false;
+        let errorMsg: string | undefined = undefined;
+        let outputData: Record<string, any> = {};
+
+        // 1. SSRF check for HTTP nodes
+        if (node.type === 'action_http_request' && node.config?.url) {
+          if (!isUrlAllowed(node.config.url)) {
+            hasError = true;
+            errorMsg = 'Security Error: SSRF protection blocked access to private/internal network host.';
+          } else {
+            outputData = {
+              status: 200,
+              body: { message: 'HTTP request successfully processed in sandbox.' }
+            };
+            executionContext['http_response.status'] = 200;
+            executionContext['http_response.body'] = JSON.stringify(outputData.body);
+          }
+        }
+
+        // 2. Email actions token resolution
+        else if (node.type === 'action_send_email' || node.type.includes('email')) {
+          const resolvedSubject = interpolateTokens(node.config?.subject || 'Workflow Notification', executionContext);
+          const resolvedTo = interpolateTokens(node.config?.to || testPayload.email || 'partner@enterprise.com', executionContext);
+          outputData = {
+            messageId: `msg_${Date.now()}`,
+            to: resolvedTo,
+            subject: resolvedSubject,
+            dkimVerified: true,
+            status: 'queued'
+          };
+          executionContext['mail.status'] = 'delivered';
+          executionContext['mail.messageId'] = outputData.messageId;
+        }
+
+        // 3. Logic IF/ELSE evaluation
+        else if (node.type === 'logic_if_else') {
+          const field = node.config?.field || 'status';
+          const operator = node.config?.operator || 'equals';
+          const targetVal = node.config?.value || 'approved';
+          const currentVal = executionContext[field] || testPayload[field] || 'approved';
+
+          let conditionMet = false;
+          if (operator === 'equals') conditionMet = String(currentVal) === String(targetVal);
+          else if (operator === 'not_equals') conditionMet = String(currentVal) !== String(targetVal);
+          else if (operator === 'contains') conditionMet = String(currentVal).includes(String(targetVal));
+          else if (operator === 'greater_than') conditionMet = Number(currentVal) > Number(targetVal);
+          else if (operator === 'less_than') conditionMet = Number(currentVal) < Number(targetVal);
+          else if (operator === 'exists') conditionMet = currentVal !== undefined && currentVal !== null && currentVal !== '';
+          else conditionMet = true;
+
+          outputData = { branchEvaluated: conditionMet ? 'true' : 'false', field, currentVal, conditionMet };
+        }
+
+        // 4. AI Generator Simulation
+        else if (node.type.startsWith('ai_')) {
+          const prompt = interpolateTokens(node.config?.prompt || 'Summarize context', executionContext);
+          outputData = {
+            task: node.config?.task || 'Generate',
+            prompt,
+            result: `AI generated response: Validated suitability for ${executionContext.companyName || 'Institutional Partner'}.`
+          };
+          const outVar = node.config?.outputVar || 'ai_generated_text';
+          executionContext[outVar] = outputData.result;
+        }
+
+        // Standard nodes
+        else {
+          outputData = { processed: true, timestamp: new Date().toISOString() };
+        }
+
+        executionSteps.push({
+          nodeId: node.id,
+          nodeTitle: node.title,
+          nodeType: node.type,
+          status: hasError ? 'failed' : 'completed',
+          startedAt: stepStart.toISOString(),
+          completedAt: new Date().toISOString(),
+          durationMs: 90,
+          inputData: executionContext,
+          outputData: hasError ? undefined : outputData,
+          error: errorMsg,
+          httpStatus: hasError ? 403 : 200
+        });
+
+        if (hasError) break;
+
+        // Traverse downstream edges
+        const outgoingEdges = workflow.edges.filter((e) => e.sourceNodeId === node.id);
+
+        if (node.type === 'logic_if_else') {
+          const branchTargetPort = outputData.branchEvaluated === 'true' ? 'true' : 'false';
+          const matchingEdges = outgoingEdges.filter(
+            (e) => e.sourcePortId === branchTargetPort || e.sourcePortId === `out_${branchTargetPort}`
+          );
+          for (const edge of matchingEdges.length > 0 ? matchingEdges : outgoingEdges) {
+            const nextNode = workflow.nodes.find((n) => n.id === edge.targetNodeId);
+            if (nextNode && !visitedNodes.has(nextNode.id)) {
+              nextLevelNodes.push(nextNode);
+            }
+          }
+        } else {
+          for (const edge of outgoingEdges) {
+            const nextNode = workflow.nodes.find((n) => n.id === edge.targetNodeId);
+            if (nextNode && !visitedNodes.has(nextNode.id)) {
+              nextLevelNodes.push(nextNode);
+            }
+          }
         }
       }
 
-      executionSteps.push({
-        nodeId: node.id,
-        nodeTitle: node.title,
-        nodeType: node.type,
-        status: hasError ? 'failed' : 'completed',
-        startedAt: stepStart.toISOString(),
-        completedAt: new Date().toISOString(),
-        durationMs: 80,
-        inputData: testPayload,
-        outputData: hasError ? undefined : { processed: true, nodeResult: 'Success', timestamp: new Date().toISOString() },
-        error: errorMsg,
-        httpStatus: hasError ? 403 : 200
-      });
-
-      if (hasError) break;
+      currentNodes = nextLevelNodes;
+      if (executionSteps.some((s) => s.status === 'failed')) break;
     }
 
     const hasFailure = executionSteps.some((s) => s.status === 'failed');
