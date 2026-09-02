@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /flow/
+Disallow: /mail/
+Disallow: /admin/
+Disallow: /partners/
+Disallow: /influencers/
 
 Sitemap: https://llc.jonanda.com/sitemap.xml

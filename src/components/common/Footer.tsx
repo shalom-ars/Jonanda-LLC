@@ -1,157 +1,97 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ExternalLink, ShieldCheck, Cpu, Globe } from 'lucide-react';
-import {
-  FOOTER_ECOSYSTEM_LINKS,
-  FOOTER_SERVICES_LINKS,
-  FOOTER_COMPANY_LINKS,
-  FOOTER_LEGAL_LINKS
-} from '../../data/navigationData';
+import { ShieldCheck, Globe } from 'lucide-react';
 
 export const Footer: React.FC = () => {
-  return (
-    <footer className="relative bg-slate-100 dark:bg-background-subtle border-t border-gray-200 dark:border-white/[0.08] pt-16 pb-12 overflow-hidden transition-colors duration-300">
-      {/* Subtle top ambient glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-gold-500/5 blur-3xl pointer-events-none" />
+  const scrollTo = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 pb-12 border-b border-gray-200 dark:border-white/[0.06]">
-          {/* Brand & Corporate Summary Column */}
-          <div className="lg:col-span-2 space-y-4">
-            <Link to="/" className="inline-flex items-center gap-3 group">
+  return (
+    <footer className="relative bg-slate-100 dark:bg-[#07070c] border-t border-gray-200 dark:border-white/[0.08] py-12 overflow-hidden transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-8">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-gray-200 dark:border-white/[0.06]">
+          {/* Brand Column */}
+          <div className="flex items-center gap-3">
+            <Link to="/" onClick={() => scrollTo('hero')} className="flex items-center gap-3 group">
               <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-surface border border-gold-500/30 group-hover:border-gold-500/60 transition-colors shadow-gold-sm overflow-hidden p-1">
                 <img
                   src="/brand/jonanda-mark-gold.png"
                   alt="JONANDA LLC Emblem"
-                  className="w-full h-full object-contain transform group-hover:scale-105 transition-transform"
+                  className="w-full h-full object-contain"
                 />
               </div>
-              <div className="flex items-center gap-1.5">
-                <span className="text-xl font-extrabold tracking-wider text-gray-900 dark:text-white">
-                  JONANDA
-                </span>
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gold-500/15 text-amber-700 dark:text-gold-400 border border-gold-500/30">
-                  LLC
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xl font-extrabold tracking-wider text-gray-900 dark:text-white">
+                    JONANDA
+                  </span>
+                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gold-500/15 text-amber-700 dark:text-gold-400 border border-gold-500/30">
+                    LLC
+                  </span>
+                </div>
+                <span className="text-[10px] tracking-widest text-gray-500 dark:text-gray-400 uppercase font-medium -mt-1">
+                  Technology & Project Development
                 </span>
               </div>
             </Link>
-
-            <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed max-w-sm">
-              Building technology for the next digital economy. JONANDA LLC develops proprietary software, AI systems, and custom digital platforms for global enterprises and startups.
-            </p>
-
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-white/60 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.08] text-xs text-gray-600 dark:text-gray-400">
-              <Globe className="w-3.5 h-3.5 text-amber-600 dark:text-gold-400" />
-              <span>United States Technology Enterprise</span>
-            </div>
-
-            <div className="pt-2 flex flex-wrap gap-2 text-[11px] font-medium text-gray-600 dark:text-gray-400">
-              <span className="px-2 py-0.5 rounded bg-white dark:bg-surface border border-gray-200 dark:border-white/5">Custom Software</span>
-              <span className="px-2 py-0.5 rounded bg-white dark:bg-surface border border-gray-200 dark:border-white/5">AI Systems</span>
-              <span className="px-2 py-0.5 rounded bg-white dark:bg-surface border border-gray-200 dark:border-white/5">Web3</span>
-              <span className="px-2 py-0.5 rounded bg-white dark:bg-surface border border-gray-200 dark:border-white/5">Cybersecurity</span>
-            </div>
           </div>
 
-          {/* Development & Solutions Column */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-gold-300">
-              Solutions & Services
-            </h4>
-            <ul className="space-y-2.5 text-sm">
-              {FOOTER_SERVICES_LINKS.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    to={link.href}
-                    className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Ecosystem Column */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-gold-300">
-              Our Ecosystem
-            </h4>
-            <ul className="space-y-2.5 text-sm">
-              {FOOTER_ECOSYSTEM_LINKS.map((link) => (
-                <li key={link.label}>
-                  {link.isExternal ? (
-                    <a
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-gray-600 dark:text-gray-400 hover:text-amber-600 dark:hover:text-gold-200 transition-colors"
-                    >
-                      <span>{link.label}</span>
-                      <ExternalLink className="w-3 h-3 opacity-50" />
-                    </a>
-                  ) : (
-                    <Link
-                      to={link.href}
-                      className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
-                    >
-                      {link.label}
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company & Legal Column */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-gold-300">
-              Company & Legal
-            </h4>
-            <ul className="space-y-2.5 text-sm">
-              {FOOTER_COMPANY_LINKS.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    to={link.href}
-                    className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-              {FOOTER_LEGAL_LINKS.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    to={link.href}
-                    className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-              <li className="pt-2 text-xs text-gray-500 dark:text-gray-400">
-                Official Corporate HQ:<br />
-                <span className="font-mono text-amber-700 dark:text-gold-400 text-xs">llc.jonanda.com</span>
-              </li>
-            </ul>
+          {/* Clean Navigation & Legal Links */}
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 dark:text-gray-400">
+            <button
+              type="button"
+              onClick={() => scrollTo('about')}
+              className="hover:text-black dark:hover:text-white transition-colors"
+            >
+              About
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollTo('what-we-do')}
+              className="hover:text-black dark:hover:text-white transition-colors"
+            >
+              What We Do
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollTo('process')}
+              className="hover:text-black dark:hover:text-white transition-colors"
+            >
+              Process
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollTo('contact')}
+              className="hover:text-black dark:hover:text-white transition-colors"
+            >
+              Contact
+            </button>
+            <Link to="/privacy" className="hover:text-black dark:hover:text-white transition-colors">
+              Privacy
+            </Link>
+            <Link to="/terms" className="hover:text-black dark:hover:text-white transition-colors">
+              Terms
+            </Link>
+            <Link to="/cookies" className="hover:text-black dark:hover:text-white transition-colors">
+              Cookies
+            </Link>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-600 dark:text-gray-400">
+        {/* Bottom Metadata */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500 dark:text-gray-400">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-amber-600 dark:text-gold-400 shrink-0" />
-            <span>
-              &copy; {new Date().getFullYear()} JONANDA LLC. All rights reserved.
-            </span>
+            <span>&copy; {new Date().getFullYear()} JONANDA LLC. All rights reserved.</span>
           </div>
 
-          <div className="flex items-center gap-6">
-            <span>Corporate Entity • United States</span>
-            <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
-              <Cpu className="w-3.5 h-3.5 text-amber-600 dark:text-gold-400" />
-              <span>Next-Gen Digital Infrastructure</span>
-            </div>
+          <div className="flex items-center gap-2">
+            <Globe className="w-3.5 h-3.5 text-amber-600 dark:text-gold-400" />
+            <span>United States Corporate Entity</span>
           </div>
         </div>
       </div>
