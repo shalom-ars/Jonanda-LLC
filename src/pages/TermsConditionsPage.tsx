@@ -72,7 +72,7 @@ export const TermsConditionsPage: React.FC = () => {
           <section className="space-y-3">
             <h2 className="text-xl font-bold text-white">5. Ecosystem & Third-Party Links</h2>
             <p>
-              This website links to external platforms within our technology network (such as <strong>jonanda.com</strong> and <strong>lozula.com</strong>). JONANDA LLC is not responsible for external services or third-party web content beyond the scope of this corporate domain.
+              This website may link to external platforms within our technology network (such as <strong>jonanda.com</strong>). JONANDA LLC is not responsible for external services or third-party web content beyond the scope of this corporate domain.
             </p>
           </section>
 

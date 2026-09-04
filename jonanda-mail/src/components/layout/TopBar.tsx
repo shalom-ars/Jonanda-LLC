@@ -121,7 +121,7 @@ export const TopBar: React.FC = () => {
               <div className="py-2 space-y-2 text-xs">
                 <div className="p-2 rounded bg-slate-900 border border-slate-800">
                   <div className="font-medium text-slate-200">DNS Verification Check Succeeded</div>
-                  <div className="text-[10px] text-slate-400 mt-0.5">SPF, DKIM, and DMARC confirmed for lozula.com</div>
+                  <div className="text-[10px] text-slate-400 mt-0.5">SPF, DKIM, and DMARC confirmed for JONANDA.com</div>
                 </div>
                 <div className="p-2 rounded bg-slate-900 border border-slate-800">
                   <div className="font-medium text-slate-200">Campaign Dispatch Completed</div>

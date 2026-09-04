@@ -41,16 +41,16 @@ export const ECOSYSTEM_PROJECTS: EcosystemProject[] = [
     dnsConfigured: true
   },
   {
-    id: 'lozula-cybersecurity',
-    name: 'LOZULA Cybersecurity',
-    slug: 'lozula-cybersecurity',
+    id: 'JONANDA-cybersecurity',
+    name: 'JONANDA Security',
+    slug: 'JONANDA-cybersecurity',
     category: 'Defensive Cyber Technology & Assessment',
     status: 'Live',
-    domain: 'lozula.com',
+    domain: 'JONANDA.com',
     hasLiveDomain: true,
     brandColor: '#10b981',
     description: 'Advanced defensive cybersecurity suite delivering continuous vulnerability diagnostics, perimeter hardening, and threat modeling.',
-    emailIdentities: ['support@lozula.com', 'security@lozula.com', 'contact@lozula.com'],
+    emailIdentities: ['support@JONANDA.com', 'security@JONANDA.com', 'contact@JONANDA.com'],
     mailboxesCount: 3,
     campaignsCount: 2,
     dnsConfigured: true
@@ -185,16 +185,16 @@ export const INITIAL_DOMAINS: Domain[] = [
     lastCheckedAt: '2026-08-31T14:00:00Z'
   },
   {
-    id: 'dom_lozula',
+    id: 'dom_JONANDA',
     orgId: 'org_jonanda_master',
-    projectId: 'lozula-cybersecurity',
-    domainName: 'lozula.com',
+    projectId: 'JONANDA-cybersecurity',
+    domainName: 'JONANDA.com',
     status: 'verified',
     spfStatus: 'verified',
     dkimStatus: 'verified',
     dmarcStatus: 'verified',
     mxStatus: 'verified',
-    dkimSelector: 'lozula',
+    dkimSelector: 'JONANDA',
     records: {
       spf: {
         type: 'TXT',
@@ -204,7 +204,7 @@ export const INITIAL_DOMAINS: Domain[] = [
       },
       dkim: {
         type: 'TXT',
-        host: 'lozula._domainkey',
+        host: 'JONANDA._domainkey',
         value: 'v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1b...',
         status: 'verified'
       },
@@ -314,42 +314,42 @@ export const INITIAL_MAILBOXES: Mailbox[] = [
     createdAt: '2026-01-20T00:00:00Z'
   },
   {
-    id: 'mbx_lozula_support',
+    id: 'mbx_JONANDA_support',
     orgId: 'org_jonanda_master',
-    projectId: 'lozula-cybersecurity',
-    domainId: 'dom_lozula',
-    email: 'support@lozula.com',
-    displayName: 'LOZULA Security Support',
+    projectId: 'JONANDA-cybersecurity',
+    domainId: 'dom_JONANDA',
+    email: 'support@JONANDA.com',
+    displayName: 'JONANDA Security Support',
     quotaBytes: 10737418240,
     usedBytes: 2147483648,
     status: 'active',
     sendingEnabled: true,
     assignedUsers: ['usr_ar_admin'],
-    signature: '--\nLOZULA Cybersecurity Operations\nlozula.com',
+    signature: '--\nJONANDA Security Operations\nJONANDA.com',
     createdAt: '2026-02-01T00:00:00Z'
   },
   {
-    id: 'mbx_lozula_security',
+    id: 'mbx_JONANDA_security',
     orgId: 'org_jonanda_master',
-    projectId: 'lozula-cybersecurity',
-    domainId: 'dom_lozula',
-    email: 'security@lozula.com',
-    displayName: 'LOZULA Threat Intelligence Team',
+    projectId: 'JONANDA-cybersecurity',
+    domainId: 'dom_JONANDA',
+    email: 'security@JONANDA.com',
+    displayName: 'JONANDA Threat Intelligence Team',
     quotaBytes: 10737418240,
     usedBytes: 1073741824,
     status: 'active',
     sendingEnabled: true,
     assignedUsers: ['usr_ar_admin'],
-    signature: '--\nLOZULA Threat & Incident Response Desk',
+    signature: '--\nJONANDA Threat & Incident Response Desk',
     createdAt: '2026-02-01T00:00:00Z'
   },
   {
-    id: 'mbx_lozula_contact',
+    id: 'mbx_JONANDA_contact',
     orgId: 'org_jonanda_master',
-    projectId: 'lozula-cybersecurity',
-    domainId: 'dom_lozula',
-    email: 'contact@lozula.com',
-    displayName: 'LOZULA Cybersecurity Inquiries',
+    projectId: 'JONANDA-cybersecurity',
+    domainId: 'dom_JONANDA',
+    email: 'contact@JONANDA.com',
+    displayName: 'JONANDA Security Inquiries',
     quotaBytes: 5368709120,
     usedBytes: 214748364,
     status: 'active',
@@ -392,8 +392,8 @@ export const INITIAL_THREADS: EmailThread[] = [
   {
     id: 'th_01_security_audit',
     orgId: 'org_jonanda_master',
-    projectId: 'lozula-cybersecurity',
-    mailboxId: 'mbx_lozula_security',
+    projectId: 'JONANDA-cybersecurity',
+    mailboxId: 'mbx_JONANDA_security',
     subject: 'Quarterly Infrastructure Perimeter Security Audit — Completed',
     snippet: 'All external endpoints and DNS records have passed the automated vulnerability and spoofing test...',
     lastMessageAt: '2026-08-31T14:32:00Z',
@@ -405,21 +405,21 @@ export const INITIAL_THREADS: EmailThread[] = [
     labels: ['Security', 'Audit', 'High Priority'],
     participants: [
       { name: 'Marcus Vance', email: 'm.vance@defense-partners.com' },
-      { name: 'LOZULA Threat Intelligence Team', email: 'security@lozula.com' }
+      { name: 'JONANDA Threat Intelligence Team', email: 'security@JONANDA.com' }
     ],
     messages: [
       {
         id: 'msg_01_01',
         threadId: 'th_01_security_audit',
         orgId: 'org_jonanda_master',
-        projectId: 'lozula-cybersecurity',
-        mailboxId: 'mbx_lozula_security',
+        projectId: 'JONANDA-cybersecurity',
+        mailboxId: 'mbx_JONANDA_security',
         from: { name: 'Marcus Vance', email: 'm.vance@defense-partners.com' },
-        to: [{ name: 'LOZULA Threat Intelligence Team', email: 'security@lozula.com' }],
+        to: [{ name: 'JONANDA Threat Intelligence Team', email: 'security@JONANDA.com' }],
         subject: 'Quarterly Infrastructure Perimeter Security Audit — Completed',
-        snippet: 'Here is the summary of the quarterly assessment on lozula.com and mail infrastructure.',
-        bodyHtml: `<p>Hello LOZULA Security Team,</p><p>We have completed the comprehensive DNS and perimeter diagnostic for <strong>lozula.com</strong> and connected email infrastructure.</p><p>Summary findings:</p><ul><li><strong>SPF:</strong> Strict pass (~all) configured correctly.</li><li><strong>DKIM:</strong> 2048-bit RSA key verified.</li><li><strong>DMARC:</strong> Enforcement set to reject (p=reject) with 100% compliance.</li><li><strong>TLS:</strong> Strict TLS 1.3 enforced on SMTP and web endpoints.</li></ul><p>Report is attached for your records.</p><p>Best regards,<br>Marcus Vance<br>Principal Security Auditor</p>`,
-        bodyText: `Hello LOZULA Security Team,\nWe have completed the comprehensive DNS and perimeter diagnostic for lozula.com...`,
+        snippet: 'Here is the summary of the quarterly assessment on JONANDA.com and mail infrastructure.',
+        bodyHtml: `<p>Hello JONANDA Security Team,</p><p>We have completed the comprehensive DNS and perimeter diagnostic for <strong>JONANDA.com</strong> and connected email infrastructure.</p><p>Summary findings:</p><ul><li><strong>SPF:</strong> Strict pass (~all) configured correctly.</li><li><strong>DKIM:</strong> 2048-bit RSA key verified.</li><li><strong>DMARC:</strong> Enforcement set to reject (p=reject) with 100% compliance.</li><li><strong>TLS:</strong> Strict TLS 1.3 enforced on SMTP and web endpoints.</li></ul><p>Report is attached for your records.</p><p>Best regards,<br>Marcus Vance<br>Principal Security Auditor</p>`,
+        bodyText: `Hello JONANDA Security Team,\nWe have completed the comprehensive DNS and perimeter diagnostic for JONANDA.com...`,
         date: '2026-08-31T11:15:00Z',
         isRead: true,
         isStarred: false,
@@ -430,7 +430,7 @@ export const INITIAL_THREADS: EmailThread[] = [
         folder: 'inbox',
         labels: ['Security', 'Audit'],
         attachments: [
-          { id: 'att_01', name: 'LOZULA_Q3_Security_Audit.pdf', size: 1843200, type: 'application/pdf' }
+          { id: 'att_01', name: 'JONANDA_Q3_Security_Audit.pdf', size: 1843200, type: 'application/pdf' }
         ],
         messageIdHeader: '<sec-audit-20260831@defense-partners.com>'
       },
@@ -438,13 +438,13 @@ export const INITIAL_THREADS: EmailThread[] = [
         id: 'msg_01_02',
         threadId: 'th_01_security_audit',
         orgId: 'org_jonanda_master',
-        projectId: 'lozula-cybersecurity',
-        mailboxId: 'mbx_lozula_security',
-        from: { name: 'LOZULA Threat Intelligence Team', email: 'security@lozula.com' },
+        projectId: 'JONANDA-cybersecurity',
+        mailboxId: 'mbx_JONANDA_security',
+        from: { name: 'JONANDA Threat Intelligence Team', email: 'security@JONANDA.com' },
         to: [{ name: 'Marcus Vance', email: 'm.vance@defense-partners.com' }],
         subject: 'Re: Quarterly Infrastructure Perimeter Security Audit — Completed',
         snippet: 'Thank you Marcus. The findings have been archived in our compliance registry.',
-        bodyHtml: `<p>Thank you Marcus,</p><p>We have received and archived the Q3 diagnostic report in our compliance telemetry logs. All DNS authentication assertions remain locked under automated monitoring.</p><p>Regards,<br>LOZULA Threat Intelligence Desk</p>`,
+        bodyHtml: `<p>Thank you Marcus,</p><p>We have received and archived the Q3 diagnostic report in our compliance telemetry logs. All DNS authentication assertions remain locked under automated monitoring.</p><p>Regards,<br>JONANDA Threat Intelligence Desk</p>`,
         bodyText: `Thank you Marcus,\nWe have received and archived the Q3 diagnostic report...`,
         date: '2026-08-31T14:32:00Z',
         isRead: false,
@@ -456,7 +456,7 @@ export const INITIAL_THREADS: EmailThread[] = [
         folder: 'inbox',
         labels: ['Security', 'High Priority'],
         attachments: [],
-        messageIdHeader: '<lozula-sec-reply-49281@mail.jonanda.com>',
+        messageIdHeader: '<JONANDA-sec-reply-49281@mail.jonanda.com>',
         inReplyTo: '<sec-audit-20260831@defense-partners.com>'
       }
     ]
@@ -490,7 +490,7 @@ export const INITIAL_THREADS: EmailThread[] = [
         to: [{ name: 'JONANDA Executive Office', email: 'contact@jonanda.com' }],
         subject: 'Enterprise Partnership Inquiry — AI Infrastructure Integration',
         snippet: 'We are interested in evaluating the JONANDA platform capabilities for our distributed developer teams.',
-        bodyHtml: `<p>Dear JONANDA Leadership,</p><p>We have been closely tracking the advancements across the JONANDA technology portfolio, particularly your enterprise AI workflow pipelines and LOZULA cybersecurity verification standards.</p><p>We would like to schedule a confidential briefing to discuss API integration and enterprise pilot licensing.</p><p>Looking forward to your reply.</p><p>Sincerely,<br>Elena Rostova<br>VP of Strategic Infrastructure<br>QuantumScale Technologies</p>`,
+        bodyHtml: `<p>Dear JONANDA Leadership,</p><p>We have been closely tracking the advancements across the JONANDA technology portfolio, particularly your enterprise AI workflow pipelines and JONANDA Security verification standards.</p><p>We would like to schedule a confidential briefing to discuss API integration and enterprise pilot licensing.</p><p>Looking forward to your reply.</p><p>Sincerely,<br>Elena Rostova<br>VP of Strategic Infrastructure<br>QuantumScale Technologies</p>`,
         bodyText: `Dear JONANDA Leadership,\nWe have been closely tracking the advancements...`,
         date: '2026-08-31T13:45:00Z',
         isRead: false,
@@ -558,7 +558,7 @@ export const INITIAL_CONTACT_GROUPS: ContactGroup[] = [
     id: 'grp_enterprise_clients',
     orgId: 'org_jonanda_master',
     name: 'Enterprise VIP Partners',
-    description: 'Verified enterprise clients with active SLAs across JONANDA & LOZULA systems.',
+    description: 'Verified enterprise clients with active SLAs across JONANDA & JONANDA systems.',
     contactCount: 42,
     createdAt: '2026-01-25T00:00:00Z'
   },
@@ -608,7 +608,7 @@ export const INITIAL_CONTACTS: Contact[] = [
   {
     id: 'cnt_02',
     orgId: 'org_jonanda_master',
-    projectId: 'lozula-cybersecurity',
+    projectId: 'JONANDA-cybersecurity',
     firstName: 'Marcus',
     lastName: 'Vance',
     email: 'm.vance@defense-partners.com',
@@ -655,7 +655,7 @@ export const INITIAL_CONTACTS: Contact[] = [
   {
     id: 'cnt_05',
     orgId: 'org_jonanda_master',
-    projectId: 'lozula-cybersecurity',
+    projectId: 'JONANDA-cybersecurity',
     firstName: 'Amina',
     lastName: 'Diallo',
     email: 'a.diallo@shield-ops.eu',
@@ -717,14 +717,14 @@ export const INITIAL_TEMPLATES: EmailTemplate[] = [
   {
     id: 'tpl_security_advisory',
     orgId: 'org_jonanda_master',
-    projectId: 'lozula-cybersecurity',
-    name: 'LOZULA Threat & Security Advisory',
+    projectId: 'JONANDA-cybersecurity',
+    name: 'JONANDA Threat & Security Advisory',
     category: 'security_alert',
     subject: 'SECURITY ADVISORY: Perimeter Verification & DNS Policy Notice',
     previewText: 'Crucial verification update regarding domain SPF/DKIM policy alignment.',
     htmlContent: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #050811; color: #f1f5f9; padding: 32px; border-radius: 12px; border: 1px solid #10b981;">
   <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1e293b; padding-bottom: 16px; margin-bottom: 24px;">
-    <h1 style="color: #10b981; margin: 0; font-size: 20px; font-weight: 700;">LOZULA CYBERSECURITY</h1>
+    <h1 style="color: #10b981; margin: 0; font-size: 20px; font-weight: 700;">JONANDA Security</h1>
     <span style="background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: bold; border: 1px solid rgba(16, 185, 129, 0.3);">SECURITY ALERT</span>
   </div>
   <h2 style="color: #ffffff; font-size: 18px; margin-top: 0;">Automated Diagnostic Telemetry Update</h2>
@@ -740,12 +740,12 @@ export const INITIAL_TEMPLATES: EmailTemplate[] = [
   <p style="color: #94a3b8; font-size: 13px;">No defensive manual action is required at this time.</p>
   <hr style="border: 0; border-top: 1px solid #1e293b; margin: 24px 0;" />
   <div style="text-align: center; color: #64748b; font-size: 11px;">
-    <p>LOZULA Cybersecurity Operations • Automated Security Dispatch</p>
+    <p>JONANDA Security Operations • Automated Security Dispatch</p>
     <p><a href="{{unsubscribeUrl}}" style="color: #64748b;">Manage Email Preferences</a></p>
   </div>
 </div>`,
     jsonBlocks: [
-      { id: 'b1', type: 'heading', content: { text: 'LOZULA CYBERSECURITY', level: 'h1' } },
+      { id: 'b1', type: 'heading', content: { text: 'JONANDA Security', level: 'h1' } },
       { id: 'b2', type: 'heading', content: { text: 'Security Advisory Notice', level: 'h2' } },
       { id: 'b3', type: 'text', content: { text: 'Automated defensive perimeter verification checks have passed successfully.' } },
       { id: 'b4', type: 'divider', content: {} },
@@ -761,7 +761,7 @@ export const INITIAL_TEMPLATES: EmailTemplate[] = [
     name: 'Ecosystem Monthly Briefing',
     category: 'newsletter',
     subject: 'JONANDA Ecosystem Dispatch — August 2026 Tech & Product Briefing',
-    previewText: 'Key milestones across JONANDA, LOZULA, and EqualShare technology pipelines.',
+    previewText: 'Key milestones across JONANDA, JONANDA, and EqualShare technology pipelines.',
     htmlContent: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0c1322; color: #f1f5f9; padding: 32px; border-radius: 12px; border: 1px solid #1e293b;">
   <div style="text-align: center; margin-bottom: 24px;">
     <span style="color: #f59e0b; font-weight: 700; letter-spacing: 0.1em; font-size: 12px;">MONTHLY DISPATCH</span>
@@ -773,7 +773,7 @@ export const INITIAL_TEMPLATES: EmailTemplate[] = [
     <p style="color: #94a3b8; font-size: 14px; margin: 0; line-height: 1.5;">Centralized communication infrastructure supporting all JONANDA brand identities with strict deliverability compliance.</p>
   </div>
   <div style="border-top: 1px solid #1e293b; padding-top: 16px; margin-top: 16px;">
-    <h3 style="color: #10b981; margin: 0 0 8px 0;">2. LOZULA Cybersecurity Diagnostic Framework</h3>
+    <h3 style="color: #10b981; margin: 0 0 8px 0;">2. JONANDA Security Diagnostic Framework</h3>
     <p style="color: #94a3b8; font-size: 14px; margin: 0; line-height: 1.5;">Automated vulnerability reconnaissance pipelines entering expanded testing.</p>
   </div>
   <div style="border-top: 1px solid #1e293b; padding-top: 16px; margin-top: 16px;">
@@ -808,7 +808,7 @@ export const INITIAL_CAMPAIGNS: Campaign[] = [
     mailboxId: 'mbx_jonanda_info',
     name: 'August 2026 Ecosystem Overview Briefing',
     subject: 'JONANDA Ecosystem Dispatch — August 2026 Tech & Product Briefing',
-    previewText: 'Key milestones across JONANDA, LOZULA, and EqualShare technology pipelines.',
+    previewText: 'Key milestones across JONANDA, JONANDA, and EqualShare technology pipelines.',
     fromName: 'JONANDA Global',
     fromEmail: 'info@jonanda.com',
     templateId: 'tpl_monthly_newsletter',
@@ -833,15 +833,15 @@ export const INITIAL_CAMPAIGNS: Campaign[] = [
     createdAt: '2026-08-27T10:00:00Z'
   },
   {
-    id: 'cmp_02_lozula_advisory',
+    id: 'cmp_02_JONANDA_advisory',
     orgId: 'org_jonanda_master',
-    projectId: 'lozula-cybersecurity',
-    mailboxId: 'mbx_lozula_security',
-    name: 'LOZULA Q3 Security Diagnostic Release',
+    projectId: 'JONANDA-cybersecurity',
+    mailboxId: 'mbx_JONANDA_security',
+    name: 'JONANDA Q3 Security Diagnostic Release',
     subject: 'SECURITY ADVISORY: Perimeter Verification & DNS Policy Notice',
     previewText: 'Crucial verification update regarding domain SPF/DKIM policy alignment.',
-    fromName: 'LOZULA Security Intelligence',
-    fromEmail: 'security@lozula.com',
+    fromName: 'JONANDA Security Intelligence',
+    fromEmail: 'security@JONANDA.com',
     templateId: 'tpl_security_advisory',
     status: 'sent',
     scheduledAt: '2026-08-29T16:00:00Z',
@@ -931,7 +931,7 @@ export const INITIAL_AUTOMATIONS: Automation[] = [
   {
     id: 'auto_02_security_event',
     orgId: 'org_jonanda_master',
-    projectId: 'lozula-cybersecurity',
+    projectId: 'JONANDA-cybersecurity',
     name: 'Perimeter Alert Automated Dispatch',
     description: 'Dispatches high-priority security advisory to registered security points when an audit event triggers.',
     triggerType: 'security_alert',
@@ -940,8 +940,8 @@ export const INITIAL_AUTOMATIONS: Automation[] = [
       {
         id: 'st_sec_1',
         type: 'send_email',
-        title: 'Send LOZULA Threat Advisory',
-        config: { templateId: 'tpl_security_advisory', subject: 'ALERT: LOZULA Security Advisory' }
+        title: 'Send JONANDA Threat Advisory',
+        config: { templateId: 'tpl_security_advisory', subject: 'ALERT: JONANDA Security Advisory' }
       },
       {
         id: 'st_sec_2',
@@ -977,8 +977,8 @@ export const INITIAL_AUDIT_LOGS: AuditLog[] = [
     userName: 'Antigravity Executive Admin',
     action: 'DOMAIN_DNS_VERIFIED',
     entityType: 'DOMAIN',
-    entityId: 'dom_lozula',
-    details: 'Automated DNS resolver verified SPF, DKIM (2048-bit), and DMARC records for lozula.com.',
+    entityId: 'dom_JONANDA',
+    details: 'Automated DNS resolver verified SPF, DKIM (2048-bit), and DMARC records for JONANDA.com.',
     ipAddress: '198.51.100.24',
     timestamp: '2026-08-31T14:00:00Z'
   },
@@ -989,8 +989,8 @@ export const INITIAL_AUDIT_LOGS: AuditLog[] = [
     userName: 'Antigravity Executive Admin',
     action: 'MAILBOX_CREATED',
     entityType: 'MAILBOX',
-    entityId: 'mbx_lozula_security',
-    details: 'Created mailbox security@lozula.com with 10GB storage quota and strict sending policy.',
+    entityId: 'mbx_JONANDA_security',
+    details: 'Created mailbox security@JONANDA.com with 10GB storage quota and strict sending policy.',
     ipAddress: '198.51.100.24',
     timestamp: '2026-08-30T11:20:00Z'
   },
@@ -1001,8 +1001,8 @@ export const INITIAL_AUDIT_LOGS: AuditLog[] = [
     userName: 'Antigravity Executive Admin',
     action: 'CAMPAIGN_DISPATCHED',
     entityType: 'CAMPAIGN',
-    entityId: 'cmp_02_lozula_advisory',
-    details: 'Dispatched campaign "LOZULA Q3 Security Diagnostic Release" to 28 verified recipients.',
+    entityId: 'cmp_02_JONANDA_advisory',
+    details: 'Dispatched campaign "JONANDA Q3 Security Diagnostic Release" to 28 verified recipients.',
     ipAddress: '198.51.100.24',
     timestamp: '2026-08-29T16:00:08Z'
   }

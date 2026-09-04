@@ -56,7 +56,7 @@ export const PARTNERSHIP_PROGRAMS: PartnershipProgram[] = [
     tagline: 'Security diagnostics, vulnerability research, and threat mitigation',
     description: 'Partnering with authorized security researchers, vulnerability assessment teams, and defensive cyber platforms to harden software perimeters.',
     benefits: [
-      'Integration with LOZULA Cybersecurity assessment modules',
+      'Integration with specialized security assessment modules',
       'Collaborative threat modeling and audit methodology development',
       'Authorized security testing and boundary validation',
       'Security advisory sharing and rapid vulnerability mitigation'

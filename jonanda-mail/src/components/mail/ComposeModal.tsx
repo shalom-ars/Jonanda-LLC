@@ -60,7 +60,7 @@ export const ComposeModal: React.FC = () => {
   const handleAttachMockFile = () => {
     const mockFiles = [
       { id: `att_${Date.now()}_1`, name: 'JONANDA_Architecture_Overview.pdf', size: 1420000, type: 'application/pdf' },
-      { id: `att_${Date.now()}_2`, name: 'LOZULA_Security_Telemetry.json', size: 45000, type: 'application/json' },
+      { id: `att_${Date.now()}_2`, name: 'JONANDA_Security_Telemetry.json', size: 45000, type: 'application/json' },
       { id: `att_${Date.now()}_3`, name: 'EqualShare_Grant_Proposal.docx', size: 680000, type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }
     ];
     const picked = mockFiles[Math.floor(Math.random() * mockFiles.length)];

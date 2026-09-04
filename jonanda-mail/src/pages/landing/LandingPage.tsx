@@ -33,7 +33,7 @@ export const LandingPage: React.FC = () => {
 
   const ecosystemVentures = [
     { name: 'JONANDA LLC', status: 'Live' as const, desc: 'Corporate parent & holding enterprise', domain: 'jonanda.com', icon: Globe },
-    { name: 'LOZULA Cybersecurity', status: 'Live' as const, desc: 'Defensive cyber diagnostics & security auditing', domain: 'lozula.com', icon: Shield },
+    { name: 'JONANDA Security', status: 'Live' as const, desc: 'Defensive cyber diagnostics & security auditing', domain: 'JONANDA.com', icon: Shield },
     { name: 'EqualShare Foundation', status: 'Active' as const, desc: 'Digital inclusion & community education initiative', domain: 'equalshare.org', icon: HeartHandshake },
     { name: 'Jonanda Coin (JNDA)', status: 'Active' as const, desc: 'Web3 & AI digital asset utility infrastructure', domain: 'Staging', icon: Sparkles },
     { name: 'Jonanda Studio', status: 'Coming Soon' as const, desc: 'Autonomous AI workflow orchestrator', domain: 'Coming Soon', icon: Bot },
@@ -49,7 +49,7 @@ export const LandingPage: React.FC = () => {
     },
     {
       q: 'How does JONANDA MAIL handle multi-project email identities?',
-      a: 'The platform provides a brand/project layer allowing administrators to switch seamlessly between JONANDA LLC (jonanda.com), LOZULA Cybersecurity (lozula.com), EqualShare Foundation (equalshare.org), and future project domains while enforcing strict tenant isolation.'
+      a: 'The platform provides a brand/project layer allowing administrators to switch seamlessly between JONANDA LLC (jonanda.com), JONANDA Security (JONANDA.com), EqualShare Foundation (equalshare.org), and future project domains while enforcing strict tenant isolation.'
     },
     {
       q: 'How is email deliverability and anti-spam compliance guaranteed?',

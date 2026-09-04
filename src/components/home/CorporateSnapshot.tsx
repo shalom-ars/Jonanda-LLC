@@ -33,7 +33,7 @@ export const CorporateSnapshot: React.FC = () => {
                   <ShieldCheck className="w-3.5 h-3.5" />
                 </div>
                 <p className="text-sm text-gray-600 dark:text-gray-300">
-                  <strong className="text-gray-900 dark:text-white">Separation of Entities:</strong> JONANDA LLC maintains dedicated governance for distinct products including Jonanda Coin (JNDA), LOZULA Cybersecurity, and JONANDA MAIL.
+                  <strong className="text-gray-900 dark:text-white">Separation of Entities:</strong> JONANDA LLC maintains dedicated governance for distinct products including Jonanda Coin (JNDA) and JONANDA MAIL.
                 </p>
               </div>
 

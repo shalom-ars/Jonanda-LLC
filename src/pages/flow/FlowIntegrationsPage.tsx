@@ -46,7 +46,7 @@ export const FlowIntegrationsPage: React.FC = () => {
     <>
       <SEOHead
         title="App Integrations Catalog | JONANDA FLOW"
-        description="Connect JONANDA MAIL, LOZULA, AI providers, PostgreSQL databases, and webhooks into visual automation pipelines."
+        description="Connect JONANDA MAIL, AI providers, PostgreSQL databases, and webhooks into visual automation pipelines."
         canonicalPath="/flow/integrations"
       />
 

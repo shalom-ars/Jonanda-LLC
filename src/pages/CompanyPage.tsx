@@ -200,7 +200,7 @@ export const CompanyPage: React.FC = () => {
         <section className="rounded-3xl bg-slate-100 dark:bg-surface/50 border border-gray-200 dark:border-white/[0.08] p-8 sm:p-12 text-center space-y-6">
           <div className="max-w-2xl mx-auto space-y-4">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white">
-              Corporate & Investor Inquiries
+              Corporate & Partnership Inquiries
             </h2>
             <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed">
               For official corporate communications, institutional partnerships, or technical compliance documentation, connect directly with our administrative team.

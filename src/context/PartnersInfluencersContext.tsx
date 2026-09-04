@@ -29,7 +29,7 @@ const SEED_PARTNER_APPLICATIONS: PartnerApplication[] = [
     tier: 'Enterprise',
     status: 'pending',
     appliedAt: '2026-08-30',
-    notes: 'Interested in LOZULA cybersecurity assessment pipeline integration.'
+    notes: 'Interested in enterprise security assessment pipeline integration.'
   },
   {
     id: 'ptnr_app_2',
@@ -107,15 +107,15 @@ const SEED_BRAND_CAMPAIGNS: BrandCampaign[] = [
   },
   {
     id: 'camp_2',
-    title: 'LOZULA Cybersecurity Threat Assessment Brief',
-    brandName: 'LOZULA Security',
+    title: 'JONANDA Software & AI Automation Brief',
+    brandName: 'JONANDA LLC',
     budget: '$20,000',
     status: 'active',
     invitedCount: 15,
     acceptedCount: 11,
     submissionsCount: 8,
     deadline: '2026-09-20',
-    brief: 'Highlight automated enterprise code audits and threat surface monitoring.'
+    brief: 'Highlight automated workflow systems and enterprise software architecture.'
   }
 ];
 

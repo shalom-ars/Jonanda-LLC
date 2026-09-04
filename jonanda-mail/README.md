@@ -13,7 +13,7 @@
 **JONANDA MAIL** is the centralized, multi-tenant enterprise business email and campaign communication platform engineered for **JONANDA LLC** and its portfolio ventures.
 
 The platform provides a unified control plane for:
-- **Ecosystem Multi-Project Management**: Isolated workspaces for JONANDA LLC, LOZULA Cybersecurity, EqualShare Foundation, Jonanda Coin (JNDA), Jonanda Studio, Jonanda SEO, Jonanda Influencer, and Jonanda Security Toolkit.
+- **Ecosystem Multi-Project Management**: Isolated workspaces for JONANDA LLC, EqualShare Foundation, Jonanda Coin (JNDA), Jonanda Studio, Jonanda SEO, Jonanda Influencer, and Jonanda Security Toolkit.
 - **Threaded Webmail Client**: Full-featured conversation threading, rich text compose with attachments, reply/reply-all/forward, labels/folders, and draft autosave.
 - **Automated DNS & Deliverability Engine**: Automated SPF, DKIM (2048-bit RSA), DMARC (`p=reject`), and MX record generation and DNS-over-HTTPS (DoH) verification.
 - **Compliant Campaign Broadcasts**: Audience segmentation, visual template block builder, pre-built templates, anti-spam validation, and real-time deliverability telemetry (delivery rate, open rate, CTR, bounce tracking, suppression list).
@@ -27,7 +27,6 @@ The platform provides a unified control plane for:
 | Project | Category | Domain | Status | Email Identities |
 | :--- | :--- | :--- | :--- | :--- |
 | **JONANDA LLC** | Parent Corporate Entity & Tech Holding | `jonanda.com` | `Live` | `contact@`, `support@`, `info@` |
-| **LOZULA Cybersecurity** | Defensive Cyber Technology & Diagnostics | `lozula.com` | `Live` | `support@`, `security@`, `contact@` |
 | **EqualShare Foundation** | Social Impact & Accessible Technology | `equalshare.org` | `Active` | `contact@`, `support@` |
 | **Jonanda Coin (JNDA)** | Web3 & AI Digital Asset Ecosystem | Staging | `Active` | In staging |
 | **Jonanda Studio** | AI & Intelligent Workflows | Staging | `Coming Soon` | Coming Soon |

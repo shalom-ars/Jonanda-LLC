@@ -29,7 +29,7 @@ export const SettingsPage: React.FC = () => {
 
   // API Keys state
   const [apiKeys, setApiKeys] = useState<{ id: string; name: string; key: string; created: string }[]>([
-    { id: 'key_1', name: 'LOZULA Threat Automation Webhook', key: 'jnd_live_99f2b8478d103948572a', created: '2026-02-15' },
+    { id: 'key_1', name: 'JONANDA Threat Automation Webhook', key: 'jnd_live_99f2b8478d103948572a', created: '2026-02-15' },
     { id: 'key_2', name: 'Corporate Dispatch Relay Key', key: 'jnd_live_44a8c91028374659102b', created: '2026-03-01' }
   ]);
   const [newKeyName, setNewKeyName] = useState('');

@@ -12,7 +12,6 @@ export const CORPORATE_DETAILS: CorporateInfoItem[] = [
   { label: 'Primary Focus', value: 'AI, Web3, Cybersecurity, Software & Infrastructure' },
   { label: 'Corporate HQ Domain', value: 'llc.jonanda.com', isLink: true, href: 'https://llc.jonanda.com' },
   { label: 'Jonanda Coin Domain', value: 'jonanda.com', isLink: true, href: 'https://jonanda.com' },
-  { label: 'LOZULA Security Domain', value: 'lozula.com', isLink: true, href: 'https://lozula.com' },
   { label: 'Corporate Inquiries', value: 'contact@jonanda.com', isLink: true, href: 'mailto:contact@jonanda.com' },
 ];
 
@@ -48,7 +47,7 @@ export const COMPANY_MILESTONES = [
   {
     phase: 'Ecosystem Expansion',
     title: 'Launch of Specialized Platforms',
-    description: 'Development and deployment of foundational ecosystem platforms: Jonanda Coin (JNDA) for AI-integrated Web3 utility and LOZULA for cybersecurity assessment.'
+    description: 'Development and deployment of foundational digital platforms: software engineering, custom platforms, and Web3 utility.'
   },
   {
     phase: 'Infrastructure & Scaling',

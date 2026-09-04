@@ -177,11 +177,11 @@ export const LoginPage: React.FC = () => {
               </button>
               <button
                 type="button"
-                onClick={() => handleQuickDemoFill('support@lozula.com')}
+                onClick={() => handleQuickDemoFill('support@JONANDA.com')}
                 className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-left truncate"
               >
-                <div className="font-bold text-emerald-400">LOZULA Admin</div>
-                <div className="text-[10px] text-slate-500 truncate">support@lozula.com</div>
+                <div className="font-bold text-emerald-400">JONANDA Admin</div>
+                <div className="text-[10px] text-slate-500 truncate">support@JONANDA.com</div>
               </button>
             </div>
           </div>

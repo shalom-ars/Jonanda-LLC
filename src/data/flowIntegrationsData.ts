@@ -14,14 +14,14 @@ export const SEED_INTEGRATIONS: IntegrationApp[] = [
     capabilities: ['Send Email', 'Send Campaign', 'Email Events', 'Bounce Suppression']
   },
   {
-    id: 'lozula_security',
-    name: 'LOZULA Cybersecurity',
+    id: 'security_engine',
+    name: 'Security Engine',
     category: 'ecosystem',
-    description: 'Automated vulnerability scanning, defensive code audits, and live threat telemetry alerts.',
+    description: 'Automated vulnerability scanning, defensive code audits, and live security telemetry alerts.',
     iconName: 'ShieldCheck',
     authType: 'api_key',
     isConnected: true,
-    credentialId: 'cred_lozula',
+    credentialId: 'cred_security',
     featured: true,
     capabilities: ['Threat Assessment', 'Security Audits', 'Vulnerability Alerts']
   },

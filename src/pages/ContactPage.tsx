@@ -12,7 +12,6 @@ import {
   CheckCircle2,
   ShieldAlert,
   Sparkles,
-  MessageSquare,
   Inbox,
   ShieldCheck
 } from 'lucide-react';
@@ -176,23 +175,6 @@ export const ContactPage: React.FC = () => {
                       className="font-mono text-gray-700 dark:text-gray-200 hover:text-amber-600 dark:hover:text-gold-300 transition-colors"
                     >
                       jonanda.com
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-100 dark:bg-background/50 border border-gray-200 dark:border-white/[0.04]">
-                  <div className="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0">
-                    <MessageSquare className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 block font-medium">LOZULA Cybersecurity</span>
-                    <a
-                      href="https://lozula.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-mono text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-300 transition-colors"
-                    >
-                      lozula.com
                     </a>
                   </div>
                 </div>

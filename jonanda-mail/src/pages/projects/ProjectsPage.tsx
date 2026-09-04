@@ -27,7 +27,7 @@ export const ProjectsPage: React.FC = () => {
     switch (slug) {
       case 'jonanda-llc':
         return <Globe className="w-6 h-6 text-brand-400" />;
-      case 'lozula-cybersecurity':
+      case 'JONANDA-cybersecurity':
         return <Shield className="w-6 h-6 text-emerald-400" />;
       case 'equalshare':
         return <HeartHandshake className="w-6 h-6 text-cyan-400" />;

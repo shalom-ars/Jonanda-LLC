@@ -142,7 +142,7 @@ export const AboutPage: React.FC = () => {
               Explore the JONANDA Technology Ecosystem
             </h2>
             <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed">
-              Discover our live platforms—including Jonanda Coin (JNDA), LOZULA Cybersecurity, and JONANDA MAIL—as well as our upcoming solutions in AI and growth intelligence.
+              Discover our platforms—including Jonanda Coin (JNDA) and JONANDA MAIL—as well as our solutions in software, AI, and cybersecurity.
             </p>
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button href="/ecosystem" variant="primary" size="md" icon={<ArrowRight className="w-4 h-4" />}>

@@ -173,15 +173,6 @@ export const MAIN_NAV_MENU: MainNavItem[] = [
         isExternal: true
       },
       {
-        label: 'LOZULA Cybersecurity',
-        href: 'https://lozula.com',
-        description: 'Security & vulnerability assessment platform',
-        iconName: 'Shield',
-        badge: 'Live',
-        badgeColor: 'emerald',
-        isExternal: true
-      },
-      {
         label: 'Coming Soon Portfolio',
         href: '/coming-soon',
         description: 'Jonanda Studio, SEO, Influencer & Security Toolkit',
@@ -237,7 +228,6 @@ export const FOOTER_ECOSYSTEM_LINKS: NavItem[] = [
   { label: 'JONANDA FLOW Engine', href: '/flow' },
   { label: 'JONANDA MAIL Suite', href: '/mail' },
   { label: 'Jonanda Coin (JNDA)', href: 'https://jonanda.com', isExternal: true },
-  { label: 'LOZULA Cybersecurity', href: 'https://lozula.com', isExternal: true },
   { label: 'Coming Soon Portfolio', href: '/coming-soon' },
   { label: 'Ecosystem Overview', href: '/ecosystem' },
 ];

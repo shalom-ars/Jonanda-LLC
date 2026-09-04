@@ -61,16 +61,16 @@ const SEED_CREDENTIALS: Credential[] = [
     isValid: true
   },
   {
-    id: 'cred_lozula',
-    name: 'LOZULA Cybersecurity API Key',
+    id: 'cred_security',
+    name: 'Security Vulnerability Scanner Key',
     type: 'api_key',
-    provider: 'LOZULA Threat Intelligence',
+    provider: 'Threat Intelligence Engine',
     createdAt: '2026-08-20',
     updatedAt: '2026-08-20',
     lastUsedAt: '2026-08-31 14:15',
-    maskedValue: 'lz_sec_••••••••••••••••••••••••3a9b',
+    maskedValue: 'sec_••••••••••••••••••••••••3a9b',
     data: {
-      headerName: 'X-Lozula-Key'
+      headerName: 'X-Security-Key'
     },
     isValid: true
   },

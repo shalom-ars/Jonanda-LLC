@@ -72,7 +72,7 @@ export const PrivacyPolicyPage: React.FC = () => {
           <section className="space-y-3">
             <h2 className="text-xl font-bold text-white">4. Ecosystem Product Boundaries</h2>
             <p>
-              Please note that independent platforms within our ecosystem—such as <strong>Jonanda Coin (jonanda.com)</strong> and <strong>LOZULA Cybersecurity (lozula.com)</strong>—maintain dedicated terms and privacy documentation applicable to their specific on-chain or platform-level software services.
+              Please note that independent platforms within our ecosystem—such as <strong>Jonanda Coin (jonanda.com)</strong> and <strong>JONANDA MAIL (mail.jonanda.com)</strong>—maintain dedicated terms and privacy documentation applicable to their specific on-chain or platform-level software services.
             </p>
           </section>
 

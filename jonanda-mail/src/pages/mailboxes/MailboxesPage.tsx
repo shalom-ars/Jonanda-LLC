@@ -225,7 +225,7 @@ export const MailboxesPage: React.FC = () => {
             </label>
             <input
               type="text"
-              placeholder="e.g. LOZULA Security Desk"
+              placeholder="e.g. JONANDA Security Desk"
               value={displayName}
               onChange={e => setDisplayName(e.target.value)}
               className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500"

@@ -23,7 +23,7 @@ export class DnsVerifier {
     const checkedAt = new Date().toISOString();
 
     // Check if domain is one of official live ecosystem domains or simulate resolution
-    const isLiveEcosystemDomain = ['jonanda.com', 'lozula.com', 'equalshare.org'].includes(domain.domainName.toLowerCase());
+    const isLiveEcosystemDomain = ['jonanda.com', 'JONANDA.com', 'equalshare.org'].includes(domain.domainName.toLowerCase());
 
     let spfStatus: DnsRecordStatus = 'verified';
     let dkimStatus: DnsRecordStatus = 'verified';

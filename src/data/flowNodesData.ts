@@ -128,13 +128,13 @@ export const FLOW_NODE_DEFINITIONS: Record<string, FlowNodeDefinition> = {
     type: 'trigger_ecosystem_event',
     category: 'trigger',
     title: 'JONANDA Ecosystem Event',
-    subtitle: 'Product activated, LOZULA security alert',
-    description: 'Triggers on events originating across JONANDA ONE, LOZULA, or JONANDA Studio products.',
+    subtitle: 'Product activated or security notification',
+    description: 'Triggers on events originating across JONANDA products and services.',
     iconName: 'Layers',
     color: 'emerald',
     inputs: [],
     outputs: [{ id: 'out', label: 'Ecosystem', type: 'output' }],
-    defaultConfig: { product: 'lozula', severity: 'medium' }
+    defaultConfig: { product: 'security', severity: 'medium' }
   },
 
   // ==========================================
@@ -443,12 +443,12 @@ export const FLOW_NODE_DEFINITIONS: Record<string, FlowNodeDefinition> = {
   // ==========================================
   // 7. JONANDA PRODUCT INTEGRATIONS
   // ==========================================
-  integration_lozula_security: {
-    type: 'integration_lozula_security',
+  integration_security_guard: {
+    type: 'integration_security_guard',
     category: 'integration',
-    title: 'LOZULA Cybersecurity',
+    title: 'Security Scanner',
     subtitle: 'Vulnerability scan & defensive audits',
-    description: 'Triggers security assessments, code audits, or retrieves threat telemetry from LOZULA platform.',
+    description: 'Triggers security assessments, code audits, or retrieves threat telemetry.',
     iconName: 'ShieldCheck',
     color: 'emerald',
     inputs: [{ id: 'in', label: 'In', type: 'input' }],

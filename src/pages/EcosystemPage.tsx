@@ -16,9 +16,9 @@ export const EcosystemPage: React.FC = () => {
     <>
       <SEOHead
         title="Our Ecosystem | JONANDA LLC Technology Portfolio"
-        description="Explore the JONANDA LLC product ecosystem: live platforms (Jonanda Coin JNDA, LOZULA Cybersecurity), upcoming projects (Jonanda Studio, Jonanda SEO, Jonanda Influencer, Jonanda Security Toolkit), and R&D incubation."
+        description="Explore the JONANDA LLC product ecosystem: platforms (Jonanda Coin JNDA, JONANDA MAIL), upcoming projects (Jonanda Studio, Jonanda SEO, Jonanda Influencer), and R&D incubation."
         canonicalPath="/ecosystem"
-        keywords="JONANDA ecosystem, Jonanda Coin, JNDA, LOZULA Cybersecurity, Jonanda Studio, Jonanda SEO, Jonanda Influencer, Jonanda Security Toolkit, JONANDA LLC technology products"
+        keywords="JONANDA ecosystem, Jonanda Coin, JNDA, JONANDA MAIL, Jonanda Studio, Jonanda SEO, Jonanda Influencer, JONANDA LLC technology products"
       />
 
       <div className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-24 relative z-10">
@@ -42,7 +42,7 @@ export const EcosystemPage: React.FC = () => {
               Clear Separation of Corporate Parent & Ecosystem Products
             </h3>
             <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-              <strong>JONANDA LLC</strong> operates as the parent technology and engineering enterprise. Dedicated projects—such as <strong>Jonanda Coin (JNDA)</strong>, <strong>LOZULA Cybersecurity</strong>, and upcoming tools like <strong>Jonanda Studio</strong>—maintain focused operational domains and dedicated product platforms.
+              <strong>JONANDA LLC</strong> operates as the parent technology and engineering enterprise. Dedicated projects—such as <strong>Jonanda Coin (JNDA)</strong>, <strong>JONANDA MAIL</strong>, and upcoming tools like <strong>Jonanda Studio</strong>—maintain focused operational domains and dedicated product platforms.
             </p>
           </div>
 

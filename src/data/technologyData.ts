@@ -68,7 +68,7 @@ export const TECHNOLOGY_PILLARS: TechnologyPillar[] = [
     id: 'cybersecurity',
     title: 'Cybersecurity',
     shortDesc: 'Vulnerability assessment, defensive threat modeling, and zero-trust security perimeters.',
-    detailedOverview: 'Security is not an afterthought at JONANDA LLC—it is embedded into every architectural layer. Through platforms like LOZULA and internal defensive frameworks, we implement automated security assessments, continuous vulnerability monitoring, and zero-trust access control.',
+    detailedOverview: 'Security is not an afterthought at JONANDA LLC—it is embedded into every architectural layer. Through proprietary defensive frameworks, we implement automated security assessments, continuous vulnerability monitoring, and zero-trust access control.',
     iconName: 'ShieldCheck',
     coreCapabilities: [
       {
